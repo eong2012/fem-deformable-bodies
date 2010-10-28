@@ -1,4 +1,8 @@
+#include "windows.h"
+#define GLUT_DISABLE_ATEXIT_HACK
+#define GLEW_STATIC
 #include "Shader/Shader.h"
+
 #include <GL/glew.h>
 #include <GL/glut.h>
 
