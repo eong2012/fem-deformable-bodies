@@ -37,17 +37,6 @@
 			<Add library="glut" />
 			<Add library="GLEW" />
 		</Linker>
-		<Unit filename="GLstuff/GLObject.cpp" />
-		<Unit filename="GLstuff/GLObject.h" />
-		<Unit filename="Geometry/Geometry.h" />
-		<Unit filename="Geometry/HalfEdgeMesh.cpp" />
-		<Unit filename="Geometry/HalfEdgeMesh.h" />
-		<Unit filename="Geometry/Mesh.cpp" />
-		<Unit filename="Geometry/Mesh.h" />
-		<Unit filename="Math/Matrix4x4.h" />
-		<Unit filename="Math/Matrix4x4_Impl.h" />
-		<Unit filename="Math/Vector3.h" />
-		<Unit filename="Math/Vector4.h" />
 		<Unit filename="Shader/Shader.cpp" />
 		<Unit filename="Shader/Shader.h" />
 		<Unit filename="Shader/fragment.glsl" />
@@ -55,6 +44,16 @@
 		<Unit filename="WindowHandler.cpp" />
 		<Unit filename="WindowHandler.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="mesh/Face.cpp" />
+		<Unit filename="mesh/Face.h" />
+		<Unit filename="mesh/HalfEdge.cpp" />
+		<Unit filename="mesh/HalfEdge.h" />
+		<Unit filename="mesh/HalfFace.cpp" />
+		<Unit filename="mesh/HalfFace.h" />
+		<Unit filename="mesh/HalfFaceMesh.cpp" />
+		<Unit filename="mesh/HalfFaceMesh.h" />
+		<Unit filename="mesh/Vertex.cpp" />
+		<Unit filename="mesh/Vertex.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />
