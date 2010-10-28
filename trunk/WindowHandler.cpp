@@ -69,25 +69,5 @@ void WindowHandler::idle()
     glutPostRedisplay();
 }
 
-bool ObjIO::Load(Mesh *mesh){
-  // std::cerr << "Reading obj file.\nOutputting any skipped line(s) for reference.\n";
-  bool success = ReadHeader(is);
-  if(!success) { return false; }
 
-  success = ReadData(is);
-  if(!success) { return false; }
-
-  // Build mesh
-  const unsigned int numTris = loadData.tris.size();
-  for (unsigned int t = 0; t < numTris; t++){
-    Vector3<unsigned int>& triangle = loadData.tris[t];
-    std::vector<Vector3<float> > verts;
-    verts.push_back(loadData.verts[triangle[0]]);
-    verts.push_back(loadData.verts[triangle[1]]);
-    verts.push_back(loadData.verts[triangle[2]]);
-
-    mesh->AddFace(verts);
-  }
-  return true;
-}
 

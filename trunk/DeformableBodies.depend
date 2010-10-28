@@ -26,21 +26,21 @@
 	"WindowHandler.h"
 	<unistd.h>
 
-1287994622 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Shader/Shader.cpp
+1288267444 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Shader/Shader.cpp
 	"Shader.h"
 	<iostream>
 
-1287994620 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Shader/Shader.h
+1288267382 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Shader/Shader.h
 	<stdio.h>
 	<stdlib.h>
 	<math.h>
 	<GL/glew.h>
 	<GL/glut.h>
 
-1288257030 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/WindowHandler.cpp
+1288268876 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/WindowHandler.cpp
 	"WindowHandler.h"
 
-1288258327 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/WindowHandler.h
+1288274302 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/WindowHandler.h
 	"Shader/Shader.h"
 	<GL/glew.h>
 	<GL/glut.h>
@@ -48,8 +48,6 @@
 	<stdlib.h>
 	<stdio.h>
 	<sys/stat.h>
-	"GLstuff/GLObject.h"
-	"Geometry/Mesh.h"
 
 1287994423 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/main.cpp
 	"WindowHandler.h"
@@ -103,7 +101,7 @@
 	<iterator>
 	<cassert>
 
-1288253677 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Math/Vector3.h
+1288274314 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Math/Vector3.h
 	"Vector4.h"
 	<cmath>
 	<iostream>
@@ -114,4 +112,53 @@
 1288257118 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Geometry/Mesh.cpp
 	"Mesh.h"
 	<iostream>
+
+1288268877 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/ObjIO.cpp
+	"ObjIO.h"
+	"Geometry/HalfEdgeMesh.h"
+	<cassert>
+	<sstream>
+	<string>
+	<iostream>
+	<vector>
+
+1269001232 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/ObjIO.h
+	"Geometry/Mesh.h"
+	"Math/Vector3.h"
+	<string>
+	<iostream>
+	<fstream>
+	<algorithm>
+
+1288274685 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/mesh/Face.cpp
+	"Face.h"
+
+1288274677 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/mesh/Face.h
+	"../Math/Vector3.h"
+
+1288277082 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/mesh/HalfFace.cpp
+	"HalfFace.h"
+
+1288277053 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/mesh/HalfFace.h
+
+1288274641 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/mesh/HalfFaceMesh.cpp
+	"HalfFaceMesh.h"
+
+1288276440 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/mesh/HalfFaceMesh.h
+	"HalfFace.h"
+	"Face.h"
+	"Vertex.h"
+	"HalfEdge.h"
+	<vector>
+
+1288275406 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/mesh/Vertex.cpp
+	"Vertex.h"
+
+1288275247 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/mesh/Vertex.h
+	"../Math/Vector3.h"
+
+1288275666 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/mesh/HalfEdge.cpp
+	"HalfEdge.h"
+
+1288275672 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/mesh/HalfEdge.h
 
