@@ -26,3 +26,92 @@
 	"WindowHandler.h"
 	<unistd.h>
 
+1287994622 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Shader/Shader.cpp
+	"Shader.h"
+	<iostream>
+
+1287994620 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Shader/Shader.h
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<GL/glew.h>
+	<GL/glut.h>
+
+1288257030 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/WindowHandler.cpp
+	"WindowHandler.h"
+
+1288258327 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/WindowHandler.h
+	"Shader/Shader.h"
+	<GL/glew.h>
+	<GL/glut.h>
+	<iostream>
+	<stdlib.h>
+	<stdio.h>
+	<sys/stat.h>
+	"GLstuff/GLObject.h"
+	"Geometry/Mesh.h"
+
+1287994423 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/main.cpp
+	"WindowHandler.h"
+	<unistd.h>
+
+1269001228 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/GLstuff/GLObject.cpp
+	"GLObject.h"
+	<iostream>
+
+1288255930 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/GLstuff/GLObject.h
+	"GLUT/glut.h"
+	<GL/glut.h>
+	<string>
+	<cstring>
+	<list>
+	<typeinfo>
+
+1288255835 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Geometry/HalfEdgeMesh.cpp
+	"HalfEdgeMesh.h"
+
+1288257411 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Geometry/HalfEdgeMesh.h
+	"Mesh.h"
+	"../Math/Vector3.h"
+	<map>
+	<limits>
+	<cassert>
+	<set>
+
+1288257350 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Geometry/Mesh.h
+	"Geometry.h"
+	"../Math/Vector3.h"
+	"../Math/Matrix4x4.h"
+	<vector>
+
+1288257052 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Geometry/Geometry.h
+	"../Math/Matrix4x4.h"
+	"../GLstuff/GLObject.h"
+
+1269001229 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Math/Matrix4x4.h
+	<algorithm>
+	<iterator>
+	"Matrix4x4_Impl.h"
+
+1269001229 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Math/Matrix4x4_Impl.h
+	<cmath>
+	"Vector4.h"
+	<algorithm>
+
+1269001229 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Math/Vector4.h
+	<iostream>
+	<iterator>
+	<cassert>
+
+1288253677 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Math/Vector3.h
+	"Vector4.h"
+	<cmath>
+	<iostream>
+	<string>
+	<sstream>
+	<cassert>
+
+1288257118 source:/home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/Geometry/Mesh.cpp
+	"Mesh.h"
+	<iostream>
+
