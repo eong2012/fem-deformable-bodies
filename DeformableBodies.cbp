@@ -31,6 +31,30 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Linker>
+			<Add library="GL" />
+			<Add library="GLU" />
+			<Add library="glut" />
+			<Add library="GLEW" />
+		</Linker>
+		<Unit filename="GLstuff/GLObject.cpp" />
+		<Unit filename="GLstuff/GLObject.h" />
+		<Unit filename="Geometry/Geometry.h" />
+		<Unit filename="Geometry/HalfEdgeMesh.cpp" />
+		<Unit filename="Geometry/HalfEdgeMesh.h" />
+		<Unit filename="Geometry/Mesh.cpp" />
+		<Unit filename="Geometry/Mesh.h" />
+		<Unit filename="Math/Matrix4x4.h" />
+		<Unit filename="Math/Matrix4x4_Impl.h" />
+		<Unit filename="Math/Vector3.h" />
+		<Unit filename="Math/Vector4.h" />
+		<Unit filename="Shader/Shader.cpp" />
+		<Unit filename="Shader/Shader.h" />
+		<Unit filename="Shader/fragment.glsl" />
+		<Unit filename="Shader/vertex.glsl" />
+		<Unit filename="WindowHandler.cpp" />
+		<Unit filename="WindowHandler.h" />
+		<Unit filename="main.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />
