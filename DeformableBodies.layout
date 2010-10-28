@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="WindowHandler.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="460" topLine="12" />
+	</File>
+	<File name="WindowHandler.h" open="1" top="0" tabpos="2">
+		<Cursor position="225" topLine="3" />
+	</File>
+	<File name="mesh/Face.cpp" open="1" top="0" tabpos="9">
+		<Cursor position="167" topLine="0" />
+	</File>
+	<File name="mesh/Face.h" open="1" top="0" tabpos="8">
+		<Cursor position="156" topLine="0" />
+	</File>
+	<File name="mesh/HalfEdge.cpp" open="1" top="0" tabpos="14">
+		<Cursor position="544" topLine="0" />
+	</File>
+	<File name="mesh/HalfEdge.h" open="1" top="0" tabpos="13">
+		<Cursor position="371" topLine="0" />
+	</File>
+	<File name="mesh/HalfFace.cpp" open="1" top="0" tabpos="6">
+		<Cursor position="608" topLine="24" />
+	</File>
+	<File name="mesh/HalfFace.h" open="1" top="0" tabpos="7">
+		<Cursor position="881" topLine="0" />
+	</File>
+	<File name="mesh/HalfFaceMesh.cpp" open="1" top="1" tabpos="4">
+		<Cursor position="213" topLine="1" />
+	</File>
+	<File name="mesh/HalfFaceMesh.h" open="1" top="0" tabpos="5">
+		<Cursor position="412" topLine="0" />
+	</File>
+	<File name="mesh/Vertex.cpp" open="1" top="0" tabpos="11">
+		<Cursor position="279" topLine="0" />
+	</File>
+	<File name="mesh/Vertex.h" open="1" top="0" tabpos="12">
+		<Cursor position="56" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>
