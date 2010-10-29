@@ -13,18 +13,18 @@ unsigned int HalfFace::getFaceInd()
 {
     return faceInd;
 }
-unsigned int HalfFace::getMateInd()
-{
-    return mateInd;
-}
-unsigned int HalfFace::getNextInd()
-{
-    return nextInd;
-}
-unsigned int HalfFace::getPrevInd()
-{
-    return prevInd;
-}
+//unsigned int HalfFace::getMateInd()
+//{
+//    return mateInd;
+//}
+//unsigned int HalfFace::getNextInd()
+//{
+//    return nextInd;
+//}
+//unsigned int HalfFace::getPrevInd()
+//{
+//    return prevInd;
+//}
 unsigned int HalfFace::getRadialInd()
 {
     return radialInd;
@@ -42,18 +42,18 @@ void HalfFace::setFaceInd(unsigned int f)
 {
     faceInd = f;
 }
-void HalfFace::setMateInd(unsigned int m)
-{
-    mateInd = m;
-}
-void HalfFace::setNextInd(unsigned int n)
-{
-    nextInd = n;
-}
-void HalfFace::setPrevInd(unsigned int p)
-{
-    prevInd = p;
-}
+//void HalfFace::setMateInd(unsigned int m)
+//{
+//    mateInd = m;
+//}
+//void HalfFace::setNextInd(unsigned int n)
+//{
+//    nextInd = n;
+//}
+//void HalfFace::setPrevInd(unsigned int p)
+//{
+//    prevInd = p;
+//}
 void HalfFace::setRadialInd(unsigned int r)
 {
     radialInd = r;
