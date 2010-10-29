@@ -2,6 +2,7 @@
 #define GLUT_DISABLE_ATEXIT_HACK
 #define GLEW_STATIC
 #include "Shader/Shader.h"
+#include "mesh/HalfFaceMesh.h"
 
 #include <GL/glew.h>
 #include <GL/glut.h>
@@ -35,6 +36,8 @@ private:
 
     int windowWidth, windowHeight;
     int textureSize;
+
+    HalfFaceMesh *halfFaceMesh;
 
     Shader *shader;
 
