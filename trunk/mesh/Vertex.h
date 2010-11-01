@@ -1,5 +1,6 @@
 
 #include "../Math/Vector3.h"
+
 class Vertex{
 public:
     Vertex();

@@ -1,4 +1,7 @@
 #include "HalfFaceMesh.h"
+#include <ctime>
+#include <cstdlib>
+using namespace std;
 HalfFaceMesh::HalfFaceMesh()
 {}
 HalfFaceMesh::~HalfFaceMesh(){}
@@ -8,16 +11,17 @@ void HalfFaceMesh::AddTetrahedron()
     //set the vertex index
     unsigned int vertexIndex1, vertexIndex2, vertexIndex3, vertexIndex4;
     setTetraGeometry(vertexIndex1, vertexIndex2, vertexIndex3, vertexIndex4);
-
+	//cout << vertexIndex1 << " " << vertexIndex2 << " " << vertexIndex3 << endl;
     //Add each tetrahedron face, send in vertex indices counter-clockwise
     unsigned int faceIndex1, faceIndex2,faceIndex3,faceIndex4;
     AddFace(vertexIndex1, vertexIndex2, vertexIndex3,faceIndex1);
+	cout << faceIndex1 << endl;
     AddFace(vertexIndex1, vertexIndex3, vertexIndex4,faceIndex2);
     AddFace(vertexIndex1, vertexIndex4, vertexIndex2,faceIndex3);
     AddFace(vertexIndex2, vertexIndex4, vertexIndex3,faceIndex4);
 
     //AddHalfFace
-    AddHalfFace(faceIndex1, vertexIndex4);
+    //AddHalfFace(faceIndex1, vertexIndex4);
 
 }
 
@@ -25,10 +29,10 @@ void HalfFaceMesh::setTetraGeometry(unsigned int &index1,unsigned int &index2,un
 {
     Vector3<float> temp1(0.0f,0.0f,0.0f);
     Vector3<float> temp2(1.0f,0.0f,0.0f);
-    Vector3<float> temp3(0.5f,1.0f,5.0f);
+    Vector3<float> temp3(0.5f,1.0f,1.0f);
     Vector3<float> temp4(1.0f,0.0f,1.0f);
 
-    //unsigned int index1,index2,index3,index4;
+//    unsigned int index1,index2,index3,index4;
     bool success = true;
     success &= AddVertex(temp1,index1);
     success &= AddVertex(temp2,index2);
@@ -46,21 +50,21 @@ void HalfFaceMesh::AddFace(unsigned int vertexIndex1,unsigned int vertexIndex2, 
     AddHalfEdgePair(vertexIndex3,vertexIndex1,edgeIndex5,edgeIndex6);
 
     // Connect inner ring
-    mHalfEdges[edgeIndex1].setNextInd(edgeIndex2);
-    mHalfEdges[edgeIndex1].setPrevInd(edgeIndex3);
+    mHalfEdges[edgeIndex1].setNextInd(edgeIndex3);
+    mHalfEdges[edgeIndex1].setPrevInd(edgeIndex5);
 
-    mHalfEdges[edgeIndex2].setNextInd(edgeIndex3);
-    mHalfEdges[edgeIndex2].setPrevInd(edgeIndex1);
+    mHalfEdges[edgeIndex3].setNextInd(edgeIndex5);
+    mHalfEdges[edgeIndex3].setPrevInd(edgeIndex1);
 
-    mHalfEdges[edgeIndex3].setNextInd(edgeIndex1);
-    mHalfEdges[edgeIndex3].setPrevInd(edgeIndex2);
+    mHalfEdges[edgeIndex5].setNextInd(edgeIndex1);
+    mHalfEdges[edgeIndex5].setPrevInd(edgeIndex3);
 
     // Finally, create the face, don't forget to set the normal
 
     Face face;
 
     // Connect the face to an edge
-    face.setEdgeInd(edgeIndex3);
+    face.setEdgeInd(edgeIndex1);
 
     mFaces.push_back(face);
 
@@ -163,10 +167,10 @@ void HalfFaceMesh::Render()
 {
      glDisable(GL_LIGHTING);
 // Draw geometry
-  glBegin(GL_TRIANGLES);
+  
   const int numTriangles = mFaces.size();
   for (int i = 0; i < numTriangles; i++){
-
+ 
     Face & face = mFaces[i];
 
 
@@ -179,20 +183,30 @@ void HalfFaceMesh::Render()
     edge = &mHalfEdges[edge->getNextInd()];
 
     Vertex & v3 = mVertices[edge->getVertexInd()];
-
-    glColor3f(0.3f, 0.4f, 0.8f);
-    //glNormal3f(face.getNormal()[0], face.getNormal()[1], face.getNormal()[2]);
-
+	
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glNormal3f(face.getNormal()[0], face.getNormal()[1], face.getNormal()[2]);
+	
+	glBegin(GL_TRIANGLES);
     glVertex3f(v1.getPosition()[0], v1.getPosition()[1], v1.getPosition()[2]);
     glVertex3f(v2.getPosition()[0], v2.getPosition()[1], v2.getPosition()[2]);
     glVertex3f(v3.getPosition()[0], v3.getPosition()[1], v3.getPosition()[2]);
-    float x = v1.getPosition()[0];
-    std::cout<<(x);
+	glEnd();
 
+	glColor3f(0.2f, 0.0f, 1.0f);
+	
+	glBegin(GL_LINES);
+    glVertex3f(v1.getPosition()[0], v1.getPosition()[1], v1.getPosition()[2]);
+    glVertex3f(v2.getPosition()[0], v2.getPosition()[1], v2.getPosition()[2]);
+	glVertex3f(v2.getPosition()[0], v2.getPosition()[1], v2.getPosition()[2]);
+	glVertex3f(v3.getPosition()[0], v3.getPosition()[1], v3.getPosition()[2]);
+	glVertex3f(v3.getPosition()[0], v3.getPosition()[1], v3.getPosition()[2]);
+	glVertex3f(v1.getPosition()[0], v1.getPosition()[1], v1.getPosition()[2]);
+	glEnd();
 
 
   }
-  glEnd();
+
 
 
 }
