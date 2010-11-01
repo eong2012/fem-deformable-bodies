@@ -1,6 +1,9 @@
 #include "Face.h"
 
-Face::Face(){}
+Face::Face(){
+
+oppositeFaceInd = -1;
+}
 Face::~Face(){}
 
 void Face::setNormal(Vector3<float> n)
@@ -19,4 +22,14 @@ Vector3<float> Face::getNormal()
 unsigned int Face::getEdgeInd()
 {
     return edgeInd;
+}
+
+void Face::setOppositeFaceInd(int f) {
+
+	this->oppositeFaceInd = f;
+}
+   
+int Face::getOppositeFaceInd() {
+
+return this->oppositeFaceInd;
 }
