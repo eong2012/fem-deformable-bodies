@@ -20,9 +20,27 @@ WindowHandler::WindowHandler(void)
 }
 WindowHandler::~WindowHandler(void)
 {
-
+	
 }
 
+void WindowHandler::processNormalKeys(unsigned char key, int x, int y) {
+
+	if(key == 110) {
+	
+		volumeGenerator->changeNormalRenderMode();
+	}
+
+	if(key == 101) {
+	
+		volumeGenerator->changeEdgeRenderMode();
+	}
+
+	if(key == 116) {
+	
+		volumeGenerator->changeTriangleRenderMode();
+	}
+
+}
 
 
 void WindowHandler::display()
@@ -35,18 +53,18 @@ void WindowHandler::display()
 
 void WindowHandler::Render()
 {
-
+	glEnable(GL_CULL_FACE);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  // glMatrixMode(GL_MODELVIEW);
   //glLoadIdentity();
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   arcball_rotate();
-  glTranslatef(-0.5,-0.5,-0.5);
+  shader->use();
  
    
   volumeGenerator->render();
-
+  shader->disable();
    //glClear(GL_COLOR_BUFFER_BIT);
 
 //	glFlush();
@@ -56,7 +74,7 @@ void WindowHandler::Render()
 
 void WindowHandler::init()
 {
-
+	
     shader = new Shader();
     shader->load("Shader/vertexPhongShader.glsl","Shader/fragmentPhongShader.glsl");
 	volumeGenerator = new VolumeGenerator();

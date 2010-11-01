@@ -28,6 +28,7 @@ public:
     void init();
     void reshape(int width, int height);
     void Render();
+	void processNormalKeys(unsigned char key, int x, int y);
 
 	VolumeGenerator *volumeGenerator;
 
