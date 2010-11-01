@@ -1,5 +1,10 @@
-#include "HalfFaceMesh.h"
+#include "TetrahedMesh.h"
 #include <string>
+
+#define INNER   0
+#define OUTER   1
+#define ALL     2
+
 
 class VolumeGenerator {
 public:
@@ -7,9 +12,16 @@ public:
 	void generateVolumeFromFile(string filename);
 	void generateVolume();
 	void render();
+	void changeNormalRenderMode();
+	void changeEdgeRenderMode();
+	void changeTriangleRenderMode();
+
 	
 
 private :
-	HalfFaceMesh *halfFaceMesh;
+	TetrahedMesh *tetrahedMesh;
+	int normalMode;
+	int edgeMode;
+	int triangleMode;
 
 };
