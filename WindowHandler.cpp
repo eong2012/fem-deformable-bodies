@@ -43,7 +43,10 @@ void WindowHandler::Render()
   glLoadIdentity();
   arcball_rotate();
   glTranslatef(-0.5,-0.5,-0.5);
-  halfFaceMesh->Render();
+ 
+   
+  volumeGenerator->render();
+
    //glClear(GL_COLOR_BUFFER_BIT);
 
 //	glFlush();
@@ -54,11 +57,13 @@ void WindowHandler::Render()
 void WindowHandler::init()
 {
 
-  //  shader = new Shader();
-  //  shader->load("Shader/vertex.glsl","Shader/fragment.glsl");
+    shader = new Shader();
+    shader->load("Shader/vertexPhongShader.glsl","Shader/fragmentPhongShader.glsl");
+	volumeGenerator = new VolumeGenerator();
+	volumeGenerator->generateVolume();
 
-    halfFaceMesh = new HalfFaceMesh();
-    halfFaceMesh->AddTetrahedron();
+
+   
 }
 
 void WindowHandler::reshape(int w, int h)

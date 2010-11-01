@@ -1,8 +1,8 @@
 #include "Shader/Shader.h"
-#include "mesh/HalfFaceMesh.h"
+#include "mesh/VolumeGenerator.h"
 
-#include <GL/glew.h>
-#include <GL/glut.h>
+#include <gl\glew.h>
+#include <glut.h>
 
 #include <iostream>
 
@@ -29,6 +29,8 @@ public:
     void reshape(int width, int height);
     void Render();
 
+	VolumeGenerator *volumeGenerator;
+
     //Functions for controlling the view
     void mouseButtonEvent(int button, int state, int x, int y);
     void mouseMoveEvent(int x, int y);
@@ -40,7 +42,7 @@ private:
     int windowWidth, windowHeight;
     int textureSize;
 
-    HalfFaceMesh *halfFaceMesh;
+    
 
     Shader *shader;
 
