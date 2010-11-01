@@ -8,6 +8,8 @@ WindowHandler *mainWindow = 0;
 void display(void)                              { mainWindow->display();                            }
 void idle(void)                                 { mainWindow->idle();                               }
 void reshape(int width, int height)             { mainWindow->reshape(width, height);               }
+void mouse(int button, int state, int x, int y) { mainWindow->mouseButtonEvent(button,state,x,y);   }
+void move(int x, int y)                         { mainWindow->mouseMoveEvent(x,y);                  }
 
 int main(int argc, char* argv[])
 {
@@ -36,6 +38,8 @@ int main(int argc, char* argv[])
 
 	glutDisplayFunc(display);
     glutReshapeFunc(reshape);
+    glutMouseFunc(mouse);
+    glutMotionFunc(move);
 	glutIdleFunc(idle);
 	glutMainLoop();
 
