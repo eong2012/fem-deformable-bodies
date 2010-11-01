@@ -6,38 +6,34 @@ HalfFaceMesh::HalfFaceMesh()
 {}
 HalfFaceMesh::~HalfFaceMesh(){}
 
-void HalfFaceMesh::AddTetrahedron()
+void HalfFaceMesh::AddTetrahedron(vector<Vector3<float>> vertices)
 {
+
     //set the vertex index
     unsigned int vertexIndex1, vertexIndex2, vertexIndex3, vertexIndex4;
-    setTetraGeometry(vertexIndex1, vertexIndex2, vertexIndex3, vertexIndex4);
-	//cout << vertexIndex1 << " " << vertexIndex2 << " " << vertexIndex3 << endl;
+    setTetraGeometry(vertices,vertexIndex1, vertexIndex2, vertexIndex3, vertexIndex4);
+
     //Add each tetrahedron face, send in vertex indices counter-clockwise
     unsigned int faceIndex1, faceIndex2,faceIndex3,faceIndex4;
-    AddFace(vertexIndex1, vertexIndex2, vertexIndex3,faceIndex1);
-	cout << faceIndex1 << endl;
-    AddFace(vertexIndex1, vertexIndex3, vertexIndex4,faceIndex2);
-    AddFace(vertexIndex1, vertexIndex4, vertexIndex2,faceIndex3);
-    AddFace(vertexIndex2, vertexIndex4, vertexIndex3,faceIndex4);
+    
+	AddFace(vertexIndex1, vertexIndex4, vertexIndex3,faceIndex1);
+    AddFace(vertexIndex1, vertexIndex3, vertexIndex2,faceIndex2);
+    AddFace(vertexIndex2, vertexIndex3, vertexIndex4,faceIndex3);
+    AddFace(vertexIndex1, vertexIndex2, vertexIndex4,faceIndex4);
 
     //AddHalfFace
     //AddHalfFace(faceIndex1, vertexIndex4);
 
 }
 
-void HalfFaceMesh::setTetraGeometry(unsigned int &index1,unsigned int &index2,unsigned int &index3,unsigned int &index4)
+void HalfFaceMesh::setTetraGeometry(vector<Vector3<float>> vertices, unsigned int &index1,unsigned int &index2,unsigned int &index3,unsigned int &index4)
 {
-    Vector3<float> temp1(0.0f,0.0f,0.0f);
-    Vector3<float> temp2(1.0f,0.0f,0.0f);
-    Vector3<float> temp3(0.5f,1.0f,1.0f);
-    Vector3<float> temp4(1.0f,0.0f,1.0f);
-
 //    unsigned int index1,index2,index3,index4;
     bool success = true;
-    success &= AddVertex(temp1,index1);
-    success &= AddVertex(temp2,index2);
-    success &= AddVertex(temp3,index3);
-    success &= AddVertex(temp4,index4);
+    success &= AddVertex(vertices[0],index1);
+    success &= AddVertex(vertices[1],index2);
+    success &= AddVertex(vertices[2],index3);
+    success &= AddVertex(vertices[3],index4);
 
 
 }
@@ -194,7 +190,7 @@ void HalfFaceMesh::Render()
 	glEnd();
 
 	glColor3f(0.2f, 0.0f, 1.0f);
-	
+	/*
 	glBegin(GL_LINES);
     glVertex3f(v1.getPosition()[0], v1.getPosition()[1], v1.getPosition()[2]);
     glVertex3f(v2.getPosition()[0], v2.getPosition()[1], v2.getPosition()[2]);
@@ -202,6 +198,30 @@ void HalfFaceMesh::Render()
 	glVertex3f(v3.getPosition()[0], v3.getPosition()[1], v3.getPosition()[2]);
 	glVertex3f(v3.getPosition()[0], v3.getPosition()[1], v3.getPosition()[2]);
 	glVertex3f(v1.getPosition()[0], v1.getPosition()[1], v1.getPosition()[2]);
+	glEnd();
+	*/
+
+	if(i == 0) {
+	glColor3f(1.0f, 0.0f, 0.0f);
+	} else if(i == 1) {
+	glColor3f(0.0f, 1.0f, 0.0f);
+	}
+	 else if(i == 2) {
+	glColor3f(0.0f, 0.0f, 1.0f);
+	}
+	  else if(i == 3) {
+	glColor3f(1.0f, 1.0f, 0.0f);
+	}
+	
+	Vector3<float> vCenter, normal;
+	normal = face.getNormal();
+	normal.Normalize();
+	vCenter = (v1.getPosition()+v2.getPosition()+v3.getPosition())/3.0;
+	
+	glBegin(GL_LINES);
+	glVertex3f(vCenter[0], vCenter[1], vCenter[2]);
+	glVertex3f(vCenter[0]+normal[0]/4, vCenter[1]+normal[1]/4, vCenter[2]+normal[2]/4);
+    
 	glEnd();
 
 
