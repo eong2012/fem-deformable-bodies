@@ -1,6 +1,3 @@
-#include "windows.h"
-#define GLUT_DISABLE_ATEXIT_HACK
-#define GLEW_STATIC
 #include "Shader/Shader.h"
 #include "mesh/HalfFaceMesh.h"
 
@@ -12,6 +9,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/stat.h>
+
+#include "arcball.h"
 
 using namespace std;
 
@@ -30,6 +29,10 @@ public:
     void reshape(int width, int height);
     void Render();
 
+    //Functions for controlling the view
+    void mouseButtonEvent(int button, int state, int x, int y);
+    void mouseMoveEvent(int x, int y);
+
 
 private:
 
@@ -40,6 +43,14 @@ private:
     HalfFaceMesh *halfFaceMesh;
 
     Shader *shader;
+
+    //Arcball stuff
+    vec eye;
+    vec center;
+    vec up;
+    float SPHERE_RADIUS;
+    float PI;
+    int buttonPressed;
 
 
 };
