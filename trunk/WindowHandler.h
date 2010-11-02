@@ -1,8 +1,8 @@
 #include "Shader/Shader.h"
 #include "mesh/VolumeGenerator.h"
 
-#include <gl\glew.h>
-#include <glut.h>
+#include <GL/glew.h>
+#include <GL/glut.h>
 
 #include <iostream>
 
@@ -27,10 +27,14 @@ public:
     void idle();
     void init();
     void reshape(int width, int height);
-    void Render();
-	void processNormalKeys(unsigned char key, int x, int y);
 
-	VolumeGenerator *volumeGenerator;
+    void RenderFirstPass();
+    void RenderSecondPass();
+    void setupTextures();
+
+    void drawQuad();
+
+	void processNormalKeys(unsigned char key, int x, int y);
 
     //Functions for controlling the view
     void mouseButtonEvent(int button, int state, int x, int y);
@@ -39,14 +43,19 @@ public:
 
 private:
 
-
     int windowWidth, windowHeight;
+
+
+    VolumeGenerator *volumeGenerator;
+    //Stuff for the second pass
+    Shader *lightShader;
+
+    //Stuff for the first pass
+    GLuint positionTexID; //Add necessary textures
+    GLuint fbo;
+    Shader *deformationShader;
     int textureSize;
-
-    
-
-    Shader *shader;
-
+    int nrOfVertices;
     //Arcball stuff
     vec eye;
     vec center;

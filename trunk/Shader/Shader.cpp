@@ -138,7 +138,7 @@ void Shader::sendUniformTexture(const char *name,int unitIndex)
     GLint uniformLocation = glGetUniformLocation(programObject,(const char*) name);
 
     if (uniformLocation == -1)
-        printError("Binding error","Failed to locate uniform variable");
+        printError("Binding error","Failed to locate uniform texture");
 
     glUniform1i(uniformLocation,unitIndex);
 

@@ -6,7 +6,7 @@ HalfFaceMesh::HalfFaceMesh()
 {}
 HalfFaceMesh::~HalfFaceMesh(){}
 
-void HalfFaceMesh::AddTetrahedron(vector<Vector3<float>> vertices)
+void HalfFaceMesh::AddTetrahedron(vector<Vector3<float> > vertices)
 {
 
     //set the vertex index
@@ -15,7 +15,7 @@ void HalfFaceMesh::AddTetrahedron(vector<Vector3<float>> vertices)
 
     //Add each tetrahedron face, send in vertex indices counter-clockwise
     unsigned int faceIndex1, faceIndex2,faceIndex3,faceIndex4;
-    
+
 	AddFace(vertexIndex1, vertexIndex4, vertexIndex3,faceIndex1);
     AddFace(vertexIndex1, vertexIndex3, vertexIndex2,faceIndex2);
     AddFace(vertexIndex2, vertexIndex3, vertexIndex4,faceIndex3);
@@ -26,7 +26,7 @@ void HalfFaceMesh::AddTetrahedron(vector<Vector3<float>> vertices)
 
 }
 
-void HalfFaceMesh::setTetraGeometry(vector<Vector3<float>> vertices, unsigned int &index1,unsigned int &index2,unsigned int &index3,unsigned int &index4)
+void HalfFaceMesh::setTetraGeometry(vector<Vector3<float> > vertices, unsigned int &index1,unsigned int &index2,unsigned int &index3,unsigned int &index4)
 {
 //    unsigned int index1,index2,index3,index4;
     bool success = true;
@@ -163,10 +163,10 @@ void HalfFaceMesh::Render()
 {
      glDisable(GL_LIGHTING);
 // Draw geometry
-  
+
   const int numTriangles = mFaces.size();
   for (int i = 0; i < numTriangles; i++){
- 
+
     Face & face = mFaces[i];
 
 
@@ -179,10 +179,10 @@ void HalfFaceMesh::Render()
     edge = &mHalfEdges[edge->getNextInd()];
 
     Vertex & v3 = mVertices[edge->getVertexInd()];
-	
+
     glColor3f(1.0f, 1.0f, 1.0f);
     glNormal3f(face.getNormal()[0], face.getNormal()[1], face.getNormal()[2]);
-	
+
 	glBegin(GL_TRIANGLES);
     glVertex3f(v1.getPosition()[0], v1.getPosition()[1], v1.getPosition()[2]);
     glVertex3f(v2.getPosition()[0], v2.getPosition()[1], v2.getPosition()[2]);
@@ -212,16 +212,16 @@ void HalfFaceMesh::Render()
 	  else if(i == 3) {
 	glColor3f(1.0f, 1.0f, 0.0f);
 	}
-	
+
 	Vector3<float> vCenter, normal;
 	normal = face.getNormal();
 	normal.Normalize();
 	vCenter = (v1.getPosition()+v2.getPosition()+v3.getPosition())/3.0;
-	
+
 	glBegin(GL_LINES);
 	glVertex3f(vCenter[0], vCenter[1], vCenter[2]);
 	glVertex3f(vCenter[0]+normal[0]/4, vCenter[1]+normal[1]/4, vCenter[2]+normal[2]/4);
-    
+
 	glEnd();
 
 

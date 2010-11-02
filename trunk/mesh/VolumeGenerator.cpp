@@ -11,8 +11,8 @@ VolumeGenerator::VolumeGenerator() {
 
 void VolumeGenerator::generateVolume() {
 
-	vector<Vector3<float>> vertices;
-	
+	vector<Vector3<float> > vertices;
+
 	Vector3<float> temp1(0.5f, 0.5f,0.5f);
 	Vector3<float> temp2(-0.5f, 0.5f,-0.5f);
     Vector3<float> temp3(0.5f, -0.5f, -0.5f);
@@ -24,9 +24,9 @@ void VolumeGenerator::generateVolume() {
 	vertices.push_back(temp4);
 
     tetrahedMesh->AddTetrahedron(vertices);
-	
+
 	vertices.clear();
-	
+
 	Vector3<float> temp12(0.5f, 0.5f,0.5f);
     Vector3<float> temp22(-0.5f, -0.5f, 0.5f);
 	Vector3<float> temp32(0.5f, -0.5f, -0.5f);
@@ -38,14 +38,14 @@ void VolumeGenerator::generateVolume() {
 	vertices.push_back(temp42);
 
 	tetrahedMesh->AddTetrahedron(vertices);
-	
+
 	vertices.clear();
 
 	Vector3<float> temp13(0.5f, 0.5f,0.5f);
     Vector3<float> temp23(-0.5f, 0.5f,-0.5f);
 	Vector3<float> temp33(0.5f, 0.5f, -0.5f);
 	Vector3<float> temp43(0.5f, -0.5f, -0.5f);
-    
+
 
     vertices.push_back(temp13);
 	vertices.push_back(temp23);
@@ -53,7 +53,7 @@ void VolumeGenerator::generateVolume() {
 	vertices.push_back(temp43);
 
 	tetrahedMesh->AddTetrahedron(vertices);
-	
+
 	vertices.clear();
 
 	Vector3<float> temp14(0.5f, 0.5f,0.5f);
@@ -68,7 +68,7 @@ void VolumeGenerator::generateVolume() {
 	vertices.push_back(temp44);
 
 	tetrahedMesh->AddTetrahedron(vertices);
-	
+
 	vertices.clear();
 
 	Vector3<float> temp15(-0.5f, 0.5f,-0.5f);
@@ -82,7 +82,7 @@ void VolumeGenerator::generateVolume() {
 	vertices.push_back(temp45);
 
 	tetrahedMesh->AddTetrahedron(vertices);
-	
+
 
 }
 
@@ -91,7 +91,7 @@ void VolumeGenerator::changeNormalRenderMode() {
 	if (normalMode > 2 || normalMode < 0 )
 	{
 		normalMode = 2;
-		
+
 	}else {
 	normalMode--;
 	}
@@ -125,4 +125,9 @@ void VolumeGenerator::render() {
 	tetrahedMesh->Render(triangleMode);
 	tetrahedMesh->RenderNormals(normalMode);
 	tetrahedMesh->RenderEdges(edgeMode);
+}
+
+TetrahedMesh VolumeGenerator::getTetrahedMesh()
+{
+    return *tetrahedMesh;
 }
