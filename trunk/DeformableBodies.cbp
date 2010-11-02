@@ -39,8 +39,10 @@
 		</Linker>
 		<Unit filename="Shader\Shader.cpp" />
 		<Unit filename="Shader\Shader.h" />
-		<Unit filename="Shader\fragment.glsl" />
-		<Unit filename="Shader\vertex.glsl" />
+		<Unit filename="Shader\fragmentDeformationShader.glsl" />
+		<Unit filename="Shader\fragmentPhongShader.glsl" />
+		<Unit filename="Shader\vertexDeformationShader.glsl" />
+		<Unit filename="Shader\vertexPhongShader.glsl" />
 		<Unit filename="WindowHandler.cpp" />
 		<Unit filename="WindowHandler.h" />
 		<Unit filename="arcball.cpp" />
