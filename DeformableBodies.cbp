@@ -43,17 +43,21 @@
 		<Unit filename="Shader\vertex.glsl" />
 		<Unit filename="WindowHandler.cpp" />
 		<Unit filename="WindowHandler.h" />
+		<Unit filename="arcball.cpp" />
+		<Unit filename="arcball.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="mesh\Face.cpp" />
 		<Unit filename="mesh\Face.h" />
 		<Unit filename="mesh\HalfEdge.cpp" />
 		<Unit filename="mesh\HalfEdge.h" />
-		<Unit filename="mesh\HalfFace.cpp" />
-		<Unit filename="mesh\HalfFace.h" />
-		<Unit filename="mesh\HalfFaceMesh.cpp" />
-		<Unit filename="mesh\HalfFaceMesh.h" />
+		<Unit filename="mesh\Tetrahed.cpp" />
+		<Unit filename="mesh\Tetrahed.h" />
+		<Unit filename="mesh\TetrahedMesh.cpp" />
+		<Unit filename="mesh\TetrahedMesh.h" />
 		<Unit filename="mesh\Vertex.cpp" />
 		<Unit filename="mesh\Vertex.h" />
+		<Unit filename="mesh\VolumeGenerator.cpp" />
+		<Unit filename="mesh\VolumeGenerator.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />

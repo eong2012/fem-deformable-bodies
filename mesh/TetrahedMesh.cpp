@@ -6,7 +6,7 @@ TetrahedMesh::TetrahedMesh()
 {}
 TetrahedMesh::~TetrahedMesh(){}
 
-void TetrahedMesh::AddTetrahedron(vector<Vector3<float>> vertices)
+void TetrahedMesh::AddTetrahedron(vector<Vector3<float> > vertices)
 {
 
     //set the vertex index
@@ -15,24 +15,24 @@ void TetrahedMesh::AddTetrahedron(vector<Vector3<float>> vertices)
 
     //Add each tetrahedron face, send in vertex indices counter-clockwise
     unsigned int faceIndex1, faceIndex2,faceIndex3,faceIndex4;
-    
+
 	AddFace(vertexIndex1, vertexIndex4, vertexIndex3,faceIndex1);
     AddFace(vertexIndex1, vertexIndex3, vertexIndex2,faceIndex2);
     AddFace(vertexIndex2, vertexIndex3, vertexIndex4,faceIndex3);
     AddFace(vertexIndex1, vertexIndex2, vertexIndex4,faceIndex4);
 
 	//Add a tetrahed which contains pointers to all spanning faces
-	Tetrahed temp; 
+	Tetrahed temp;
 	temp.setFaceInd1(faceIndex1);
 	temp.setFaceInd2(faceIndex2);
 	temp.setFaceInd3(faceIndex3);
 	temp.setFaceInd4(faceIndex4);
 	mTetraheds.push_back(temp);
-   
+
 
 }
 
-void TetrahedMesh::setTetraGeometry(vector<Vector3<float>> vertices, unsigned int &index1,unsigned int &index2,unsigned int &index3,unsigned int &index4)
+void TetrahedMesh::setTetraGeometry(vector<Vector3<float> > vertices, unsigned int &index1,unsigned int &index2,unsigned int &index3,unsigned int &index4)
 {
 //    unsigned int index1,index2,index3,index4;
     bool success = true;
@@ -66,7 +66,7 @@ void TetrahedMesh::AddFace(unsigned int vertexIndex1,unsigned int vertexIndex2, 
 
     vector<Face>::iterator iter;
 	iter = mFaces.begin();
-	int count = 0; 
+	int count = 0;
 	while(iter != mFaces.end()){
 
     HalfEdge* edge = &mHalfEdges[iter->getEdgeInd()];
@@ -79,23 +79,23 @@ void TetrahedMesh::AddFace(unsigned int vertexIndex1,unsigned int vertexIndex2, 
 
     Vertex & v3 = mVertices[edge->getVertexInd()];
 
-	
+
 	if (mVertices[vertexIndex1].getPosition() == v1.getPosition() || mVertices[vertexIndex1].getPosition() == v2.getPosition() || mVertices[vertexIndex1].getPosition() == v3.getPosition()){
 		if(mVertices[vertexIndex2].getPosition() == v1.getPosition() || mVertices[vertexIndex2].getPosition() == v2.getPosition() || mVertices[vertexIndex2].getPosition() == v3.getPosition()){
 			if(mVertices[vertexIndex3].getPosition() == v1.getPosition() || mVertices[vertexIndex3].getPosition() == v2.getPosition() || mVertices[vertexIndex3].getPosition() == v3.getPosition()){
-			
+
 				face.setOppositeFaceInd(count);
 				iter->setOppositeFaceInd(mFaces.size());
 				//cout <<  "Count: " << count << endl;
 				break;
-			} 
-		
+			}
+
 		}
 		}
 		count++;
 		cout << iter->getOppositeFaceInd() << endl;
-		iter += 1; 
-		
+		iter += 1;
+
 	}
 	cout << "----" << endl;
 	//cout <<  "size: " << mFaces.size() << endl;
@@ -150,17 +150,17 @@ bool TetrahedMesh::AddVertex(Vector3<float> vertexPos, unsigned int &index)
 
 	vector<Vertex>::iterator iter;
 	iter = mVertices.begin();
-	int count = 0; 
+	int count = 0;
 	while(iter != mVertices.end()){
-		
+
 		if (iter->getPosition() == vertexPos) {
-		
+
 			index = count;
-			
+
 			return true;
 		}
 		count++;
-		iter += 1; 
+		iter += 1;
 	}
 
   Vertex vert;
@@ -192,15 +192,15 @@ Vector3<float> TetrahedMesh::FaceNormal(unsigned int faceIndex)
 
 void TetrahedMesh::Render(int mode)
 {
-     
+
 // Draw geometry
-  
+
   const int numTriangles = mFaces.size();
   for (int i = 0; i < numTriangles; i++){
- 
+
     Face & face = mFaces[i];
 
-	
+
 
     HalfEdge* edge = &mHalfEdges[face.getEdgeInd()];
 
@@ -211,13 +211,13 @@ void TetrahedMesh::Render(int mode)
     edge = &mHalfEdges[edge->getNextInd()];
 
     Vertex & v3 = mVertices[edge->getVertexInd()];
-		
+
 		if(mode == 2){
 			if (face.getOppositeFaceInd() == -1) {
 			glColor3f(1.0f, 1.0f, 1.0f);
-	
+
 			glNormal3f(face.getNormal()[0], face.getNormal()[1], face.getNormal()[2]);
-	
+
 			glBegin(GL_TRIANGLES);
 			glVertex3f(v1.getPosition()[0], v1.getPosition()[1], v1.getPosition()[2]);
 			glVertex3f(v2.getPosition()[0], v2.getPosition()[1], v2.getPosition()[2]);
@@ -229,9 +229,9 @@ void TetrahedMesh::Render(int mode)
 		if(mode == 1){
 			if (face.getOppositeFaceInd() != -1) {
 			glColor3f(1.0f, 1.0f, 1.0f);
-	
+
 			glNormal3f(face.getNormal()[0], face.getNormal()[1], face.getNormal()[2]);
-	
+
 			glBegin(GL_TRIANGLES);
 			glVertex3f(v1.getPosition()[0], v1.getPosition()[1], v1.getPosition()[2]);
 			glVertex3f(v2.getPosition()[0], v2.getPosition()[1], v2.getPosition()[2]);
@@ -241,19 +241,19 @@ void TetrahedMesh::Render(int mode)
 		}
 
 		if(mode == 0){
-			
+
 			glColor3f(1.0f, 1.0f, 1.0f);
-	
+
 			glNormal3f(face.getNormal()[0], face.getNormal()[1], face.getNormal()[2]);
-	
+
 			glBegin(GL_TRIANGLES);
 			glVertex3f(v1.getPosition()[0], v1.getPosition()[1], v1.getPosition()[2]);
 			glVertex3f(v2.getPosition()[0], v2.getPosition()[1], v2.getPosition()[2]);
 			glVertex3f(v3.getPosition()[0], v3.getPosition()[1], v3.getPosition()[2]);
 			glEnd();
-			
+
 		}
-	
+
   }
 
 
@@ -262,13 +262,13 @@ void TetrahedMesh::Render(int mode)
 
 void TetrahedMesh::RenderNormals(int mode) {
 
-	
+
 	const int numTriangles = mFaces.size();
- 
+
     for (int i = 0; i < numTriangles; i++){
 
     Face & face = mFaces[i];
-	
+
     HalfEdge* edge = &mHalfEdges[face.getEdgeInd()];
 
     Vertex & v1 = mVertices[edge->getVertexInd()];
@@ -278,19 +278,19 @@ void TetrahedMesh::RenderNormals(int mode) {
     edge = &mHalfEdges[edge->getNextInd()];
 
     Vertex & v3 = mVertices[edge->getVertexInd()];
-  
+
 	Vector3<float> vCenter, normal;
 	normal = face.getNormal();
 	normal.Normalize();
 	vCenter = (v1.getPosition()+v2.getPosition()+v3.getPosition())/3.0;
-		
+
 		if (mode == 0) {
 			if (face.getOppositeFaceInd() != -1) {
 			glColor3f(1.0f, 0.0f, 1.0f);
 			glBegin(GL_LINES);
 			glVertex3f(vCenter[0], vCenter[1], vCenter[2]);
 			glVertex3f(vCenter[0]+normal[0]/4, vCenter[1]+normal[1]/4, vCenter[2]+normal[2]/4);
-    
+
 			glEnd();
 			}
 
@@ -302,36 +302,36 @@ void TetrahedMesh::RenderNormals(int mode) {
 			glBegin(GL_LINES);
 			glVertex3f(vCenter[0], vCenter[1], vCenter[2]);
 			glVertex3f(vCenter[0]+normal[0]/4, vCenter[1]+normal[1]/4, vCenter[2]+normal[2]/4);
-    
+
 			glEnd();
 			}
 
 		}
 
 		if (mode == 2) {
-		
+
 			glColor3f(1.0f, 0.0f, 1.0f);
 			glBegin(GL_LINES);
 			glVertex3f(vCenter[0], vCenter[1], vCenter[2]);
 			glVertex3f(vCenter[0]+normal[0]/4, vCenter[1]+normal[1]/4, vCenter[2]+normal[2]/4);
-    
+
 			glEnd();
-			
+
 
 		}
   }
-	
+
 }
 
 void TetrahedMesh::RenderEdges(int mode) {
-	
+
 	const int numTriangles = mFaces.size();
-  
+
     for (int i = 0; i < numTriangles; i++){
 
     Face & face = mFaces[i];
 
-	
+
     HalfEdge* edge = &mHalfEdges[face.getEdgeInd()];
 
     Vertex & v1 = mVertices[edge->getVertexInd()];
@@ -341,11 +341,11 @@ void TetrahedMesh::RenderEdges(int mode) {
     edge = &mHalfEdges[edge->getNextInd()];
 
     Vertex & v3 = mVertices[edge->getVertexInd()];
-		
+
 		if (mode == 0) {
 			if (face.getOppositeFaceInd() != -1) {
 			glColor3f(0.2f, 0.0f, 1.0f);
-	
+
 			glBegin(GL_LINES);
 			glVertex3f(v1.getPosition()[0], v1.getPosition()[1], v1.getPosition()[2]);
 			glVertex3f(v2.getPosition()[0], v2.getPosition()[1], v2.getPosition()[2]);
@@ -361,7 +361,7 @@ void TetrahedMesh::RenderEdges(int mode) {
 		if (mode == 1) {
 			if (face.getOppositeFaceInd() == -1) {
 			glColor3f(0.2f, 0.0f, 1.0f);
-	
+
 			glBegin(GL_LINES);
 			glVertex3f(v1.getPosition()[0], v1.getPosition()[1], v1.getPosition()[2]);
 			glVertex3f(v2.getPosition()[0], v2.getPosition()[1], v2.getPosition()[2]);
@@ -375,9 +375,9 @@ void TetrahedMesh::RenderEdges(int mode) {
 		}
 
 		if (mode == 2) {
-			
+
 			glColor3f(0.2f, 0.0f, 1.0f);
-	
+
 			glBegin(GL_LINES);
 			glVertex3f(v1.getPosition()[0], v1.getPosition()[1], v1.getPosition()[2]);
 			glVertex3f(v2.getPosition()[0], v2.getPosition()[1], v2.getPosition()[2]);
@@ -386,11 +386,31 @@ void TetrahedMesh::RenderEdges(int mode) {
 			glVertex3f(v3.getPosition()[0], v3.getPosition()[1], v3.getPosition()[2]);
 			glVertex3f(v1.getPosition()[0], v1.getPosition()[1], v1.getPosition()[2]);
 			glEnd();
-			
+
 
 		}
 	}
-  
-  
-	
+
+
+
+}
+
+//Get the vertex array for use to create a texture
+float* TetrahedMesh::GetVertexArray()
+{
+    float vertexArray[4*mVertices.size()];
+
+    for(int i = 0; i < mVertices.size(); i++)
+    {
+        vertexArray[i*4] = mVertices[i].getPosition()[0];
+        vertexArray[i*4+1] = mVertices[i].getPosition()[1];
+        vertexArray[i*4+2] = mVertices[i].getPosition()[2];
+        vertexArray[i*4+3] = 1.0f;
+    }
+    return vertexArray;
+}
+
+int TetrahedMesh::GetVertexArraySize()
+{
+    return 4*mVertices.size();
 }
