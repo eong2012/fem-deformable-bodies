@@ -1,40 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="WindowHandler.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="460" topLine="12" />
+	<File name="Solver/Solver.cpp" open="1" top="0" tabpos="4">
+		<Cursor position="3902" topLine="121" />
 	</File>
-	<File name="WindowHandler.h" open="1" top="0" tabpos="2">
-		<Cursor position="225" topLine="3" />
+	<File name="Solver/Solver.h" open="1" top="0" tabpos="3">
+		<Cursor position="235" topLine="0" />
 	</File>
-	<File name="mesh/Face.cpp" open="1" top="0" tabpos="9">
+	<File name="WindowHandler.cpp" open="1" top="0" tabpos="9">
+		<Cursor position="4566" topLine="6" />
+	</File>
+	<File name="WindowHandler.h" open="1" top="0" tabpos="10">
+		<Cursor position="1187" topLine="17" />
+	</File>
+	<File name="arcball.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="180" topLine="58" />
+	</File>
+	<File name="arcball.h" open="0" top="0" tabpos="0">
+		<Cursor position="3175" topLine="0" />
+	</File>
+	<File name="main.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="27" topLine="0" />
+	</File>
+	<File name="mesh/Face.cpp" open="0" top="0" tabpos="9">
 		<Cursor position="167" topLine="0" />
 	</File>
-	<File name="mesh/Face.h" open="1" top="0" tabpos="8">
-		<Cursor position="156" topLine="0" />
+	<File name="mesh/Face.h" open="0" top="0" tabpos="8">
+		<Cursor position="59" topLine="0" />
 	</File>
-	<File name="mesh/HalfEdge.cpp" open="1" top="0" tabpos="14">
+	<File name="mesh/HalfEdge.cpp" open="0" top="0" tabpos="14">
 		<Cursor position="544" topLine="0" />
 	</File>
-	<File name="mesh/HalfEdge.h" open="1" top="0" tabpos="13">
-		<Cursor position="371" topLine="0" />
+	<File name="mesh/HalfEdge.h" open="0" top="0" tabpos="13">
+		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="mesh/HalfFace.cpp" open="1" top="0" tabpos="6">
-		<Cursor position="608" topLine="24" />
+	<File name="mesh/Tetrahed.cpp" open="1" top="0" tabpos="6">
+		<Cursor position="70" topLine="0" />
 	</File>
-	<File name="mesh/HalfFace.h" open="1" top="0" tabpos="7">
-		<Cursor position="881" topLine="0" />
+	<File name="mesh/Tetrahed.h" open="1" top="0" tabpos="7">
+		<Cursor position="462" topLine="0" />
 	</File>
-	<File name="mesh/HalfFaceMesh.cpp" open="1" top="1" tabpos="4">
-		<Cursor position="213" topLine="1" />
+	<File name="mesh/TetrahedMesh.cpp" open="1" top="0" tabpos="8">
+		<Cursor position="7969" topLine="118" />
 	</File>
-	<File name="mesh/HalfFaceMesh.h" open="1" top="0" tabpos="5">
-		<Cursor position="412" topLine="0" />
+	<File name="mesh/TetrahedMesh.h" open="1" top="0" tabpos="5">
+		<Cursor position="1336" topLine="2" />
 	</File>
-	<File name="mesh/Vertex.cpp" open="1" top="0" tabpos="11">
-		<Cursor position="279" topLine="0" />
+	<File name="mesh/Vertex.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="122" topLine="0" />
 	</File>
-	<File name="mesh/Vertex.h" open="1" top="0" tabpos="12">
-		<Cursor position="56" topLine="0" />
+	<File name="mesh/Vertex.h" open="1" top="0" tabpos="2">
+		<Cursor position="31" topLine="0" />
+	</File>
+	<File name="mesh/VolumeGenerator.cpp" open="1" top="1" tabpos="11">
+		<Cursor position="2469" topLine="88" />
+	</File>
+	<File name="mesh/VolumeGenerator.h" open="1" top="0" tabpos="12">
+		<Cursor position="425" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>

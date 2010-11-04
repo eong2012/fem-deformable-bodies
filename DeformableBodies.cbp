@@ -34,7 +34,7 @@
 					<Add library="GL" />
 					<Add library="GLU" />
 					<Add library="glut" />
-					<Add library="glew" />
+					<Add library="GLEW" />
 				</Linker>
 			</Target>
 		</Build>
@@ -42,10 +42,10 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Linker>
-			<Add library="glew32s" />
-			<Add library="glu32" />
-			<Add library="glut32" />
-			<Add library="opengl32" />
+			<Add library="GL" />
+			<Add library="GLU" />
+			<Add library="GLEW" />
+			<Add library="glut" />
 		</Linker>
 		<Unit filename="Shader/Shader.cpp" />
 		<Unit filename="Shader/Shader.h" />
@@ -53,6 +53,8 @@
 		<Unit filename="Shader/fragmentPhongShader.glsl" />
 		<Unit filename="Shader/vertexDeformationShader.glsl" />
 		<Unit filename="Shader/vertexPhongShader.glsl" />
+		<Unit filename="Solver/Solver.cpp" />
+		<Unit filename="Solver/Solver.h" />
 		<Unit filename="WindowHandler.cpp" />
 		<Unit filename="WindowHandler.h" />
 		<Unit filename="arcball.cpp" />
