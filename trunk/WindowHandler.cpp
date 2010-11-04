@@ -27,6 +27,7 @@ void WindowHandler::display()
     glClearColor(0.0, 0.0, 0.0, 1.0);
     RenderFirstPass(); //Deformation Simulation
     RenderSecondPass(); //Render the actual graphics
+    //cout << "in display" << endl;
 
     glutSwapBuffers();
 }
@@ -99,7 +100,14 @@ void WindowHandler::setupTextures()
 {
     ///Example, if we need the position of the vertices
     //Get the position data for each vertex
-	GLfloat *positionData = volumeGenerator->getTetrahedMesh().GetVertexArray();
+
+	GLfloat *positionData = new GLfloat[volumeGenerator->getTetrahedMesh().GetVertexArraySize()];
+
+	for(int i = 0; i < volumeGenerator->getTetrahedMesh().GetVertexArraySize(); i++)
+	{
+	    positionData[i] = volumeGenerator->getTetrahedMesh().GetVertexArray()[i];
+	}
+
 
     //Create the position texture that will be sent to the shader for integration
 	glGenTextures(1, &positionTexID);
@@ -148,6 +156,7 @@ void WindowHandler::init()
 
     //Setup textures used for the deformation shader
 	setupTextures();
+
 
 
 
