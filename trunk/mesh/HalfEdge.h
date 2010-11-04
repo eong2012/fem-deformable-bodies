@@ -1,4 +1,7 @@
 
+#ifndef HALFEDGE_H
+#define HALFEDGE_H
+
 class HalfEdge {
     public:
         HalfEdge();
@@ -11,7 +14,7 @@ class HalfEdge {
 
         void setVertexInd(unsigned int v);
         void setFaceInd(unsigned int f);
-        void setPairInd(unsigned int p);
+        void setPairInd(unsigned int pcd);
         void setNextInd(unsigned int n);
         void setPrevInd(unsigned int p);
 
@@ -24,3 +27,4 @@ class HalfEdge {
 
 
 };
+#endif

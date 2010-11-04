@@ -1,4 +1,4 @@
-#include "windows.h"
+//#include "windows.h"
 #define GLUT_DISABLE_ATEXIT_HACK
 #define GLEW_STATIC
 
@@ -11,6 +11,11 @@
 #include "HalfEdge.h"
 
 #include <vector>
+#include <set>
+
+#ifndef TETRAHEDMESH_H
+#define TETRAHEDMESH_H
+
 using namespace std;
 
 class TetrahedMesh{
@@ -28,6 +33,9 @@ public:
 	void RenderNormals(int mode);
 	void RenderEdges(int mode);
 
+	vector< Vector3<float> > getVertexPosition(unsigned int tetraIndex);
+	int getNrOfTetrahedra();
+
 	float* GetVertexArray();
 	int GetVertexArraySize();
 
@@ -39,3 +47,5 @@ private:
     vector<Tetrahed> mTetraheds;
 
 };
+
+#endif

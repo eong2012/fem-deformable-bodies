@@ -1,5 +1,6 @@
 #include "Shader/Shader.h"
 #include "mesh/VolumeGenerator.h"
+#include "Solver/Solver.h"
 
 #include <GL/glew.h>
 #include <GL/glut.h>
@@ -45,7 +46,7 @@ private:
 
     int windowWidth, windowHeight;
 
-
+    Solver *solver;
     VolumeGenerator *volumeGenerator;
     //Stuff for the second pass
     Shader *lightShader;

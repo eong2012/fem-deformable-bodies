@@ -2,6 +2,8 @@
 
 using namespace std;
 
+
+
 WindowHandler *mainWindow = 0;
 
 
@@ -20,7 +22,6 @@ int main(int argc, char* argv[])
 	mainWindow = new WindowHandler();
 
 	GLenum err = glewInit();
-	
 
     mainWindow->init();
     glClearColor(1., 1., 1., 0.);
@@ -34,6 +35,10 @@ int main(int argc, char* argv[])
     glutMotionFunc(move);
 	glutIdleFunc(idle);
 	glutMainLoop();
+
+
+  return 0;
+
 
 	return 0;
 }
