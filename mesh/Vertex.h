@@ -1,6 +1,9 @@
 
 #include "../Math/Vector3.h"
 
+#ifndef VERTEX_H
+#define VERTEX_H
+
 class Vertex{
 public:
     Vertex();
@@ -17,3 +20,4 @@ private:
     unsigned int edgeInd;
 
 };
+#endif

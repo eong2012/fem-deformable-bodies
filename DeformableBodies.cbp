@@ -7,17 +7,23 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin\Debug\DeformableBodies" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Debug\" />
+				<Option output="bin/Debug/DeformableBodies" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
+				<Linker>
+					<Add library="GL" />
+					<Add library="GLEW" />
+					<Add library="glut" />
+					<Add library="GLU" />
+				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="bin\Release\DeformableBodies" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Release\" />
+				<Option output="bin/Release/DeformableBodies" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -25,6 +31,10 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="GL" />
+					<Add library="GLU" />
+					<Add library="glut" />
+					<Add library="glew" />
 				</Linker>
 			</Target>
 		</Build>
@@ -37,29 +47,29 @@
 			<Add library="glut32" />
 			<Add library="opengl32" />
 		</Linker>
-		<Unit filename="Shader\Shader.cpp" />
-		<Unit filename="Shader\Shader.h" />
-		<Unit filename="Shader\fragmentDeformationShader.glsl" />
-		<Unit filename="Shader\fragmentPhongShader.glsl" />
-		<Unit filename="Shader\vertexDeformationShader.glsl" />
-		<Unit filename="Shader\vertexPhongShader.glsl" />
+		<Unit filename="Shader/Shader.cpp" />
+		<Unit filename="Shader/Shader.h" />
+		<Unit filename="Shader/fragmentDeformationShader.glsl" />
+		<Unit filename="Shader/fragmentPhongShader.glsl" />
+		<Unit filename="Shader/vertexDeformationShader.glsl" />
+		<Unit filename="Shader/vertexPhongShader.glsl" />
 		<Unit filename="WindowHandler.cpp" />
 		<Unit filename="WindowHandler.h" />
 		<Unit filename="arcball.cpp" />
 		<Unit filename="arcball.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="mesh\Face.cpp" />
-		<Unit filename="mesh\Face.h" />
-		<Unit filename="mesh\HalfEdge.cpp" />
-		<Unit filename="mesh\HalfEdge.h" />
-		<Unit filename="mesh\Tetrahed.cpp" />
-		<Unit filename="mesh\Tetrahed.h" />
-		<Unit filename="mesh\TetrahedMesh.cpp" />
-		<Unit filename="mesh\TetrahedMesh.h" />
-		<Unit filename="mesh\Vertex.cpp" />
-		<Unit filename="mesh\Vertex.h" />
-		<Unit filename="mesh\VolumeGenerator.cpp" />
-		<Unit filename="mesh\VolumeGenerator.h" />
+		<Unit filename="mesh/Face.cpp" />
+		<Unit filename="mesh/Face.h" />
+		<Unit filename="mesh/HalfEdge.cpp" />
+		<Unit filename="mesh/HalfEdge.h" />
+		<Unit filename="mesh/Tetrahed.cpp" />
+		<Unit filename="mesh/Tetrahed.h" />
+		<Unit filename="mesh/TetrahedMesh.cpp" />
+		<Unit filename="mesh/TetrahedMesh.h" />
+		<Unit filename="mesh/Vertex.cpp" />
+		<Unit filename="mesh/Vertex.h" />
+		<Unit filename="mesh/VolumeGenerator.cpp" />
+		<Unit filename="mesh/VolumeGenerator.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />

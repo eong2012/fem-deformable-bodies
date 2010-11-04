@@ -6,6 +6,9 @@
 #define ALL     2
 
 
+#ifndef VOLUMEGENERATOR_H
+#define VOLUMEGENERATOR_H
+
 class VolumeGenerator {
 public:
 	VolumeGenerator();
@@ -26,3 +29,5 @@ private :
 	int triangleMode;
 
 };
+
+#endif

@@ -162,3 +162,874 @@
 
 1288275672 /home/studenter/johpe114/privat_stuff/TSBK03/Projekt/fem-deformable-bodies/mesh/HalfEdge.h
 
+1288861097 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/Shader/Shader.cpp
+	"Shader.h"
+	<iostream>
+
+1288862173 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/Shader/Shader.h
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<GL/glew.h>
+	<GL/glut.h>
+
+1288880299 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/WindowHandler.cpp
+	"WindowHandler.h"
+
+1288871887 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/WindowHandler.h
+	"Shader/Shader.h"
+	"mesh/VolumeGenerator.h"
+	"Solver/Solver.h"
+	<GL/glew.h>
+	<GL/glut.h>
+	<iostream>
+	<stdlib.h>
+	<stdio.h>
+	<sys/stat.h>
+	"arcball.h"
+
+1288871568 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/VolumeGenerator.h
+	"TetrahedMesh.h"
+	<string>
+
+1288876154 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/TetrahedMesh.h
+	<GL/glew.h>
+	<GL/glut.h>
+	"Tetrahed.h"
+	"Face.h"
+	"Vertex.h"
+	"HalfEdge.h"
+	<vector>
+	<set>
+
+1288871262 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Tetrahed.h
+	<vector>
+
+1288871324 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Face.h
+	"../Math/Vector3.h"
+
+1288861097 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/Math/Vector3.h
+	"Vector4.h"
+	<cmath>
+	<iostream>
+	<string>
+	<sstream>
+	<cassert>
+
+1288861097 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/Math/Vector4.h
+	<iostream>
+	<iterator>
+	<cassert>
+
+1288871345 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Vertex.h
+	"../Math/Vector3.h"
+
+1288871375 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/HalfEdge.h
+
+1288861097 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/arcball.h
+	<cmath>
+
+1288861097 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/arcball.cpp
+	"arcball.h"
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1288869997 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/main.cpp
+	"WindowHandler.h"
+
+1288861097 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Face.cpp
+	"Face.h"
+
+1288861097 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/HalfEdge.cpp
+	"HalfEdge.h"
+
+1288861097 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Tetrahed.cpp
+	"Tetrahed.h"
+
+1288880329 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/TetrahedMesh.cpp
+	"TetrahedMesh.h"
+	<ctime>
+	<cstdlib>
+
+1288861097 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Vertex.cpp
+	"Vertex.h"
+
+1288861097 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/VolumeGenerator.cpp
+	"VolumeGenerator.h"
+
+1288863750 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo.h
+	<cstdlib>
+	<cstring>
+	<climits>
+	<cmath>
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdexcept>
+	<limits>
+	<algorithm>
+	<complex>
+	<vector>
+	"armadillo_bits/config.hpp"
+	"armadillo_bits/compiler_setup.hpp"
+	<sys/time.h>
+	<boost/date_time/posix_time/posix_time.hpp>
+	<tr1/cmath>
+	<tr1/complex>
+	<boost/math/complex.hpp>
+	<boost/math/special_functions/acosh.hpp>
+	<boost/math/special_functions/asinh.hpp>
+	<boost/math/special_functions/atanh.hpp>
+	<boost/format.hpp>
+	<boost/current_function.hpp>
+	<cblas.h>
+	<clapack.h>
+	"armadillo_bits/itpp_wrap.hpp"
+	"armadillo_bits/forward_proto.hpp"
+	"armadillo_bits/arma_static_assert.hpp"
+	"armadillo_bits/typedef.hpp"
+	"armadillo_bits/format_wrap.hpp"
+	"armadillo_bits/constants.hpp"
+	"armadillo_bits/arma_version.hpp"
+	"armadillo_bits/arma_config.hpp"
+	"armadillo_bits/traits.hpp"
+	"armadillo_bits/promote_type.hpp"
+	"armadillo_bits/upgrade_val.hpp"
+	"armadillo_bits/restrictors.hpp"
+	"armadillo_bits/access.hpp"
+	"armadillo_bits/span.hpp"
+	"armadillo_bits/Base.hpp"
+	"armadillo_bits/BaseCube.hpp"
+	"armadillo_bits/syslib_proto.hpp"
+	"armadillo_bits/arrayops_proto.hpp"
+	"armadillo_bits/podarray_proto.hpp"
+	"armadillo_bits/blas_proto.hpp"
+	"armadillo_bits/lapack_proto.hpp"
+	"armadillo_bits/atlas_proto.hpp"
+	"armadillo_bits/auxlib_proto.hpp"
+	"armadillo_bits/injector_proto.hpp"
+	"armadillo_bits/Mat_proto.hpp"
+	"armadillo_bits/Col_proto.hpp"
+	"armadillo_bits/Row_proto.hpp"
+	"armadillo_bits/Cube_proto.hpp"
+	"armadillo_bits/typedef_fixed.hpp"
+	"armadillo_bits/field_proto.hpp"
+	"armadillo_bits/subview_proto.hpp"
+	"armadillo_bits/subview_field_proto.hpp"
+	"armadillo_bits/subview_cube_proto.hpp"
+	"armadillo_bits/diagview_proto.hpp"
+	"armadillo_bits/diskio_proto.hpp"
+	"armadillo_bits/wall_clock_proto.hpp"
+	"armadillo_bits/running_stat_proto.hpp"
+	"armadillo_bits/running_stat_vec_proto.hpp"
+	"armadillo_bits/Op_proto.hpp"
+	"armadillo_bits/OpCube_proto.hpp"
+	"armadillo_bits/eOp_proto.hpp"
+	"armadillo_bits/eOpCube_proto.hpp"
+	"armadillo_bits/mtOp_proto.hpp"
+	"armadillo_bits/mtOpCube_proto.hpp"
+	"armadillo_bits/Glue_proto.hpp"
+	"armadillo_bits/eGlue_proto.hpp"
+	"armadillo_bits/mtGlue_proto.hpp"
+	"armadillo_bits/GlueCube_proto.hpp"
+	"armadillo_bits/eGlueCube_proto.hpp"
+	"armadillo_bits/mtGlueCube_proto.hpp"
+	"armadillo_bits/eop_core_proto.hpp"
+	"armadillo_bits/eglue_core_proto.hpp"
+	"armadillo_bits/op_diagmat_proto.hpp"
+	"armadillo_bits/op_diagvec_proto.hpp"
+	"armadillo_bits/op_dot_proto.hpp"
+	"armadillo_bits/op_inv_proto.hpp"
+	"armadillo_bits/op_htrans_proto.hpp"
+	"armadillo_bits/op_max_proto.hpp"
+	"armadillo_bits/op_min_proto.hpp"
+	"armadillo_bits/op_mean_proto.hpp"
+	"armadillo_bits/op_median_proto.hpp"
+	"armadillo_bits/op_sort_proto.hpp"
+	"armadillo_bits/op_sum_proto.hpp"
+	"armadillo_bits/op_stddev_proto.hpp"
+	"armadillo_bits/op_trans_proto.hpp"
+	"armadillo_bits/op_var_proto.hpp"
+	"armadillo_bits/op_repmat_proto.hpp"
+	"armadillo_bits/op_reshape_proto.hpp"
+	"armadillo_bits/op_cov_proto.hpp"
+	"armadillo_bits/op_cor_proto.hpp"
+	"armadillo_bits/op_shuffle_proto.hpp"
+	"armadillo_bits/op_prod_proto.hpp"
+	"armadillo_bits/op_pinv_proto.hpp"
+	"armadillo_bits/op_dotext_proto.hpp"
+	"armadillo_bits/op_flip_proto.hpp"
+	"armadillo_bits/op_princomp_proto.hpp"
+	"armadillo_bits/op_princomp_cov_proto.hpp"
+	"armadillo_bits/op_misc_proto.hpp"
+	"armadillo_bits/op_relational_proto.hpp"
+	"armadillo_bits/op_find_proto.hpp"
+	"armadillo_bits/op_chol_proto.hpp"
+	"armadillo_bits/op_cx_scalar_proto.hpp"
+	"armadillo_bits/glue_times_proto.hpp"
+	"armadillo_bits/glue_mixed_proto.hpp"
+	"armadillo_bits/glue_cov_proto.hpp"
+	"armadillo_bits/glue_cor_proto.hpp"
+	"armadillo_bits/glue_kron_proto.hpp"
+	"armadillo_bits/glue_cross_proto.hpp"
+	"armadillo_bits/glue_join_proto.hpp"
+	"armadillo_bits/glue_relational_proto.hpp"
+	"armadillo_bits/glue_solve_proto.hpp"
+	"armadillo_bits/glue_conv_proto.hpp"
+	"armadillo_bits/glue_toeplitz_proto.hpp"
+	"armadillo_bits/debug.hpp"
+	"armadillo_bits/cmath_wrap.hpp"
+	"armadillo_bits/Proxy.hpp"
+	"armadillo_bits/ProxyCube.hpp"
+	"armadillo_bits/diagmat_proxy.hpp"
+	"armadillo_bits/unwrap.hpp"
+	"armadillo_bits/unwrap_cube.hpp"
+	"armadillo_bits/strip.hpp"
+	"armadillo_bits/Op_meat.hpp"
+	"armadillo_bits/OpCube_meat.hpp"
+	"armadillo_bits/mtOp_meat.hpp"
+	"armadillo_bits/mtOpCube_meat.hpp"
+	"armadillo_bits/Glue_meat.hpp"
+	"armadillo_bits/GlueCube_meat.hpp"
+	"armadillo_bits/eop_aux.hpp"
+	"armadillo_bits/eOp_meat.hpp"
+	"armadillo_bits/eOpCube_meat.hpp"
+	"armadillo_bits/eGlue_meat.hpp"
+	"armadillo_bits/eGlueCube_meat.hpp"
+	"armadillo_bits/mtGlue_meat.hpp"
+	"armadillo_bits/mtGlueCube_meat.hpp"
+	"armadillo_bits/arma_ostream_proto.hpp"
+	"armadillo_bits/arma_ostream_meat.hpp"
+	"armadillo_bits/operator_plus.hpp"
+	"armadillo_bits/operator_minus.hpp"
+	"armadillo_bits/operator_times.hpp"
+	"armadillo_bits/operator_schur.hpp"
+	"armadillo_bits/operator_div.hpp"
+	"armadillo_bits/operator_relational.hpp"
+	"armadillo_bits/operator_cube_plus.hpp"
+	"armadillo_bits/operator_cube_minus.hpp"
+	"armadillo_bits/operator_cube_times.hpp"
+	"armadillo_bits/operator_cube_schur.hpp"
+	"armadillo_bits/operator_cube_div.hpp"
+	"armadillo_bits/operator_cube_relational.hpp"
+	"armadillo_bits/operator_ostream.hpp"
+	"armadillo_bits/fn_conv_to.hpp"
+	"armadillo_bits/fn_min.hpp"
+	"armadillo_bits/fn_max.hpp"
+	"armadillo_bits/fn_accu.hpp"
+	"armadillo_bits/fn_sum.hpp"
+	"armadillo_bits/fn_diagmat.hpp"
+	"armadillo_bits/fn_diagvec.hpp"
+	"armadillo_bits/fn_inv.hpp"
+	"armadillo_bits/fn_trace.hpp"
+	"armadillo_bits/fn_trans.hpp"
+	"armadillo_bits/fn_det.hpp"
+	"armadillo_bits/fn_log_det.hpp"
+	"armadillo_bits/fn_eig.hpp"
+	"armadillo_bits/fn_lu.hpp"
+	"armadillo_bits/fn_zeros.hpp"
+	"armadillo_bits/fn_ones.hpp"
+	"armadillo_bits/fn_misc.hpp"
+	"armadillo_bits/fn_norm.hpp"
+	"armadillo_bits/fn_dot.hpp"
+	"armadillo_bits/fn_randu.hpp"
+	"armadillo_bits/fn_randn.hpp"
+	"armadillo_bits/fn_trig.hpp"
+	"armadillo_bits/fn_mean.hpp"
+	"armadillo_bits/fn_median.hpp"
+	"armadillo_bits/fn_stddev.hpp"
+	"armadillo_bits/fn_var.hpp"
+	"armadillo_bits/fn_sort.hpp"
+	"armadillo_bits/fn_sort_index.hpp"
+	"armadillo_bits/fn_htrans.hpp"
+	"armadillo_bits/fn_chol.hpp"
+	"armadillo_bits/fn_qr.hpp"
+	"armadillo_bits/fn_svd.hpp"
+	"armadillo_bits/fn_solve.hpp"
+	"armadillo_bits/fn_repmat.hpp"
+	"armadillo_bits/fn_reshape.hpp"
+	"armadillo_bits/fn_cov.hpp"
+	"armadillo_bits/fn_cor.hpp"
+	"armadillo_bits/fn_shuffle.hpp"
+	"armadillo_bits/fn_prod.hpp"
+	"armadillo_bits/fn_eps.hpp"
+	"armadillo_bits/fn_pinv.hpp"
+	"armadillo_bits/fn_rank.hpp"
+	"armadillo_bits/fn_kron.hpp"
+	"armadillo_bits/fn_flip.hpp"
+	"armadillo_bits/fn_as_scalar.hpp"
+	"armadillo_bits/fn_princomp.hpp"
+	"armadillo_bits/fn_princomp_cov.hpp"
+	"armadillo_bits/fn_cross.hpp"
+	"armadillo_bits/fn_join.hpp"
+	"armadillo_bits/fn_conv.hpp"
+	"armadillo_bits/fn_trunc_exp.hpp"
+	"armadillo_bits/fn_trunc_log.hpp"
+	"armadillo_bits/fn_toeplitz.hpp"
+	"armadillo_bits/gemm.hpp"
+	"armadillo_bits/gemv.hpp"
+	"armadillo_bits/gemm_mixed.hpp"
+	"armadillo_bits/eop_core_meat.hpp"
+	"armadillo_bits/eglue_core_meat.hpp"
+	"armadillo_bits/podarray_meat.hpp"
+	"armadillo_bits/auxlib_meat.hpp"
+	"armadillo_bits/injector_meat.hpp"
+	"armadillo_bits/Mat_meat.hpp"
+	"armadillo_bits/Col_meat.hpp"
+	"armadillo_bits/Row_meat.hpp"
+	"armadillo_bits/Cube_meat.hpp"
+	"armadillo_bits/field_meat.hpp"
+	"armadillo_bits/subview_meat.hpp"
+	"armadillo_bits/subview_field_meat.hpp"
+	"armadillo_bits/subview_cube_meat.hpp"
+	"armadillo_bits/diagview_meat.hpp"
+	"armadillo_bits/diskio_meat.hpp"
+	"armadillo_bits/wall_clock_meat.hpp"
+	"armadillo_bits/running_stat_meat.hpp"
+	"armadillo_bits/running_stat_vec_meat.hpp"
+	"armadillo_bits/op_diagmat_meat.hpp"
+	"armadillo_bits/op_diagvec_meat.hpp"
+	"armadillo_bits/op_dot_meat.hpp"
+	"armadillo_bits/op_inv_meat.hpp"
+	"armadillo_bits/op_htrans_meat.hpp"
+	"armadillo_bits/op_max_meat.hpp"
+	"armadillo_bits/op_min_meat.hpp"
+	"armadillo_bits/op_mean_meat.hpp"
+	"armadillo_bits/op_median_meat.hpp"
+	"armadillo_bits/op_sort_meat.hpp"
+	"armadillo_bits/op_sum_meat.hpp"
+	"armadillo_bits/op_stddev_meat.hpp"
+	"armadillo_bits/op_trans_meat.hpp"
+	"armadillo_bits/op_var_meat.hpp"
+	"armadillo_bits/op_repmat_meat.hpp"
+	"armadillo_bits/op_reshape_meat.hpp"
+	"armadillo_bits/op_cov_meat.hpp"
+	"armadillo_bits/op_cor_meat.hpp"
+	"armadillo_bits/op_shuffle_meat.hpp"
+	"armadillo_bits/op_prod_meat.hpp"
+	"armadillo_bits/op_pinv_meat.hpp"
+	"armadillo_bits/op_dotext_meat.hpp"
+	"armadillo_bits/op_flip_meat.hpp"
+	"armadillo_bits/op_princomp_meat.hpp"
+	"armadillo_bits/op_princomp_cov_meat.hpp"
+	"armadillo_bits/op_misc_meat.hpp"
+	"armadillo_bits/op_relational_meat.hpp"
+	"armadillo_bits/op_find_meat.hpp"
+	"armadillo_bits/op_chol_meat.hpp"
+	"armadillo_bits/op_cx_scalar_meat.hpp"
+	"armadillo_bits/glue_times_meat.hpp"
+	"armadillo_bits/glue_mixed_meat.hpp"
+	"armadillo_bits/glue_cov_meat.hpp"
+	"armadillo_bits/glue_cor_meat.hpp"
+	"armadillo_bits/glue_kron_meat.hpp"
+	"armadillo_bits/glue_cross_meat.hpp"
+	"armadillo_bits/glue_join_meat.hpp"
+	"armadillo_bits/glue_relational_meat.hpp"
+	"armadillo_bits/glue_solve_meat.hpp"
+	"armadillo_bits/glue_conv_meat.hpp"
+	"armadillo_bits/glue_toeplitz_meat.hpp"
+
+1288861999 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/config.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/compiler_setup.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/itpp_wrap.hpp
+	<itpp/base/mat.h>
+	<itpp/base/vec.h>
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/forward_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/arma_static_assert.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/typedef.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/format_wrap.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/constants.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/arma_version.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/arma_config.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/traits.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/promote_type.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/upgrade_val.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/restrictors.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/access.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/span.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Base.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/BaseCube.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/syslib_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/arrayops_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/podarray_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/blas_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/lapack_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/atlas_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/auxlib_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/injector_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Mat_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Col_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Row_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Cube_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/typedef_fixed.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/field_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/subview_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/subview_field_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/subview_cube_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/diagview_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/diskio_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/wall_clock_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/running_stat_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/running_stat_vec_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Op_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/OpCube_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/eOp_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/eOpCube_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/mtOp_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/mtOpCube_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Glue_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/eGlue_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/mtGlue_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/GlueCube_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/eGlueCube_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/mtGlueCube_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/eop_core_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/eglue_core_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_diagmat_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_diagvec_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_dot_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_inv_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_htrans_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_max_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_min_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_mean_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_median_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_sort_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_sum_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_stddev_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_trans_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_var_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_repmat_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_reshape_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_cov_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_cor_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_shuffle_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_prod_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_pinv_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_dotext_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_flip_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_princomp_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_princomp_cov_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_misc_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_relational_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_find_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_chol_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_cx_scalar_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_times_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_mixed_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_cov_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_cor_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_kron_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_cross_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_join_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_relational_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_solve_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_conv_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_toeplitz_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/debug.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/cmath_wrap.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Proxy.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/ProxyCube.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/diagmat_proxy.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/unwrap.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/unwrap_cube.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/strip.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Op_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/OpCube_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/mtOp_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/mtOpCube_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Glue_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/GlueCube_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/eop_aux.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/eOp_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/eOpCube_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/eGlue_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/eGlueCube_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/mtGlue_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/mtGlueCube_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/arma_ostream_proto.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/arma_ostream_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/operator_plus.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/operator_minus.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/operator_times.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/operator_schur.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/operator_div.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/operator_relational.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/operator_cube_plus.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/operator_cube_minus.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/operator_cube_times.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/operator_cube_schur.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/operator_cube_div.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/operator_cube_relational.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/operator_ostream.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_conv_to.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_min.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_max.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_accu.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_sum.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_diagmat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_diagvec.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_inv.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_trace.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_trans.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_det.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_log_det.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_eig.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_lu.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_zeros.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_ones.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_misc.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_norm.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_dot.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_randu.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_randn.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_trig.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_mean.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_median.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_stddev.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_var.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_sort.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_sort_index.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_htrans.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_chol.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_qr.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_svd.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_solve.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_repmat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_reshape.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_cov.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_cor.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_shuffle.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_prod.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_eps.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_pinv.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_rank.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_kron.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_flip.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_as_scalar.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_princomp.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_princomp_cov.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_cross.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_join.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_conv.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_trunc_exp.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_trunc_log.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/fn_toeplitz.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/gemm.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/gemv.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/gemm_mixed.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/eop_core_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/eglue_core_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/podarray_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/auxlib_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/injector_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Mat_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Col_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Row_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/Cube_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/field_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/subview_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/subview_field_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/subview_cube_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/diagview_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/diskio_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/wall_clock_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/running_stat_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/running_stat_vec_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_diagmat_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_diagvec_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_dot_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_inv_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_htrans_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_max_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_min_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_mean_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_median_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_sort_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_sum_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_stddev_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_trans_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_var_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_repmat_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_reshape_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_cov_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_cor_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_shuffle_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_prod_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_pinv_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_dotext_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_flip_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_princomp_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_princomp_cov_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_misc_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_relational_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_find_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_chol_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/op_cx_scalar_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_times_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_mixed_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_cov_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_cor_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_kron_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_cross_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_join_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_relational_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_solve_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_conv_meat.hpp
+
+1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_toeplitz_meat.hpp
+
+1288879935 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/Solver/Solver.cpp
+	"Solver.h"
+
+1288877217 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/Solver/Solver.h
+	"../../usr/include/armadillo.h"
+	"../mesh/TetrahedMesh.h"
+	<vector>
+

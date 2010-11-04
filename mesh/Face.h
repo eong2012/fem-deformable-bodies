@@ -1,6 +1,10 @@
 
 
 #include "../Math/Vector3.h"
+
+#ifndef FACE_H
+#define FACE_H
+
 class Face{
 public:
     Face();
@@ -21,3 +25,4 @@ private:
 
 };
 
+#endif
