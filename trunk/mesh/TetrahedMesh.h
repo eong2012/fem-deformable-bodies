@@ -39,6 +39,11 @@ public:
 	float* GetVertexArray();
 	int GetVertexArraySize();
 
+	void updatePosition(unsigned int tetraIndex, vector<Vector3<float> > vertexPos);
+
+	//temp debug thing
+	void printVertices(int ind);
+
 private:
 
     vector<Vertex> mVertices;

@@ -26,6 +26,10 @@ void WindowHandler::display()
 {
     glClearColor(0.0, 0.0, 0.0, 1.0);
    // RenderFirstPass(); //Deformation Simulation
+
+    solver->calcNewPosition(volumeGenerator->getTetrahedMesh());
+
+ //   volumeGenerator->getTetrahedMesh().
     RenderSecondPass(); //Render the actual graphics
 
     glutSwapBuffers();
@@ -99,7 +103,7 @@ void WindowHandler::setupTextures()
 {
     ///Example, if we need the position of the vertices
     //Get the position data for each vertex
-	GLfloat *positionData = volumeGenerator->getTetrahedMesh().GetVertexArray();
+	GLfloat *positionData = volumeGenerator->getTetrahedMesh()->GetVertexArray();
 
     //Create the position texture that will be sent to the shader for integration
 	glGenTextures(1, &positionTexID);
@@ -141,10 +145,10 @@ void WindowHandler::init()
 	volumeGenerator->generateVolume();
 
 	solver = new Solver();
-    solver->contstructKe(&volumeGenerator->getTetrahedMesh());
+    solver->contstructKe(volumeGenerator->getTetrahedMesh());
 
 	//For the deformation
-    textureSize = volumeGenerator->getTetrahedMesh().GetVertexArraySize(); //a texture is optimal if 2^n large
+    textureSize = volumeGenerator->getTetrahedMesh()->GetVertexArraySize(); //a texture is optimal if 2^n large
     nrOfVertices = textureSize*textureSize;
 
 

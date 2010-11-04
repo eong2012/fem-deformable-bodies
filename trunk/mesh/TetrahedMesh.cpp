@@ -199,8 +199,6 @@ void TetrahedMesh::Render(int mode)
 
     Face & face = mFaces[i];
 
-
-
     HalfEdge* edge = &mHalfEdges[face.getEdgeInd()];
 
     Vertex & v1 = mVertices[edge->getVertexInd()];
@@ -395,7 +393,7 @@ void TetrahedMesh::RenderEdges(int mode) {
 }
 
 //Get the vertex array for use to create a texture
-float* TetrahedMesh::GetVertexArray()c
+float* TetrahedMesh::GetVertexArray()
 {
     float *vertexArray = new float[4*mVertices.size()];
 
@@ -452,4 +450,43 @@ vector< Vector3<float> > TetrahedMesh::getVertexPosition(unsigned int tetraIndex
 
 int TetrahedMesh::getNrOfTetrahedra(){
     return mTetraheds.size();
+}
+
+void TetrahedMesh::updatePosition(unsigned int tetraIndex, vector<Vector3<float> > vertexPos)
+{
+    Tetrahed tempTetra;
+    tempTetra = mTetraheds.at(tetraIndex);
+
+    vector<unsigned int> faceIndices = tempTetra.getFaceInd();
+    set<unsigned int> vertexIndices;
+
+     for(int i=0; i<4;i++){
+
+        Face & face = mFaces[faceIndices[i]];
+
+        HalfEdge* edge = &mHalfEdges[face.getEdgeInd()];
+
+        vertexIndices.insert(edge->getVertexInd());
+
+        edge = &mHalfEdges[edge->getNextInd()];
+        vertexIndices.insert(edge->getVertexInd());
+
+        edge = &mHalfEdges[edge->getNextInd()];
+        vertexIndices.insert(edge->getVertexInd());
+    }
+
+    set<unsigned int>::iterator iter = vertexIndices.begin();
+    int count = 0;
+    while(iter!=vertexIndices.end())
+    {
+        mVertices[*iter].setPosition(vertexPos[count]);
+        iter++;
+        count++;
+    }
+
+}
+
+void TetrahedMesh::printVertices(int ind)
+{
+    cout << mVertices[ind].getPosition() << endl;
 }

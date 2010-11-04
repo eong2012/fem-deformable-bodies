@@ -4,7 +4,7 @@ Vertex::~Vertex(){}
 
 void Vertex::setPosition(Vector3<float> p)
 {
-    position = p;
+   position = p;
 }
 void Vertex::setEdgeInd(unsigned int e)
 {

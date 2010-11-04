@@ -19,7 +19,7 @@ public:
 	void changeEdgeRenderMode();
 	void changeTriangleRenderMode();
 
-    TetrahedMesh getTetrahedMesh();
+    TetrahedMesh* getTetrahedMesh();
 
 
 private :

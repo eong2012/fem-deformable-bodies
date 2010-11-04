@@ -127,7 +127,7 @@ void VolumeGenerator::render() {
 	tetrahedMesh->RenderEdges(edgeMode);
 }
 
-TetrahedMesh VolumeGenerator::getTetrahedMesh()
+TetrahedMesh* VolumeGenerator::getTetrahedMesh()
 {
-    return *tetrahedMesh;
+    return tetrahedMesh;
 }
