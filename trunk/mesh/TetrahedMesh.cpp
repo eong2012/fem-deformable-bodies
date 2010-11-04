@@ -93,11 +93,11 @@ void TetrahedMesh::AddFace(unsigned int vertexIndex1,unsigned int vertexIndex2, 
 		}
 		}
 		count++;
-		cout << iter->getOppositeFaceInd() << endl;
+		//cout << iter->getOppositeFaceInd() << endl;
 		iter += 1;
 
 	}
-	cout << "----" << endl;
+	//cout << "----" << endl;
 	//cout <<  "size: " << mFaces.size() << endl;
     // Connect the face to an edge
     face.setEdgeInd(edgeIndex1);
@@ -398,7 +398,7 @@ void TetrahedMesh::RenderEdges(int mode) {
 //Get the vertex array for use to create a texture
 float* TetrahedMesh::GetVertexArray()
 {
-    float vertexArray[4*mVertices.size()];
+    float *vertexArray = new float[4*mVertices.size()];
 
     for(int i = 0; i < mVertices.size(); i++)
     {
