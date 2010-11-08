@@ -1,5 +1,8 @@
 #include "WindowHandler.h"
 
+int X; 
+int Y;
+
 WindowHandler::WindowHandler(void)
 {
 
@@ -9,13 +12,14 @@ WindowHandler::WindowHandler(void)
     glutCreateWindow("");
 
     //Set arcball
-    eye.setVec( 0.0f, 0.0f, 3.0f );
+    eye.setVec( 0.0f, 0.0f, 5.0f );
     center.setVec( 0.0f, 0.0f, 0.0f );
     up.setVec( 0.0f, 1.0f, 0.0f );
 
     SPHERE_RADIUS = 1.0f;
     PI = 3.141592654f;
     buttonPressed = -1;
+	Fxt = arma::zeros(24,1);
 }
 WindowHandler::~WindowHandler(void)
 {
@@ -25,11 +29,7 @@ WindowHandler::~WindowHandler(void)
 void WindowHandler::display()
 {
     glClearColor(0.0, 0.0, 0.0, 1.0);
-   // RenderFirstPass(); //Deformation Simulation
-
-    solver->calcNewPosition(volumeGenerator->getTetrahedMesh());
-
- //   volumeGenerator->getTetrahedMesh().
+    RenderFirstPass(); //Deformation Simulation
     RenderSecondPass(); //Render the actual graphics
 
     glutSwapBuffers();
@@ -91,8 +91,16 @@ void WindowHandler::RenderSecondPass()
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
   ///---
 
-  arcball_rotate();
+  
 
+  //cout << temp << endl;
+  arcball_rotate();  
+  
+  solver->calcNewPosition(volumeGenerator->getTetrahedMesh(), this->Fxt);
+  this->Fxt(0) = 0.00;
+  this->Fxt(1) = 0.00;
+  this->Fxt(2) = 0.00;
+ 
   lightShader->use();
   volumeGenerator->render();
   lightShader->disable();
@@ -103,7 +111,8 @@ void WindowHandler::setupTextures()
 {
     ///Example, if we need the position of the vertices
     //Get the position data for each vertex
-	GLfloat *positionData = volumeGenerator->getTetrahedMesh()->GetVertexArray();
+	/*GLfloat *positionData = volumeGenerator->getTetrahedMesh().GetVertexArray();
+	
 
     //Create the position texture that will be sent to the shader for integration
 	glGenTextures(1, &positionTexID);
@@ -129,12 +138,12 @@ void WindowHandler::setupTextures()
 	if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) != GL_FRAMEBUFFER_COMPLETE_EXT)
 	printf("ERROR - Incomplete FrameBuffer\n");
 
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);*/
 }
 
 void WindowHandler::init()
 {
-
+	solver = new Solver();
     lightShader = new Shader();
     lightShader->load("Shader/vertexPhongShader.glsl","Shader/fragmentPhongShader.glsl");
 
@@ -144,18 +153,13 @@ void WindowHandler::init()
 	volumeGenerator = new VolumeGenerator();
 	volumeGenerator->generateVolume();
 
-	solver = new Solver();
-    solver->contstructKe(volumeGenerator->getTetrahedMesh());
-
 	//For the deformation
     textureSize = volumeGenerator->getTetrahedMesh()->GetVertexArraySize(); //a texture is optimal if 2^n large
-    nrOfVertices = textureSize*textureSize;
-
-
-
+    //
+	this->nrOfVertices = textureSize*textureSize;
     //Setup textures used for the deformation shader
 	setupTextures();
-
+	solver->contstructKe(volumeGenerator->getTetrahedMesh());
 
 
 }
@@ -171,7 +175,7 @@ void WindowHandler::reshape(int w, int h)
     glViewport(0, 0, windowWidth, windowHeight);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective( 45.0f, aspect_ratio, 0.1f, 1000.0f );
+    gluPerspective( 60.0f, aspect_ratio, 1.0f, 650.0f );
     gluLookAt(
         eye.x, eye.y, eye.z,   //eye
         center.x, center.y, center.z,   //lookat
@@ -204,6 +208,8 @@ void WindowHandler::mouseButtonEvent(int button, int state, int x, int y)
 }
 void WindowHandler::mouseMoveEvent(int x, int y)
 {
+	X = x;
+	Y = y;
     if( buttonPressed == GLUT_LEFT_BUTTON || buttonPressed == GLUT_RIGHT_BUTTON || buttonPressed == GLUT_MIDDLE_BUTTON) {
 
 		if( buttonPressed == GLUT_LEFT_BUTTON) {
@@ -233,6 +239,51 @@ void WindowHandler::processNormalKeys(unsigned char key, int x, int y) {
 
 		volumeGenerator->changeTriangleRenderMode();
 	}
+
+	if(key == 116) {
+
+		volumeGenerator->changeTriangleRenderMode();
+	}
+
+	if (key == 102)
+	{
+		this->Fxt(0) = 0.10;
+		this->Fxt(1) = 0.10;
+		this->Fxt(2) = 0.10;
+		this->Fxt(3) = 0.00;
+		this->Fxt(4) = 0.00;
+		this->Fxt(5) = 0.00;
+		this->Fxt(6) = 0.00;
+		this->Fxt(7) = 0.00;
+		this->Fxt(8) = 0.00;
+		this->Fxt(9) = 0.00;
+		this->Fxt(10) = 0.00;
+		this->Fxt(11) = 0.00;
+		this->Fxt(12) = 0.00;
+		this->Fxt(13) = 0.00;
+		this->Fxt(14) = 0.00;
+		this->Fxt(15) = 0.00;
+		this->Fxt(16) = 0.00;
+		this->Fxt(17) = 0.00;
+		this->Fxt(18) = 0.00;
+		this->Fxt(19) = 0.00;
+		this->Fxt(20) = 0.00;
+		this->Fxt(21) = 0.00;
+		this->Fxt(22) = 0.00;
+		this->Fxt(23) = 0.00;
+		
+	
+	
+	}
+
+
+	if (key == 103)
+	{
+		solver->setStaticState();
+
+	}
+
+
 
 }
 
