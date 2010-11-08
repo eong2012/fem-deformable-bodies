@@ -413,14 +413,15 @@ int TetrahedMesh::GetVertexArraySize()
 }
 
 
-vector< Vector3<float> > TetrahedMesh::getVertexPosition(unsigned int tetraIndex){
+vector<arma::Mat<double> > TetrahedMesh::getVertexPosition(unsigned int tetraIndex){
     Tetrahed tempTetra;
     tempTetra = mTetraheds.at(tetraIndex);
 
     vector<unsigned int> faceIndices = tempTetra.getFaceInd();
     set<unsigned int> vertexIndices;
 
-    vector< Vector3<float> > ret;
+	vector<arma::Mat<double> > ret;
+    //vector< Vector3<float> > ret;
 
     for(int i=0; i<4;i++){
 
@@ -441,7 +442,13 @@ vector< Vector3<float> > TetrahedMesh::getVertexPosition(unsigned int tetraIndex
 
     while(iter!=vertexIndices.end())
     {
-        ret.push_back(mVertices[*iter].getPosition());
+		arma::Mat<double> temp(4,1);
+		temp(0) = mVertices[*iter].getPosition()[0];
+		temp(1) = mVertices[*iter].getPosition()[1];
+		temp(2) = mVertices[*iter].getPosition()[2];
+		temp(3) = (*iter);
+        ret.push_back(temp);
+		//cout << *iter << endl;
         iter++;
     }
 

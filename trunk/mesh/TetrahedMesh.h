@@ -1,14 +1,16 @@
-//#include "windows.h"
+#include "windows.h"
 #define GLUT_DISABLE_ATEXIT_HACK
 #define GLEW_STATIC
 
-#include <GL/glew.h>
-#include <GL/glut.h>
+#include <gl/glew.h>
+#include <gl/glut.h>
 
 #include "Tetrahed.h"
 #include "Face.h"
 #include "Vertex.h"
 #include "HalfEdge.h"
+#include "armadillo"
+
 
 #include <vector>
 #include <set>
@@ -33,7 +35,7 @@ public:
 	void RenderNormals(int mode);
 	void RenderEdges(int mode);
 
-	vector< Vector3<float> > getVertexPosition(unsigned int tetraIndex);
+	vector< arma::Mat<double> > getVertexPosition(unsigned int tetraIndex);
 	int getNrOfTetrahedra();
 
 	float* GetVertexArray();
@@ -43,10 +45,11 @@ public:
 
 	//temp debug thing
 	void printVertices(int ind);
+	vector<Vertex> mVertices;
 
 private:
 
-    vector<Vertex> mVertices;
+    
     vector<HalfEdge> mHalfEdges;
     vector<Face> mFaces;
     vector<Tetrahed> mTetraheds;
