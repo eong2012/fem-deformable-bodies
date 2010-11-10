@@ -6,14 +6,16 @@
 
 class Solver{
 public:
-    Solver();
+	Solver();
+	Solver(int nrOfNodes);
     ~Solver();
 
     void contstructKe(TetrahedMesh *mesh);
     void calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt);
 	void tetrahedronAssemble(arma::Mat<double> &K ,arma::Mat<double> k, int i, int j, int m, int n);
 	void setStaticState() {update = true;}
-	void checkCollision();
+	void planeCollisionDetection(arma::Mat<double> X);
+	void planeCollisionHandler(unsigned int forceIndex);
 
 private:
 
@@ -31,5 +33,13 @@ private:
 	arma::Mat<double> grav;
 	vector<arma::Mat<double> >  xOrgin;
 	arma::Mat<double> normal;
+	int nrOfNodes;
+	arma::Mat<double> ForcePrev;
+
+	arma::Mat<double> v;
+	arma::Mat<double> X;
+	arma::Mat<double> collisionForce;
+	double dt;
+	double mass;
 
 };
