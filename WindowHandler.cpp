@@ -19,7 +19,7 @@ WindowHandler::WindowHandler(void)
     SPHERE_RADIUS = 1.0f;
     PI = 3.141592654f;
     buttonPressed = -1;
-	Fxt = arma::zeros(24,1);
+	
 }
 WindowHandler::~WindowHandler(void)
 {
@@ -97,11 +97,10 @@ void WindowHandler::RenderSecondPass()
   arcball_rotate();  
   
   solver->calcNewPosition(volumeGenerator->getTetrahedMesh(), this->Fxt);
-  this->Fxt(0) = 0.00;
-  this->Fxt(1) = 0.00;
-  this->Fxt(2) = 0.00;
+  this->Fxt = arma::zeros(this->Fxt.n_rows,this->Fxt.n_cols);
  
   lightShader->use();
+  
   volumeGenerator->render();
   lightShader->disable();
 
@@ -143,7 +142,7 @@ void WindowHandler::setupTextures()
 
 void WindowHandler::init()
 {
-	solver = new Solver();
+	
     lightShader = new Shader();
     lightShader->load("Shader/vertexPhongShader.glsl","Shader/fragmentPhongShader.glsl");
 
@@ -152,7 +151,13 @@ void WindowHandler::init()
 
 	volumeGenerator = new VolumeGenerator();
 	volumeGenerator->generateVolume();
-
+	
+	
+	solver = new Solver(volumeGenerator->getTetrahedMesh()->getNrOfNodes());
+	Fxt = arma::zeros(volumeGenerator->getTetrahedMesh()->getNrOfNodes()*3,1);
+	
+	//volumeGenerator->subdivide();
+	
 	//For the deformation
     textureSize = volumeGenerator->getTetrahedMesh()->GetVertexArraySize(); //a texture is optimal if 2^n large
     //
@@ -250,27 +255,7 @@ void WindowHandler::processNormalKeys(unsigned char key, int x, int y) {
 		this->Fxt(0) = 0.10;
 		this->Fxt(1) = 0.10;
 		this->Fxt(2) = 0.10;
-		this->Fxt(3) = 0.00;
-		this->Fxt(4) = 0.00;
-		this->Fxt(5) = 0.00;
-		this->Fxt(6) = 0.00;
-		this->Fxt(7) = 0.00;
-		this->Fxt(8) = 0.00;
-		this->Fxt(9) = 0.00;
-		this->Fxt(10) = 0.00;
-		this->Fxt(11) = 0.00;
-		this->Fxt(12) = 0.00;
-		this->Fxt(13) = 0.00;
-		this->Fxt(14) = 0.00;
-		this->Fxt(15) = 0.00;
-		this->Fxt(16) = 0.00;
-		this->Fxt(17) = 0.00;
-		this->Fxt(18) = 0.00;
-		this->Fxt(19) = 0.00;
-		this->Fxt(20) = 0.00;
-		this->Fxt(21) = 0.00;
-		this->Fxt(22) = 0.00;
-		this->Fxt(23) = 0.00;
+	
 		
 	
 	
@@ -279,7 +264,9 @@ void WindowHandler::processNormalKeys(unsigned char key, int x, int y) {
 
 	if (key == 103)
 	{
-		solver->setStaticState();
+		this->Fxt(0) = -0.10;
+		this->Fxt(1) = -0.10;
+		this->Fxt(2) = -0.10;
 
 	}
 
