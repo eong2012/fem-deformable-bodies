@@ -15,7 +15,7 @@ void VolumeGenerator::generateVolume() {
 	Vector3<float> t =  Vector3<float>(0.0f, 0.0f,0.0f);
     float scale = 0.7;
 	vector<Vector3<float> > vertices;
-
+	
 	temp1 = Vector3<float>(0.5f, 0.5f,0.5f);
 	temp2 = Vector3<float>(-0.5f, 0.5f,-0.5f);
     temp3 = Vector3<float>(0.5f, -0.5f, -0.5f);
@@ -27,7 +27,8 @@ void VolumeGenerator::generateVolume() {
 	vertices.push_back(temp4*scale+t);
 
     tetrahedMesh->AddTetrahedron(vertices);
-
+	
+	/*
 	vertices.clear();
 
 	temp1 = Vector3<float>(0.5f, 0.5f,0.5f);
@@ -41,9 +42,9 @@ void VolumeGenerator::generateVolume() {
 	vertices.push_back(temp4*scale+t);
 
 	tetrahedMesh->AddTetrahedron(vertices);
-
+	*//*
 	vertices.clear();
-
+	
 	temp1 = Vector3<float>(0.5f, 0.5f,0.5f);
     temp2 = Vector3<float>(-0.5f, 0.5f,-0.5f);
 	temp3 = Vector3<float>(0.5f, 0.5f, -0.5f);
@@ -56,7 +57,7 @@ void VolumeGenerator::generateVolume() {
 	vertices.push_back(temp4*scale+t);
 
 	tetrahedMesh->AddTetrahedron(vertices);
-
+	*/
 	vertices.clear();
 
 	temp1 = Vector3<float>(0.5f, 0.5f,0.5f);
@@ -70,9 +71,9 @@ void VolumeGenerator::generateVolume() {
 	vertices.push_back(temp4*scale+t);
 
 	tetrahedMesh->AddTetrahedron(vertices);
-
+	
 	vertices.clear();
-
+	
 	temp1 = Vector3<float>(-0.5f, 0.5f,-0.5f);
     temp2 = Vector3<float>(0.5f, -0.5f, -0.5f);
 	temp3= Vector3<float>(-0.5f, -0.5f, 0.5f);
@@ -84,7 +85,11 @@ void VolumeGenerator::generateVolume() {
 	vertices.push_back(temp4*scale+t);
 
 	tetrahedMesh->AddTetrahedron(vertices);
+}
 
+void VolumeGenerator::subdivide() {
+
+	tetrahedMesh->subdivide();
 
 }
 

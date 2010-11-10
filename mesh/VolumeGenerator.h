@@ -20,6 +20,7 @@ public:
 	void changeTriangleRenderMode();
 
     TetrahedMesh* getTetrahedMesh();
+	void subdivide();
 
 
 private :
