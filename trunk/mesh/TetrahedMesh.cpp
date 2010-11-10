@@ -3,89 +3,111 @@
 #include <cstdlib>
 using namespace std;
 TetrahedMesh::TetrahedMesh()
-{}
+{
+	mTetraheds = new vector<Tetrahed>();
+	mHalfEdges = new vector<HalfEdge>();
+	mFaces = new vector<Face>();
+	mVertices = new vector<Vertex>;
+
+	
+
+}
 TetrahedMesh::~TetrahedMesh(){}
 
-void TetrahedMesh::AddTetrahedron(vector<Vector3<float> > vertices)
-{
+void TetrahedMesh::AddTetrahedron(vector<Vector3<float> > vertices ) {
 
+	buildTetrahedonMesh(vertices, mTetraheds, mFaces, mHalfEdges, mVertices, false); 
+}
+
+void TetrahedMesh::buildTetrahedonMesh(vector<Vector3<float> > vertices, vector<Tetrahed> *mtetrahedsTemp, vector<Face> *mFacesTemp, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp, bool subdivide)
+{
     //set the vertex index
     unsigned int vertexIndex1, vertexIndex2, vertexIndex3, vertexIndex4;
-    setTetraGeometry(vertices,vertexIndex1, vertexIndex2, vertexIndex3, vertexIndex4);
+    setTetraGeometry(vertices,vertexIndex1, vertexIndex2, vertexIndex3, vertexIndex4, mVerticesTemp);
 
     //Add each tetrahedron face, send in vertex indices counter-clockwise
     unsigned int faceIndex1, faceIndex2,faceIndex3,faceIndex4;
 
-	AddFace(vertexIndex1, vertexIndex4, vertexIndex3,faceIndex1);
-    AddFace(vertexIndex1, vertexIndex3, vertexIndex2,faceIndex2);
-    AddFace(vertexIndex2, vertexIndex3, vertexIndex4,faceIndex3);
-    AddFace(vertexIndex1, vertexIndex2, vertexIndex4,faceIndex4);
+	AddFace(vertexIndex1, vertexIndex4, vertexIndex3,faceIndex1, mFacesTemp, mEdgesTemp, mVerticesTemp);
+    AddFace(vertexIndex1, vertexIndex3, vertexIndex2,faceIndex2, mFacesTemp, mEdgesTemp, mVerticesTemp);
+    AddFace(vertexIndex2, vertexIndex3, vertexIndex4,faceIndex3, mFacesTemp, mEdgesTemp, mVerticesTemp);
+    AddFace(vertexIndex1, vertexIndex2, vertexIndex4,faceIndex4, mFacesTemp, mEdgesTemp, mVerticesTemp);
 
 	//Add a tetrahed which contains pointers to all spanning faces
-	Tetrahed temp;
-	temp.setFaceInd1(faceIndex1);
-	temp.setFaceInd2(faceIndex2);
-	temp.setFaceInd3(faceIndex3);
-	temp.setFaceInd4(faceIndex4);
-	mTetraheds.push_back(temp);
+	Tetrahed* temp = new Tetrahed();
+	temp->setFaceInd1(faceIndex1);
+	temp->setFaceInd2(faceIndex2);
+	temp->setFaceInd3(faceIndex3);
+	temp->setFaceInd4(faceIndex4);
+	
+	
+	mtetrahedsTemp->push_back((*temp));
+	delete temp;
 
+	if (subdivide == false){
+	mTetraheds = mtetrahedsTemp;
+	mHalfEdges = mEdgesTemp;
+	mVertices = mVerticesTemp;
+	mFaces = mFacesTemp;
+	}
 
 }
 
-void TetrahedMesh::setTetraGeometry(vector<Vector3<float> > vertices, unsigned int &index1,unsigned int &index2,unsigned int &index3,unsigned int &index4)
+void TetrahedMesh::setTetraGeometry(vector<Vector3<float> > vertices, unsigned int &index1,unsigned int &index2,unsigned int &index3,unsigned int &index4, vector<Vertex> *mVertices)
 {
 //    unsigned int index1,index2,index3,index4;
     bool success = true;
-    success &= AddVertex(vertices[0],index1);
-    success &= AddVertex(vertices[1],index2);
-    success &= AddVertex(vertices[2],index3);
-    success &= AddVertex(vertices[3],index4);
+    success &= AddVertex(vertices[0],index1, mVertices);
+    success &= AddVertex(vertices[1],index2, mVertices);
+    success &= AddVertex(vertices[2],index3, mVertices);
+    success &= AddVertex(vertices[3],index4, mVertices);
 
 
 }
-void TetrahedMesh::AddFace(unsigned int vertexIndex1,unsigned int vertexIndex2, unsigned int vertexIndex3,unsigned int &faceIndex)
+void TetrahedMesh::AddFace(unsigned int vertexIndex1,unsigned int vertexIndex2, unsigned int vertexIndex3,unsigned int &faceIndex, vector<Face> *mFacesTemp, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp)
 {
     //add halfedges
     unsigned int edgeIndex1,edgeIndex2,edgeIndex3,edgeIndex4,edgeIndex5,edgeIndex6;
-    AddHalfEdgePair(vertexIndex1,vertexIndex2,edgeIndex1,edgeIndex2);
-    AddHalfEdgePair(vertexIndex2,vertexIndex3,edgeIndex3,edgeIndex4);
-    AddHalfEdgePair(vertexIndex3,vertexIndex1,edgeIndex5,edgeIndex6);
+    AddHalfEdgePair(vertexIndex1,vertexIndex2,edgeIndex1,edgeIndex2, mEdgesTemp,mVerticesTemp);
+    AddHalfEdgePair(vertexIndex2,vertexIndex3,edgeIndex3,edgeIndex4, mEdgesTemp,mVerticesTemp);
+    AddHalfEdgePair(vertexIndex3,vertexIndex1,edgeIndex5,edgeIndex6, mEdgesTemp,mVerticesTemp);
 
     // Connect inner ring
-    mHalfEdges[edgeIndex1].setNextInd(edgeIndex3);
-    mHalfEdges[edgeIndex1].setPrevInd(edgeIndex5);
+    mEdgesTemp->at(edgeIndex1).setNextInd(edgeIndex3);
+    mEdgesTemp->at(edgeIndex1).setPrevInd(edgeIndex5);
 
-    mHalfEdges[edgeIndex3].setNextInd(edgeIndex5);
-    mHalfEdges[edgeIndex3].setPrevInd(edgeIndex1);
+    mEdgesTemp->at(edgeIndex3).setNextInd(edgeIndex5);
+    mEdgesTemp->at(edgeIndex3).setPrevInd(edgeIndex1);
 
-    mHalfEdges[edgeIndex5].setNextInd(edgeIndex1);
-    mHalfEdges[edgeIndex5].setPrevInd(edgeIndex3);
+    mEdgesTemp->at(edgeIndex5).setNextInd(edgeIndex1);
+    mEdgesTemp->at(edgeIndex5).setPrevInd(edgeIndex3);
 
   	 // Finally, create the face, don't forget to set the normal
-	Face face;
+	Face *face = new Face();
+
 
     vector<Face>::iterator iter;
-	iter = mFaces.begin();
+	iter = mFacesTemp->begin();
 	int count = 0;
-	while(iter != mFaces.end()){
+	while(iter != mFacesTemp->end()){
 
-    HalfEdge* edge = &mHalfEdges[iter->getEdgeInd()];
+		HalfEdge* edge = &mEdgesTemp->at(iter->getEdgeInd());
+		
+		Vertex & v1 = mVerticesTemp->at(edge->getVertexInd());
+		edge = &mEdgesTemp->at(edge->getNextInd());
 
-    Vertex & v1 = mVertices[edge->getVertexInd()];
-    edge = &mHalfEdges[edge->getNextInd()];
+		Vertex & v2 = mVerticesTemp->at(edge->getVertexInd());
+		edge = &mEdgesTemp->at(edge->getNextInd());
 
-    Vertex & v2 = mVertices[edge->getVertexInd()];
-    edge = &mHalfEdges[edge->getNextInd()];
-
-    Vertex & v3 = mVertices[edge->getVertexInd()];
+		Vertex & v3 = mVerticesTemp->at(edge->getVertexInd());
 
 
-	if (mVertices[vertexIndex1].getPosition() == v1.getPosition() || mVertices[vertexIndex1].getPosition() == v2.getPosition() || mVertices[vertexIndex1].getPosition() == v3.getPosition()){
-		if(mVertices[vertexIndex2].getPosition() == v1.getPosition() || mVertices[vertexIndex2].getPosition() == v2.getPosition() || mVertices[vertexIndex2].getPosition() == v3.getPosition()){
-			if(mVertices[vertexIndex3].getPosition() == v1.getPosition() || mVertices[vertexIndex3].getPosition() == v2.getPosition() || mVertices[vertexIndex3].getPosition() == v3.getPosition()){
+	if (mVerticesTemp->at(vertexIndex1).getPosition() == v1.getPosition() || mVerticesTemp->at(vertexIndex1).getPosition() == v2.getPosition() || mVerticesTemp->at(vertexIndex1).getPosition() == v3.getPosition()){
+		if(mVerticesTemp->at(vertexIndex2).getPosition() == v1.getPosition() || mVerticesTemp->at(vertexIndex2).getPosition() == v2.getPosition() || mVerticesTemp->at(vertexIndex2).getPosition() == v3.getPosition()){
+			if(mVerticesTemp->at(vertexIndex3).getPosition() == v1.getPosition() || mVerticesTemp->at(vertexIndex3).getPosition() == v2.getPosition() || mVerticesTemp->at(vertexIndex3).getPosition() == v3.getPosition()){
 
-				face.setOppositeFaceInd(count);
-				iter->setOppositeFaceInd(mFaces.size());
+				face->setOppositeFaceInd(count);
+				iter->setOppositeFaceInd(mFacesTemp->size());
 				//cout <<  "Count: " << count << endl;
 				break;
 			}
@@ -99,58 +121,64 @@ void TetrahedMesh::AddFace(unsigned int vertexIndex1,unsigned int vertexIndex2, 
 	}
 
     // Connect the face to an edge
-    face.setEdgeInd(edgeIndex1);
+    face->setEdgeInd(edgeIndex1);
 
-    mFaces.push_back(face);
-
+    mFacesTemp->push_back((*face));
+	delete face;
+	
     // Compute and assign a normal
-    mFaces.back().setNormal(FaceNormal(mFaces.size() - 1));
+    mFacesTemp->back().setNormal(FaceNormal(mFacesTemp->size() - 1, mFacesTemp, mEdgesTemp, mVerticesTemp));
 
     // All half-edges share the same left face (previously added)
-    mHalfEdges[edgeIndex1].setFaceInd(mFaces.size() - 1);
-    mHalfEdges[edgeIndex2].setFaceInd(mFaces.size() - 1);
-    mHalfEdges[edgeIndex3].setFaceInd(mFaces.size() - 1);
+    mEdgesTemp->at(edgeIndex1).setFaceInd(mFacesTemp->size() - 1);
+    mEdgesTemp->at(edgeIndex2).setFaceInd(mFacesTemp->size() - 1);
+    mEdgesTemp->at(edgeIndex3).setFaceInd(mFacesTemp->size() - 1);
     //also send back faceIndex
-    faceIndex = mFaces.size() - 1;
+    faceIndex = mFacesTemp->size() - 1;
 
 
 
 }
 
 
-void TetrahedMesh::AddHalfEdgePair(unsigned int vertexIndex1,unsigned int vertexIndex2,unsigned int &edgeIndex1,unsigned int &edgeIndex2)
+void TetrahedMesh::AddHalfEdgePair(unsigned int vertexIndex1,unsigned int vertexIndex2,unsigned int &edgeIndex1,unsigned int &edgeIndex2, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp)
 {
   //Set index
-  edgeIndex1 = mHalfEdges.size();
+  edgeIndex1 = mEdgesTemp->size();
   edgeIndex2 = edgeIndex1+1;
 
   // Create edges and set pair index
-  HalfEdge halfEdge1, halfEdge2;
-  halfEdge1.setPairInd(edgeIndex2);
-  halfEdge2.setPairInd(edgeIndex1);
+  HalfEdge *halfEdge1, *halfEdge2;
+
+  halfEdge1 = new HalfEdge();
+  halfEdge2 = new HalfEdge();
+
+  halfEdge1->setPairInd(edgeIndex2);
+  halfEdge2->setPairInd(edgeIndex1);
 
   // Connect the edges to the verts
-  halfEdge1.setVertexInd(vertexIndex1);
-  halfEdge2.setVertexInd(vertexIndex2);
+  halfEdge1->setVertexInd(vertexIndex1);
+  halfEdge2->setVertexInd(vertexIndex2);
 
   // Connect the verts to the edges
-  mVertices[vertexIndex1].setEdgeInd(edgeIndex1);
-  mVertices[vertexIndex2].setEdgeInd(edgeIndex2);
+  mVerticesTemp->at(vertexIndex1).setEdgeInd(edgeIndex1);
+  mVerticesTemp->at(vertexIndex2).setEdgeInd(edgeIndex2);
 
    // Store the edges in mEdges
-  mHalfEdges.push_back(halfEdge1);
-  mHalfEdges.push_back(halfEdge2);
+  mEdgesTemp->push_back(*halfEdge1);
+  mEdgesTemp->push_back(*halfEdge2);
+  delete halfEdge1,halfEdge2;
 
   // Store the first edge in the map as an OrderedPair
  // OrderedPair op(v1, v2);
 }
-bool TetrahedMesh::AddVertex(Vector3<float> vertexPos, unsigned int &index)
+bool TetrahedMesh::AddVertex(Vector3<float> vertexPos, unsigned int &index, vector<Vertex> *mVerticesTemp)
 {
 
 	vector<Vertex>::iterator iter;
-	iter = mVertices.begin();
+	iter = mVerticesTemp->begin();
 	int count = 0;
-	while(iter != mVertices.end()){
+	while(iter != mVerticesTemp->end()){
 
 		if (iter->getPosition() == vertexPos) {
 
@@ -164,24 +192,24 @@ bool TetrahedMesh::AddVertex(Vector3<float> vertexPos, unsigned int &index)
 
   Vertex vert;
   vert.setPosition(vertexPos);
-  mVertices.push_back(vert); // add it to the vertex list
-  index = mVertices.size()-1;
+  mVerticesTemp->push_back(vert); // add it to the vertex list
+  index = mVerticesTemp->size()-1;
   return true;
 }
 
-Vector3<float> TetrahedMesh::FaceNormal(unsigned int faceIndex)
-{
-  unsigned int edgeInd1 = mFaces[faceIndex].getEdgeInd();
-  unsigned int vertInd1 = mHalfEdges[edgeInd1].getVertexInd();
-  const Vector3<float> &p1 = mVertices[vertInd1].getPosition();
+Vector3<float> TetrahedMesh::FaceNormal(unsigned int faceIndex, vector<Face> *mFacesTemp, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp)
+{ 
+  unsigned int edgeInd1 = mFacesTemp->at(faceIndex).getEdgeInd();
+  unsigned int vertInd1 = mEdgesTemp->at(edgeInd1).getVertexInd();
+  const Vector3<float> &p1 = mVerticesTemp->at(vertInd1).getPosition();
 
-  unsigned int edgeInd2 = mHalfEdges[edgeInd1].getNextInd();
-  unsigned int vertInd2 = mHalfEdges[edgeInd2].getVertexInd();
-  const Vector3<float> &p2 = mVertices[vertInd2].getPosition();
+  unsigned int edgeInd2 = mEdgesTemp->at(edgeInd1).getNextInd();
+  unsigned int vertInd2 = mEdgesTemp->at(edgeInd2).getVertexInd();
+  const Vector3<float> &p2 = mVerticesTemp->at(vertInd2).getPosition();
 
-  unsigned int edgeInd3 = mHalfEdges[edgeInd2].getNextInd();
-  unsigned int vertInd3 = mHalfEdges[edgeInd3].getVertexInd();
-  const Vector3<float> &p3 = mVertices[vertInd3].getPosition();
+  unsigned int edgeInd3 = mEdgesTemp->at(edgeInd2).getNextInd();
+  unsigned int vertInd3 = mEdgesTemp->at(edgeInd3).getVertexInd();
+  const Vector3<float> &p3 = mVerticesTemp->at(vertInd3).getPosition();
 
 
   const Vector3<float> e1 = p2-p1;
@@ -194,20 +222,20 @@ void TetrahedMesh::Render(int mode)
 
 // Draw geometry
 
-  const int numTriangles = mFaces.size();
+  const int numTriangles = mFaces->size();
   for (int i = 0; i < numTriangles; i++){
 
-    Face & face = mFaces[i];
+    Face & face = mFaces->at(i);
 
-    HalfEdge* edge = &mHalfEdges[face.getEdgeInd()];
+    HalfEdge* edge = &mHalfEdges->at(face.getEdgeInd());
 
-    Vertex & v1 = mVertices[edge->getVertexInd()];
-    edge = &mHalfEdges[edge->getNextInd()];
+    Vertex & v1 = mVertices->at(edge->getVertexInd());
+    edge = &mHalfEdges->at(edge->getNextInd());
 
-    Vertex & v2 = mVertices[edge->getVertexInd()];
-    edge = &mHalfEdges[edge->getNextInd()];
+    Vertex & v2 = mVertices->at(edge->getVertexInd());
+    edge = &mHalfEdges->at(edge->getNextInd());
 
-    Vertex & v3 = mVertices[edge->getVertexInd()];
+    Vertex & v3 = mVertices->at(edge->getVertexInd());
 
 		if(mode == 2){
 			if (face.getOppositeFaceInd() == -1) {
@@ -260,21 +288,21 @@ void TetrahedMesh::Render(int mode)
 void TetrahedMesh::RenderNormals(int mode) {
 
 
-	const int numTriangles = mFaces.size();
+	const int numTriangles = mFaces->size();
 
     for (int i = 0; i < numTriangles; i++){
 
-    Face & face = mFaces[i];
+    Face & face = mFaces->at(i);
 
-    HalfEdge* edge = &mHalfEdges[face.getEdgeInd()];
+    HalfEdge* edge = &mHalfEdges->at(face.getEdgeInd());
 
-    Vertex & v1 = mVertices[edge->getVertexInd()];
-    edge = &mHalfEdges[edge->getNextInd()];
+    Vertex & v1 = mVertices->at(edge->getVertexInd());
+    edge = &mHalfEdges->at(edge->getNextInd());
 
-    Vertex & v2 = mVertices[edge->getVertexInd()];
-    edge = &mHalfEdges[edge->getNextInd()];
+    Vertex & v2 = mVertices->at(edge->getVertexInd());
+    edge = &mHalfEdges->at(edge->getNextInd());
 
-    Vertex & v3 = mVertices[edge->getVertexInd()];
+    Vertex & v3 = mVertices->at(edge->getVertexInd());
 
 	Vector3<float> vCenter, normal;
 	normal = face.getNormal();
@@ -322,22 +350,22 @@ void TetrahedMesh::RenderNormals(int mode) {
 
 void TetrahedMesh::RenderEdges(int mode) {
 
-	const int numTriangles = mFaces.size();
+	const int numTriangles = mFaces->size();
 
     for (int i = 0; i < numTriangles; i++){
 
-    Face & face = mFaces[i];
+		Face & face = mFaces->at(i);
 
 
-    HalfEdge* edge = &mHalfEdges[face.getEdgeInd()];
+    HalfEdge* edge = &mHalfEdges->at(face.getEdgeInd());
 
-    Vertex & v1 = mVertices[edge->getVertexInd()];
-    edge = &mHalfEdges[edge->getNextInd()];
+    Vertex & v1 = mVertices->at(edge->getVertexInd());
+    edge = &mHalfEdges->at(edge->getNextInd());
 
-    Vertex & v2 = mVertices[edge->getVertexInd()];
-    edge = &mHalfEdges[edge->getNextInd()];
+    Vertex & v2 = mVertices->at(edge->getVertexInd());
+    edge = &mHalfEdges->at(edge->getNextInd());
 
-    Vertex & v3 = mVertices[edge->getVertexInd()];
+    Vertex & v3 = mVertices->at(edge->getVertexInd());
 
 		if (mode == 0) {
 			if (face.getOppositeFaceInd() != -1) {
@@ -395,13 +423,13 @@ void TetrahedMesh::RenderEdges(int mode) {
 //Get the vertex array for use to create a texture
 float* TetrahedMesh::GetVertexArray()
 {
-    float *vertexArray = new float[4*mVertices.size()];
+    float *vertexArray = new float[4*mVertices->size()];
 
-    for(int i = 0; i < mVertices.size(); i++)
+    for(int i = 0; i < mVertices->size(); i++)
     {
-        vertexArray[i*4] = mVertices[i].getPosition()[0];
-        vertexArray[i*4+1] = mVertices[i].getPosition()[1];
-        vertexArray[i*4+2] = mVertices[i].getPosition()[2];
+        vertexArray[i*4] = mVertices->at(i).getPosition()[0];
+        vertexArray[i*4+1] = mVertices->at(i).getPosition()[1];
+        vertexArray[i*4+2] = mVertices->at(i).getPosition()[2];
         vertexArray[i*4+3] = 1.0f;
     }
     return vertexArray;
@@ -409,13 +437,13 @@ float* TetrahedMesh::GetVertexArray()
 
 int TetrahedMesh::GetVertexArraySize()
 {
-    return 4*mVertices.size();
+    return 4*mVertices->size();
 }
 
 
 vector<arma::Mat<double> > TetrahedMesh::getVertexPosition(unsigned int tetraIndex){
     Tetrahed tempTetra;
-    tempTetra = mTetraheds.at(tetraIndex);
+    tempTetra = mTetraheds->at(tetraIndex);
 
     vector<unsigned int> faceIndices = tempTetra.getFaceInd();
     set<unsigned int> vertexIndices;
@@ -425,16 +453,16 @@ vector<arma::Mat<double> > TetrahedMesh::getVertexPosition(unsigned int tetraInd
 
     for(int i=0; i<4;i++){
 
-        Face & face = mFaces[faceIndices[i]];
+		Face & face = mFaces->at(faceIndices[i]);
 
-        HalfEdge* edge = &mHalfEdges[face.getEdgeInd()];
+        HalfEdge* edge = &mHalfEdges->at(face.getEdgeInd());
 
         vertexIndices.insert(edge->getVertexInd());
 
-        edge = &mHalfEdges[edge->getNextInd()];
+        edge = &mHalfEdges->at(edge->getNextInd());
         vertexIndices.insert(edge->getVertexInd());
 
-        edge = &mHalfEdges[edge->getNextInd()];
+        edge = &mHalfEdges->at(edge->getNextInd());
         vertexIndices.insert(edge->getVertexInd());
     }
 
@@ -443,9 +471,9 @@ vector<arma::Mat<double> > TetrahedMesh::getVertexPosition(unsigned int tetraInd
     while(iter!=vertexIndices.end())
     {
 		arma::Mat<double> temp(4,1);
-		temp(0) = mVertices[*iter].getPosition()[0];
-		temp(1) = mVertices[*iter].getPosition()[1];
-		temp(2) = mVertices[*iter].getPosition()[2];
+		temp(0) = mVertices->at(*iter).getPosition()[0];
+		temp(1) = mVertices->at(*iter).getPosition()[1];
+		temp(2) = mVertices->at(*iter).getPosition()[2];
 		temp(3) = (*iter);
         ret.push_back(temp);
 		//cout << *iter << endl;
@@ -456,29 +484,29 @@ vector<arma::Mat<double> > TetrahedMesh::getVertexPosition(unsigned int tetraInd
 }
 
 int TetrahedMesh::getNrOfTetrahedra(){
-    return mTetraheds.size();
+    return mTetraheds->size();
 }
 
 void TetrahedMesh::updatePosition(unsigned int tetraIndex, vector<Vector3<float> > vertexPos)
 {
     Tetrahed tempTetra;
-    tempTetra = mTetraheds.at(tetraIndex);
+    tempTetra = mTetraheds->at(tetraIndex);
 
     vector<unsigned int> faceIndices = tempTetra.getFaceInd();
     set<unsigned int> vertexIndices;
 
      for(int i=0; i<4;i++){
 
-        Face & face = mFaces[faceIndices[i]];
+        Face & face = mFaces->at(faceIndices[i]);
 
-        HalfEdge* edge = &mHalfEdges[face.getEdgeInd()];
+        HalfEdge* edge = &mHalfEdges->at(face.getEdgeInd());
 
         vertexIndices.insert(edge->getVertexInd());
 
-        edge = &mHalfEdges[edge->getNextInd()];
+        edge = &mHalfEdges->at(edge->getNextInd());
         vertexIndices.insert(edge->getVertexInd());
 
-        edge = &mHalfEdges[edge->getNextInd()];
+        edge = &mHalfEdges->at(edge->getNextInd());
         vertexIndices.insert(edge->getVertexInd());
     }
 
@@ -486,7 +514,7 @@ void TetrahedMesh::updatePosition(unsigned int tetraIndex, vector<Vector3<float>
     int count = 0;
     while(iter!=vertexIndices.end())
     {
-        mVertices[*iter].setPosition(vertexPos[count]);
+        mVertices->at(*iter).setPosition(vertexPos[count]);
         iter++;
         count++;
     }
@@ -495,5 +523,123 @@ void TetrahedMesh::updatePosition(unsigned int tetraIndex, vector<Vector3<float>
 
 void TetrahedMesh::printVertices(int ind)
 {
-    cout << mVertices[ind].getPosition() << endl;
+    cout << mVertices->at(ind).getPosition() << endl;
+}
+
+
+void TetrahedMesh::subdivide() {
+
+
+	vector<HalfEdge> *newMHalfEdges = new vector<HalfEdge>();
+    vector<Face> *newMFaces = new vector<Face>();
+    vector<Tetrahed> *newMTetraheds = new vector<Tetrahed>();
+	vector<Vertex> *newMVertices = new vector<Vertex>();
+
+	for(int i = 0; i < mTetraheds->size(); i++) {
+	 
+		arma::Mat<double> v5;
+		v5 = arma::zeros(3,1);
+
+		vector<Vector3<float> > verticesList;
+		vector<arma::Mat<double> > verticesT = getVertexPosition(i);
+		for (int j= 0; j < verticesT.size(); j++) {
+		
+			
+			v5 += verticesT[j].rows(0,2);
+			Vector3<float> temp(verticesT[j](0),verticesT[j](1),verticesT[j](2));
+			verticesList.push_back(temp);
+		}
+		
+		v5 = v5/verticesT.size();
+		verticesT.clear();
+		Vector3<float > v5p(v5(0), v5(1), v5(2)); 
+		vector<Vector3<float> > verticesList2;
+		
+		//TETRAHED 1
+		
+		if(i == 1 || i == 2) {
+		verticesList2.push_back(verticesList.at(2));
+		verticesList2.push_back(verticesList.at(1));
+		verticesList2.push_back(verticesList.at(0));
+		verticesList2.push_back(v5p);
+
+		} else {
+		verticesList2.push_back(verticesList.at(0));
+		verticesList2.push_back(verticesList.at(1));
+		verticesList2.push_back(verticesList.at(2));
+		verticesList2.push_back(v5p);
+		}
+		this->buildTetrahedonMesh(verticesList2,newMTetraheds,newMFaces,newMHalfEdges,newMVertices, true);
+		verticesList2.clear();
+		
+		//TETRAHED 2
+		if(i == 1 || i == 2) {
+		verticesList2.push_back(verticesList.at(2));
+		verticesList2.push_back(v5p);
+		verticesList2.push_back(verticesList.at(3));
+		verticesList2.push_back(verticesList.at(1));
+		} else {
+		verticesList2.push_back(verticesList.at(1));
+		verticesList2.push_back(v5p);
+		verticesList2.push_back(verticesList.at(3));
+		verticesList2.push_back(verticesList.at(2));
+
+		}
+		this->buildTetrahedonMesh(verticesList2,newMTetraheds,newMFaces,newMHalfEdges,newMVertices, true);
+		verticesList2.clear();
+		
+
+		//TETRAHED 3
+		if(i == 1 || i == 2) {
+		verticesList2.push_back(v5p);
+		verticesList2.push_back(verticesList.at(3));
+		verticesList2.push_back(verticesList.at(0));
+		verticesList2.push_back(verticesList.at(2));
+		
+		} else {
+		
+		verticesList2.push_back(verticesList.at(0));
+		verticesList2.push_back(verticesList.at(3));
+		verticesList2.push_back(v5p);
+		verticesList2.push_back(verticesList.at(2));
+		}
+
+		this->buildTetrahedonMesh(verticesList2,newMTetraheds,newMFaces,newMHalfEdges,newMVertices, true);
+		verticesList2.clear();
+	
+		
+		//TETRAHED 4
+		if(i == 1 || i == 2) {
+		
+		verticesList2.push_back(verticesList.at(1));
+		verticesList2.push_back(verticesList.at(3));
+		verticesList2.push_back(verticesList.at(0));
+		verticesList2.push_back(v5p);
+		
+		} 
+		
+		else {
+		verticesList2.push_back(verticesList.at(0));
+		verticesList2.push_back(verticesList.at(3));
+		verticesList2.push_back(verticesList.at(1));
+		verticesList2.push_back(v5p);
+		}
+		this->buildTetrahedonMesh(verticesList2,newMTetraheds,newMFaces,newMHalfEdges,newMVertices, true);
+		verticesList2.clear();
+		verticesList.clear();
+		
+		cout << mTetraheds->size() << endl;
+		
+	}
+	
+	delete mFaces;
+	delete mHalfEdges;
+	delete mTetraheds;
+	delete mVertices;
+	this->mFaces = newMFaces;
+	this->mHalfEdges = newMHalfEdges;
+	this->mTetraheds = newMTetraheds;
+	this->mVertices = newMVertices;
+
+
 }
