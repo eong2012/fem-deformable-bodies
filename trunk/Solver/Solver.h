@@ -42,4 +42,7 @@ private:
 	double dt;
 	double mass;
 
+	vector<Vertex>* mOriginalPos;
+	arma::Mat<double> localVpre;
+
 };

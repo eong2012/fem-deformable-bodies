@@ -8,6 +8,7 @@ Solver::Solver(int nrOfNodes){
 	K = arma::zeros(this->nrOfNodes*3+1,this->nrOfNodes*3+1);
 	Xpre = arma::zeros(this->nrOfNodes*3,1);
 	Vpre = arma::zeros(this->nrOfNodes*3,1);
+	localVpre = arma::zeros(this->nrOfNodes*3,1);
 	check = false;
 	update = false;
 	grav = arma::zeros(this->nrOfNodes*3,1);
@@ -26,6 +27,8 @@ Solver::Solver(int nrOfNodes){
 	}
 
 	ForcePrev = arma::zeros(this->nrOfNodes*3,1);
+
+
 }
 
 Solver::~Solver(){
@@ -38,7 +41,7 @@ Solver::~Solver(){
 
 void Solver::contstructKe(TetrahedMesh *mesh){
 
-
+    mOriginalPos = new vector<Vertex>((*mesh->mVertices));
 
     //for each vertex in tetraheder, get positon
     unsigned int nrOfTetraheds = mesh->getNrOfTetrahedra();
@@ -127,7 +130,7 @@ void Solver::contstructKe(TetrahedMesh *mesh){
             y.push_back(y3);
 
             float a, b, c, vn, E;
-            vn = 0.2;
+            vn = 0.08;
             E = 0.5;
 
             //Paranthesis overflow :X DONT DIVIDE BY ZERO
@@ -196,9 +199,9 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
      //for each vertex in tetraheder, get positon
     unsigned int nrOfTetraheds = mesh->getNrOfTetrahedra();
 
-
 	arma::Mat<double> M = arma::eye(this->nrOfNodes*3,this->nrOfNodes*3);
 	arma::Mat<double> C = arma::eye(this->nrOfNodes*3,this->nrOfNodes*3)*1;
+	arma::Mat<double> xLocal = arma::zeros(this->nrOfNodes*3,1);
 
 
 
@@ -207,6 +210,10 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 		X(3*i) = mesh->mVertices->at(i).getPosition()[0];
 		X(3*i+1) = mesh->mVertices->at(i).getPosition()[1];
 		X(3*i+2) =  mesh->mVertices->at(i).getPosition()[2];
+
+		xLocal(3*i) = mOriginalPos->at(i).getPosition()[0];
+		xLocal(3*i+1) = mOriginalPos->at(i).getPosition()[1];
+		xLocal(3*i+2) =  mOriginalPos->at(i).getPosition()[2];
 
 	}
 
@@ -231,10 +238,10 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 	outerforce = Fxt+grav+collisionForce;
 
 	//conjugateGradient->solve(K,u,outerforce);
-	(*u) = this->X-Xpre;
+	(*u) = this->X-xLocal;
 	innerforce = this->K*(*u);
 
-	//cout << Fxt << endl;
+	cout << (*u) << endl;
 	//NY
 
 	//NY
@@ -251,13 +258,20 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 	arma::Mat<double> x = this->X+dt*v;
 	//Xpre = this->X;
 
+	//update the local positions
+	arma::Mat<double> vLocal = localVpre + (grav+collisionForce)*dt;
+	localVpre = vLocal;
+	arma::Mat<double> newXLocal = xLocal+dt*vLocal;
+
 
 	for (int i = 0; i < this->nrOfNodes; i++) {
 
-	    arma::Mat<double> tmp;
+	    arma::Mat<double> tmp, localTmp;
 	    tmp << x(3*i) << x(3*i+1) << x(3*i+2);
+        localTmp << newXLocal(3*i) << newXLocal(3*i+1) << newXLocal(3*i+2);
 
 	    mesh->mVertices->at(i).setPosition(tmp);
+	    mOriginalPos->at(i).setPosition(localTmp);
 
 		//mesh->mVertices->at(i).setPosition(arma::Mat<double>(x(3*i),x(3*i+1), x(3*i+2)));
 
