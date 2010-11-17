@@ -13,7 +13,7 @@ Solver::Solver(int nrOfNodes){
 	grav = arma::zeros(this->nrOfNodes*3,1);
 	int i = 0;
 	X = arma::zeros(this->nrOfNodes*3,1);
-	dt = 0.1;
+	dt = 0.01;
 	mass = 1.1;
 	this->v = arma::zeros(this->nrOfNodes*3,1);
 
@@ -127,8 +127,8 @@ void Solver::contstructKe(TetrahedMesh *mesh){
             y.push_back(y3);
 
             float a, b, c, vn, E;
-            vn = 0.1;
-            E = 0.01;
+            vn = 0.2;
+            E = 0.5;
 
             //Paranthesis overflow :X DONT DIVIDE BY ZERO
 
@@ -179,7 +179,6 @@ void Solver::contstructKe(TetrahedMesh *mesh){
             this->mKMatrices.push_back(Ke);
 
             vPositions.clear();
-
     }
 
 
@@ -229,7 +228,7 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 	arma::Mat<double> *u;
 	u = new arma::Mat<double>(this->nrOfNodes*3,1);
 
-	outerforce = Fxt+grav*0.000+collisionForce;
+	outerforce = Fxt+grav+collisionForce;
 
 	//conjugateGradient->solve(K,u,outerforce);
 	(*u) = this->X-Xpre;

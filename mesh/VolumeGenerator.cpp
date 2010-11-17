@@ -25,14 +25,14 @@ void VolumeGenerator::generateVolume() {
     vertex8 <<  0.5f << -0.5f <<  0.5f;
 
     //Tetror med negativ volym
-   // createTetra(vertex1,vertex3, vertex8, vertex4);
+    createTetra(vertex1,vertex3, vertex8, vertex4);
 
 
     //Tetror med positiv volym
     createTetra(vertex1,vertex2, vertex3, vertex4); //Tetra 1
-   // createTetra(vertex1,vertex2, vertex4, vertex6); //Tetra 4
-   // createTetra(vertex2,vertex3, vertex4, vertex7); //Tetra 5
-    //createTetra(vertex1,vertex2, vertex5, vertex3);
+    createTetra(vertex1,vertex2, vertex4, vertex6); //Tetra 4
+    createTetra(vertex2,vertex3, vertex4, vertex7); //Tetra 5
+    createTetra(vertex1,vertex2, vertex5, vertex3);
 
 
 }
