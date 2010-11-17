@@ -10,16 +10,16 @@ VolumeGenerator::VolumeGenerator() {
 }
 
 void VolumeGenerator::generateVolume() {
-	
-	Vector3<float> temp1,temp2,temp3,temp4;
-	Vector3<float> t =  Vector3<float>(0.0f, 0.0f,0.0f);
+
+	arma::Mat<double> temp1,temp2,temp3,temp4;
+	arma::Mat<double> t = arma::zeros(1,3);
     float scale = 0.7;
-	vector<Vector3<float> > vertices;
-	
-	temp1 = Vector3<float>(0.5f, 0.5f,0.5f);
-	temp2 = Vector3<float>(-0.5f, 0.5f,-0.5f);
-    temp3 = Vector3<float>(0.5f, -0.5f, -0.5f);
-    temp4 = Vector3<float>(-0.5f, -0.5f, 0.5f);
+	vector<arma::Mat<double> > vertices;
+
+    temp1 << 0.5f << 0.5f << 0.5f;
+	temp2 << -0.5f << 0.5f << -0.5f;
+    temp3 << 0.5f << -0.5f << -0.5f;
+    temp4 << -0.5f << -0.5f << 0.5f;
 
 	vertices.push_back(temp1*scale+t);
 	vertices.push_back(temp2*scale+t);
@@ -27,14 +27,14 @@ void VolumeGenerator::generateVolume() {
 	vertices.push_back(temp4*scale+t);
 
     tetrahedMesh->AddTetrahedron(vertices);
-	
-	/*
+
+	/* Tetrahedrar som GER NEGATIV VOLYM !!11!!11!!!
 	vertices.clear();
 
-	temp1 = Vector3<float>(0.5f, 0.5f,0.5f);
-    temp2 = Vector3<float>(-0.5f, -0.5f, 0.5f);
-	temp3 = Vector3<float>(0.5f, -0.5f, -0.5f);
-    temp4 = Vector3<float>(0.5f, -0.5f, 0.5f);
+	temp1 = arma::Mat<double>(0.5f, 0.5f,0.5f);
+    temp2 = arma::Mat<double>(-0.5f, -0.5f, 0.5f);
+	temp3 = arma::Mat<double>(0.5f, -0.5f, -0.5f);
+    temp4 = arma::Mat<double>(0.5f, -0.5f, 0.5f);
 
     vertices.push_back(temp1*scale+t);
 	vertices.push_back(temp2*scale+t);
@@ -44,11 +44,11 @@ void VolumeGenerator::generateVolume() {
 	tetrahedMesh->AddTetrahedron(vertices);
 	*//*
 	vertices.clear();
-	
-	temp1 = Vector3<float>(0.5f, 0.5f,0.5f);
-    temp2 = Vector3<float>(-0.5f, 0.5f,-0.5f);
-	temp3 = Vector3<float>(0.5f, 0.5f, -0.5f);
-	temp4 = Vector3<float>(0.5f, -0.5f, -0.5f);
+
+	temp1 = arma::Mat<double>(0.5f, 0.5f,0.5f);
+    temp2 = arma::Mat<double>(-0.5f, 0.5f,-0.5f);
+	temp3 = arma::Mat<double>(0.5f, 0.5f, -0.5f);
+	temp4 = arma::Mat<double>(0.5f, -0.5f, -0.5f);
 
 
     vertices.push_back(temp1*scale+t);
@@ -60,10 +60,10 @@ void VolumeGenerator::generateVolume() {
 	*/
 	vertices.clear();
 
-	temp1 = Vector3<float>(0.5f, 0.5f,0.5f);
-    temp2 = Vector3<float>(-0.5f, 0.5f,-0.5f);
-	temp3 = Vector3<float>(-0.5f, -0.5f, 0.5f);
-    temp4 = Vector3<float>(-0.5f, 0.5f, 0.5f);
+	temp1 << 0.5f << 0.5f << 0.5f;
+    temp2 << -0.5f << 0.5f <<-0.5f;
+	temp3 <<-0.5f << -0.5f << 0.5f;
+    temp4 <<-0.5f << 0.5f << 0.5f;
 
     vertices.push_back(temp1*scale+t);
 	vertices.push_back(temp2*scale+t);
@@ -71,13 +71,13 @@ void VolumeGenerator::generateVolume() {
 	vertices.push_back(temp4*scale+t);
 
 	tetrahedMesh->AddTetrahedron(vertices);
-	
+
 	vertices.clear();
-	
-	temp1 = Vector3<float>(-0.5f, 0.5f,-0.5f);
-    temp2 = Vector3<float>(0.5f, -0.5f, -0.5f);
-	temp3= Vector3<float>(-0.5f, -0.5f, 0.5f);
-    temp4 = Vector3<float>(-0.5f, -0.5f, -0.5f);
+
+	temp1 << -0.5f << 0.5f <<-0.5f;
+    temp2 << 0.5f << -0.5f << -0.5f;
+	temp3 << -0.5f << -0.5f << 0.5f;
+    temp4 << -0.5f << -0.5f << -0.5f;
 
     vertices.push_back(temp1*scale+t);
 	vertices.push_back(temp2*scale+t);

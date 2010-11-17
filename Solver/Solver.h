@@ -1,4 +1,4 @@
-#include "armadillo"
+#include "../../usr/include/armadillo.h"
 #include "ConjugateGradient.h"
 #include "../mesh/TetrahedMesh.h"
 #include <vector>

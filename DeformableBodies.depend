@@ -173,10 +173,10 @@
 	<GL/glew.h>
 	<GL/glut.h>
 
-1288891227 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/WindowHandler.cpp
+1289996109 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/WindowHandler.cpp
 	"WindowHandler.h"
 
-1288871887 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/WindowHandler.h
+1289996482 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/WindowHandler.h
 	"Shader/Shader.h"
 	"mesh/VolumeGenerator.h"
 	"Solver/Solver.h"
@@ -185,28 +185,28 @@
 	<iostream>
 	<stdlib.h>
 	<stdio.h>
-	<sys/stat.h>
 	"arcball.h"
 
-1288891193 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/VolumeGenerator.h
+1289996108 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/VolumeGenerator.h
 	"TetrahedMesh.h"
 	<string>
 
-1288891000 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/TetrahedMesh.h
+1289999419 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/TetrahedMesh.h
 	<GL/glew.h>
 	<GL/glut.h>
 	"Tetrahed.h"
 	"Face.h"
 	"Vertex.h"
 	"HalfEdge.h"
+	"../../usr/include/armadillo.h"
 	<vector>
 	<set>
 
 1288871262 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Tetrahed.h
 	<vector>
 
-1288871324 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Face.h
-	"../Math/Vector3.h"
+1289998428 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Face.h
+	"../../usr/include/armadillo.h"
 
 1288861097 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/Math/Vector3.h
 	"Vector4.h"
@@ -221,8 +221,8 @@
 	<iterator>
 	<cassert>
 
-1288871345 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Vertex.h
-	"../Math/Vector3.h"
+1289998014 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Vertex.h
+	"../../usr/include/armadillo.h"
 
 1288871375 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/HalfEdge.h
 
@@ -236,10 +236,10 @@
 	<GL/gl.h>
 	<GL/glu.h>
 
-1288869997 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/main.cpp
+1289470599 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/main.cpp
 	"WindowHandler.h"
 
-1288861097 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Face.cpp
+1289998255 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Face.cpp
 	"Face.h"
 
 1288861097 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/HalfEdge.cpp
@@ -248,15 +248,15 @@
 1288861097 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Tetrahed.cpp
 	"Tetrahed.h"
 
-1288891028 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/TetrahedMesh.cpp
+1290001320 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/TetrahedMesh.cpp
 	"TetrahedMesh.h"
 	<ctime>
 	<cstdlib>
 
-1288890664 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Vertex.cpp
+1289998056 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/Vertex.cpp
 	"Vertex.h"
 
-1288891169 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/VolumeGenerator.cpp
+1290000295 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/mesh/VolumeGenerator.cpp
 	"VolumeGenerator.h"
 
 1288863750 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo.h
@@ -1025,11 +1025,18 @@
 
 1287029804 /home/studenter/elili663/privat_stuff/tsbk03/usr/include/armadillo_bits/glue_toeplitz_meat.hpp
 
-1288891460 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/Solver/Solver.cpp
+1289998404 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/Solver/Solver.cpp
 	"Solver.h"
 
-1288887535 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/Solver/Solver.h
+1289996344 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/Solver/Solver.h
 	"../../usr/include/armadillo.h"
+	"ConjugateGradient.h"
 	"../mesh/TetrahedMesh.h"
 	<vector>
+
+1289996376 /home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/Solver/ConjugateGradient.h
+	"../../usr/include/armadillo.h"
+
+1289996132 source:/home/studenter/elili663/privat_stuff/tsbk03/fem-deformable-bodies/Solver/ConjugateGradient.cpp
+	"ConjugateGradient.h"
 

@@ -6,7 +6,7 @@ oppositeFaceInd = -1;
 }
 Face::~Face(){}
 
-void Face::setNormal(Vector3<float> n)
+void Face::setNormal(arma::Mat<double> n)
 {
     normal = n;
 }
@@ -15,7 +15,7 @@ void Face::setEdgeInd(unsigned int e)
     edgeInd = e;
 
 }
-Vector3<float> Face::getNormal()
+arma::Mat<double> Face::getNormal()
 {
     return normal;
 }
@@ -28,7 +28,7 @@ void Face::setOppositeFaceInd(int f) {
 
 	this->oppositeFaceInd = f;
 }
-   
+
 int Face::getOppositeFaceInd() {
 
 return this->oppositeFaceInd;
