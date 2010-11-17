@@ -14,6 +14,7 @@ public:
 	VolumeGenerator();
 	void generateVolumeFromFile(string filename);
 	void generateVolume();
+	void createTetra(arma::Mat<double> v1, arma::Mat<double> v2, arma::Mat<double> v3,arma::Mat<double> v4);
 	void render();
 	void changeNormalRenderMode();
 	void changeEdgeRenderMode();
@@ -28,6 +29,7 @@ private :
 	int normalMode;
 	int edgeMode;
 	int triangleMode;
+	vector<arma::Mat<double> > vertices;
 
 };
 
