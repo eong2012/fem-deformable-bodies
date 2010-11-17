@@ -461,12 +461,13 @@ vector<arma::Mat<double> > TetrahedMesh::getVertexPosition(unsigned int tetraInd
 
 
     for(int i=0; i<4;i++){
-        arma::Mat<double> tempVertexPos(3,1);
+        arma::Mat<double> tempVertexPos(4,1);
         vertexIndex[i] = mVertexIndexOrder->at(tetraIndex*4+i);
 
         tempVertexPos(0) = mVertices->at(vertexIndex[i]).getPosition()[0];
         tempVertexPos(1) = mVertices->at(vertexIndex[i]).getPosition()[1];
         tempVertexPos(2) = mVertices->at(vertexIndex[i]).getPosition()[2];
+        tempVertexPos(3) = vertexIndex[i];
         ret.push_back(tempVertexPos);
     }
     return ret;

@@ -9,7 +9,7 @@
 #include "Face.h"
 #include "Vertex.h"
 #include "HalfEdge.h"
-#include "../../usr/include/armadillo.h"
+#include "armadillo.h"
 
 
 #include <vector>
@@ -56,6 +56,7 @@ public:
 	void printVertices(int ind);
 	vector<Vertex> *mVertices;
 	vector<unsigned int> *mVertexIndexOrder;
+	vector<Vertex> mMaterialCoords;
 
 private:
 
