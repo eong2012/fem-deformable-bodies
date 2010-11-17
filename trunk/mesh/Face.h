@@ -1,6 +1,6 @@
 
 
-#include "../Math/Vector3.h"
+#include "../../usr/include/armadillo.h"
 
 #ifndef FACE_H
 #define FACE_H
@@ -10,16 +10,16 @@ public:
     Face();
     ~Face();
 
-    void setNormal(Vector3<float> n);
+    void setNormal(arma::Mat<double> n);
     void setEdgeInd(unsigned int e);
 	void setOppositeFaceInd(int f);
-    Vector3<float> getNormal();
+    arma::Mat<double> getNormal();
     unsigned int getEdgeInd();
 	int getOppositeFaceInd();
 
 
 private:
-    Vector3<float> normal;
+    arma::Mat<double> normal;
     unsigned int edgeInd;
 	int oppositeFaceInd;
 

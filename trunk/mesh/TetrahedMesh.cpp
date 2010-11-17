@@ -9,17 +9,17 @@ TetrahedMesh::TetrahedMesh()
 	mFaces = new vector<Face>();
 	mVertices = new vector<Vertex>;
 
-	
+
 
 }
 TetrahedMesh::~TetrahedMesh(){}
 
-void TetrahedMesh::AddTetrahedron(vector<Vector3<float> > vertices ) {
+void TetrahedMesh::AddTetrahedron(vector<arma::Mat<double> > vertices ) {
 
-	buildTetrahedonMesh(vertices, mTetraheds, mFaces, mHalfEdges, mVertices, false); 
+	buildTetrahedonMesh(vertices, mTetraheds, mFaces, mHalfEdges, mVertices, false);
 }
 
-void TetrahedMesh::buildTetrahedonMesh(vector<Vector3<float> > vertices, vector<Tetrahed> *mtetrahedsTemp, vector<Face> *mFacesTemp, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp, bool subdivide)
+void TetrahedMesh::buildTetrahedonMesh(vector<arma::Mat<double> > vertices, vector<Tetrahed> *mtetrahedsTemp, vector<Face> *mFacesTemp, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp, bool subdivide)
 {
     //set the vertex index
     unsigned int vertexIndex1, vertexIndex2, vertexIndex3, vertexIndex4;
@@ -39,8 +39,8 @@ void TetrahedMesh::buildTetrahedonMesh(vector<Vector3<float> > vertices, vector<
 	temp->setFaceInd2(faceIndex2);
 	temp->setFaceInd3(faceIndex3);
 	temp->setFaceInd4(faceIndex4);
-	
-	
+
+
 	mtetrahedsTemp->push_back((*temp));
 	delete temp;
 
@@ -53,7 +53,7 @@ void TetrahedMesh::buildTetrahedonMesh(vector<Vector3<float> > vertices, vector<
 
 }
 
-void TetrahedMesh::setTetraGeometry(vector<Vector3<float> > vertices, unsigned int &index1,unsigned int &index2,unsigned int &index3,unsigned int &index4, vector<Vertex> *mVertices)
+void TetrahedMesh::setTetraGeometry(vector<arma::Mat<double> > vertices, unsigned int &index1,unsigned int &index2,unsigned int &index3,unsigned int &index4, vector<Vertex> *mVertices)
 {
 //    unsigned int index1,index2,index3,index4;
     bool success = true;
@@ -92,7 +92,7 @@ void TetrahedMesh::AddFace(unsigned int vertexIndex1,unsigned int vertexIndex2, 
 	while(iter != mFacesTemp->end()){
 
 		HalfEdge* edge = &mEdgesTemp->at(iter->getEdgeInd());
-		
+
 		Vertex & v1 = mVerticesTemp->at(edge->getVertexInd());
 		edge = &mEdgesTemp->at(edge->getNextInd());
 
@@ -102,9 +102,12 @@ void TetrahedMesh::AddFace(unsigned int vertexIndex1,unsigned int vertexIndex2, 
 		Vertex & v3 = mVerticesTemp->at(edge->getVertexInd());
 
 
-	if (mVerticesTemp->at(vertexIndex1).getPosition() == v1.getPosition() || mVerticesTemp->at(vertexIndex1).getPosition() == v2.getPosition() || mVerticesTemp->at(vertexIndex1).getPosition() == v3.getPosition()){
-		if(mVerticesTemp->at(vertexIndex2).getPosition() == v1.getPosition() || mVerticesTemp->at(vertexIndex2).getPosition() == v2.getPosition() || mVerticesTemp->at(vertexIndex2).getPosition() == v3.getPosition()){
-			if(mVerticesTemp->at(vertexIndex3).getPosition() == v1.getPosition() || mVerticesTemp->at(vertexIndex3).getPosition() == v2.getPosition() || mVerticesTemp->at(vertexIndex3).getPosition() == v3.getPosition()){
+
+
+
+	if (vecEquals(mVerticesTemp->at(vertexIndex1).getPosition(), v1.getPosition()) || vecEquals(mVerticesTemp->at(vertexIndex1).getPosition(), v2.getPosition()) || vecEquals(mVerticesTemp->at(vertexIndex1).getPosition(), v3.getPosition())){
+		if(vecEquals(mVerticesTemp->at(vertexIndex2).getPosition(),v1.getPosition()) || vecEquals(mVerticesTemp->at(vertexIndex2).getPosition(), v2.getPosition()) || vecEquals(mVerticesTemp->at(vertexIndex2).getPosition(),v3.getPosition())){
+			if(vecEquals(mVerticesTemp->at(vertexIndex3).getPosition(), v1.getPosition()) || vecEquals(mVerticesTemp->at(vertexIndex3).getPosition(),v2.getPosition()) || vecEquals(mVerticesTemp->at(vertexIndex3).getPosition(), v3.getPosition())){
 
 				face->setOppositeFaceInd(count);
 				iter->setOppositeFaceInd(mFacesTemp->size());
@@ -125,7 +128,7 @@ void TetrahedMesh::AddFace(unsigned int vertexIndex1,unsigned int vertexIndex2, 
 
     mFacesTemp->push_back((*face));
 	delete face;
-	
+
     // Compute and assign a normal
     mFacesTemp->back().setNormal(FaceNormal(mFacesTemp->size() - 1, mFacesTemp, mEdgesTemp, mVerticesTemp));
 
@@ -172,7 +175,7 @@ void TetrahedMesh::AddHalfEdgePair(unsigned int vertexIndex1,unsigned int vertex
   // Store the first edge in the map as an OrderedPair
  // OrderedPair op(v1, v2);
 }
-bool TetrahedMesh::AddVertex(Vector3<float> vertexPos, unsigned int &index, vector<Vertex> *mVerticesTemp)
+bool TetrahedMesh::AddVertex(arma::Mat<double> vertexPos, unsigned int &index, vector<Vertex> *mVerticesTemp)
 {
 
 	vector<Vertex>::iterator iter;
@@ -180,7 +183,7 @@ bool TetrahedMesh::AddVertex(Vector3<float> vertexPos, unsigned int &index, vect
 	int count = 0;
 	while(iter != mVerticesTemp->end()){
 
-		if (iter->getPosition() == vertexPos) {
+		if (vecEquals(iter->getPosition(), vertexPos)) {
 
 			index = count;
 
@@ -197,24 +200,27 @@ bool TetrahedMesh::AddVertex(Vector3<float> vertexPos, unsigned int &index, vect
   return true;
 }
 
-Vector3<float> TetrahedMesh::FaceNormal(unsigned int faceIndex, vector<Face> *mFacesTemp, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp)
-{ 
+arma::Mat<double> TetrahedMesh::FaceNormal(unsigned int faceIndex, vector<Face> *mFacesTemp, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp)
+{
   unsigned int edgeInd1 = mFacesTemp->at(faceIndex).getEdgeInd();
   unsigned int vertInd1 = mEdgesTemp->at(edgeInd1).getVertexInd();
-  const Vector3<float> &p1 = mVerticesTemp->at(vertInd1).getPosition();
+  const arma::Mat<double> &p1 = mVerticesTemp->at(vertInd1).getPosition();
 
   unsigned int edgeInd2 = mEdgesTemp->at(edgeInd1).getNextInd();
   unsigned int vertInd2 = mEdgesTemp->at(edgeInd2).getVertexInd();
-  const Vector3<float> &p2 = mVerticesTemp->at(vertInd2).getPosition();
+  const arma::Mat<double> &p2 = mVerticesTemp->at(vertInd2).getPosition();
 
   unsigned int edgeInd3 = mEdgesTemp->at(edgeInd2).getNextInd();
   unsigned int vertInd3 = mEdgesTemp->at(edgeInd3).getVertexInd();
-  const Vector3<float> &p3 = mVerticesTemp->at(vertInd3).getPosition();
+  const arma::Mat<double> &p3 = mVerticesTemp->at(vertInd3).getPosition();
 
 
-  const Vector3<float> e1 = p2-p1;
-  const Vector3<float> e2 = p3-p1;
-  return Cross(e1, e2).Normalize();
+  const arma::Mat<double> e1 = p2-p1;
+  const arma::Mat<double> e2 = p3-p1;
+  arma::Mat<double> tmp;
+  tmp = cross(e1, e2);
+  tmp = tmp / norm(tmp,1);
+  return tmp;
 }
 
 void TetrahedMesh::Render(int mode)
@@ -304,9 +310,9 @@ void TetrahedMesh::RenderNormals(int mode) {
 
     Vertex & v3 = mVertices->at(edge->getVertexInd());
 
-	Vector3<float> vCenter, normal;
+	arma::Mat<double> vCenter, normal;
 	normal = face.getNormal();
-	normal.Normalize();
+	norm(normal, 1);
 	vCenter = (v1.getPosition()+v2.getPosition()+v3.getPosition())/3.0;
 
 		if (mode == 0) {
@@ -449,7 +455,7 @@ vector<arma::Mat<double> > TetrahedMesh::getVertexPosition(unsigned int tetraInd
     set<unsigned int> vertexIndices;
 
 	vector<arma::Mat<double> > ret;
-    //vector< Vector3<float> > ret;
+    //vector< arma::Mat<double> > ret;
 
     for(int i=0; i<4;i++){
 
@@ -487,7 +493,7 @@ int TetrahedMesh::getNrOfTetrahedra(){
     return mTetraheds->size();
 }
 
-void TetrahedMesh::updatePosition(unsigned int tetraIndex, vector<Vector3<float> > vertexPos)
+void TetrahedMesh::updatePosition(unsigned int tetraIndex, vector<arma::Mat<double> > vertexPos)
 {
     Tetrahed tempTetra;
     tempTetra = mTetraheds->at(tetraIndex);
@@ -527,6 +533,17 @@ void TetrahedMesh::printVertices(int ind)
 }
 
 
+bool TetrahedMesh::vecEquals(arma::Mat<double> A, arma::Mat<double> B){
+
+      arma::umat C = (A == B);
+      for(int i= 0; i<C.n_elem;i++){
+          if(C(i)== 0) return false;
+      }
+      return true;
+
+}
+
+
 void TetrahedMesh::subdivide() {
 
 
@@ -536,27 +553,29 @@ void TetrahedMesh::subdivide() {
 	vector<Vertex> *newMVertices = new vector<Vertex>();
 
 	for(int i = 0; i < mTetraheds->size(); i++) {
-	 
+
 		arma::Mat<double> v5;
 		v5 = arma::zeros(3,1);
 
-		vector<Vector3<float> > verticesList;
+		vector<arma::Mat<double> > verticesList;
 		vector<arma::Mat<double> > verticesT = getVertexPosition(i);
 		for (int j= 0; j < verticesT.size(); j++) {
-		
-			
+
+
 			v5 += verticesT[j].rows(0,2);
-			Vector3<float> temp(verticesT[j](0),verticesT[j](1),verticesT[j](2));
+			arma::Mat<double> temp;
+			temp << verticesT[j](0) << verticesT[j](1) << verticesT[j](2);
 			verticesList.push_back(temp);
 		}
-		
+
 		v5 = v5/verticesT.size();
 		verticesT.clear();
-		Vector3<float > v5p(v5(0), v5(1), v5(2)); 
-		vector<Vector3<float> > verticesList2;
-		
+		arma::Mat<double> v5p;
+		v5p << v5(0) << v5(1) << v5(2);
+		vector<arma::Mat<double> > verticesList2;
+
 		//TETRAHED 1
-		
+
 		if(i == 1 || i == 2) {
 		verticesList2.push_back(verticesList.at(2));
 		verticesList2.push_back(verticesList.at(1));
@@ -571,7 +590,7 @@ void TetrahedMesh::subdivide() {
 		}
 		this->buildTetrahedonMesh(verticesList2,newMTetraheds,newMFaces,newMHalfEdges,newMVertices, true);
 		verticesList2.clear();
-		
+
 		//TETRAHED 2
 		if(i == 1 || i == 2) {
 		verticesList2.push_back(verticesList.at(2));
@@ -587,7 +606,7 @@ void TetrahedMesh::subdivide() {
 		}
 		this->buildTetrahedonMesh(verticesList2,newMTetraheds,newMFaces,newMHalfEdges,newMVertices, true);
 		verticesList2.clear();
-		
+
 
 		//TETRAHED 3
 		if(i == 1 || i == 2) {
@@ -595,9 +614,9 @@ void TetrahedMesh::subdivide() {
 		verticesList2.push_back(verticesList.at(3));
 		verticesList2.push_back(verticesList.at(0));
 		verticesList2.push_back(verticesList.at(2));
-		
+
 		} else {
-		
+
 		verticesList2.push_back(verticesList.at(0));
 		verticesList2.push_back(verticesList.at(3));
 		verticesList2.push_back(v5p);
@@ -606,18 +625,18 @@ void TetrahedMesh::subdivide() {
 
 		this->buildTetrahedonMesh(verticesList2,newMTetraheds,newMFaces,newMHalfEdges,newMVertices, true);
 		verticesList2.clear();
-	
-		
+
+
 		//TETRAHED 4
 		if(i == 1 || i == 2) {
-		
+
 		verticesList2.push_back(verticesList.at(1));
 		verticesList2.push_back(verticesList.at(3));
 		verticesList2.push_back(verticesList.at(0));
 		verticesList2.push_back(v5p);
-		
-		} 
-		
+
+		}
+
 		else {
 		verticesList2.push_back(verticesList.at(0));
 		verticesList2.push_back(verticesList.at(3));
@@ -627,11 +646,11 @@ void TetrahedMesh::subdivide() {
 		this->buildTetrahedonMesh(verticesList2,newMTetraheds,newMFaces,newMHalfEdges,newMVertices, true);
 		verticesList2.clear();
 		verticesList.clear();
-		
+
 		cout << mTetraheds->size() << endl;
-		
+
 	}
-	
+
 	delete mFaces;
 	delete mHalfEdges;
 	delete mTetraheds;

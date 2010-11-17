@@ -1,5 +1,5 @@
 
-#include "../Math/Vector3.h"
+#include "../../usr/include/armadillo.h"
 
 #ifndef VERTEX_H
 #define VERTEX_H
@@ -9,14 +9,14 @@ public:
     Vertex();
     ~Vertex();
 
-    void setPosition(Vector3<float> p);
+    void setPosition(arma::Mat<double> p);
     void setEdgeInd(unsigned int e);
-    Vector3<float> getPosition();
+    arma::Mat<double> getPosition();
     unsigned int getEdgeInd();
 
 
 private:
-    Vector3<float> position;
+    arma::Mat<double> position;
     unsigned int edgeInd;
 
 };

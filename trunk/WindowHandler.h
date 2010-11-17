@@ -1,8 +1,8 @@
 #include "Shader/Shader.h"
 #include "mesh/VolumeGenerator.h"
-#include "Solver\Solver.h"
-#include <gl/glew.h>
-#include <glut.h>
+#include "Solver/Solver.h"
+#include <GL/glew.h>
+#include <GL/glut.h>
 
 #include <iostream>
 

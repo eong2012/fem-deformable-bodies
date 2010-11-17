@@ -20,7 +20,7 @@ Solver::Solver(int nrOfNodes){
 	collisionForce = arma::zeros(this->nrOfNodes*3,1);
 
 	while(i*3+1 < grav.n_rows) {
-	
+
 	grav(i*3+1) = -9.82;
 	i++;
 	}
@@ -43,19 +43,19 @@ void Solver::contstructKe(TetrahedMesh *mesh){
     //for each vertex in tetraheder, get positon
     unsigned int nrOfTetraheds = mesh->getNrOfTetrahedra();
 
-	
+
 	xOVer1 = new arma::Mat<double>[nrOfTetraheds];
 	xOVer2 = new arma::Mat<double>[nrOfTetraheds];
 	vOVer1 = new arma::Mat<double>[nrOfTetraheds];
 	vOVer2 = new arma::Mat<double>[nrOfTetraheds];
 
 		for(int i = 0; i < nrOfTetraheds; i++){
-		
+
 			xOVer1[i] = arma::zeros(12,1);
 			xOVer2[i] = arma::zeros(12,1);
 			vOVer1[i] = arma::zeros(12,1);
 			vOVer2[i] = arma::zeros(12,1);
-		
+
 		}
 
     vector<arma::Mat<double> > vPositions;
@@ -86,16 +86,16 @@ void Solver::contstructKe(TetrahedMesh *mesh){
 
 			arma::Mat<double> xOrgin = join_cols(join_cols(join_cols(x0,x1), x2),x3);
 			this->xOrgin.push_back(xOrgin);
-	
+
             arma::Mat<double> X, Volmat;
 
             X = join_rows(join_rows((x1-x0),(x2-x0)), (x3-x0));
-			
-			
+
+
 			Volmat = join_rows(arma::ones(4,1),join_cols(join_cols(join_cols(trans(x0),trans(x1)),trans(x2)),trans(x3)));
-			
+
             double V = det(Volmat)/6.0;
-			
+
 			cout << V << endl;
             X = inv(X);
 
@@ -115,9 +115,10 @@ void Solver::contstructKe(TetrahedMesh *mesh){
 
             float a, b, c, vn, E;
             vn = 0.08;
-            E = 0.2;
+            E = 0.02;
 			cout << V << endl;
             //Paranthesis overflow :X DONT DIVIDE BY ZERO
+
             a = V*E*((1-vn)/((1+vn)*(1-2*vn)));
             b = V*E*(vn/((1+vn)*(1-2*vn)));
             c = V*E*((1-2*vn)/((1+vn)*(1-2*vn)));
@@ -170,7 +171,7 @@ void Solver::contstructKe(TetrahedMesh *mesh){
 
 
 		cout << "------" << endl;
-		
+
 		K.shed_col(0);
 		K.shed_row(0);
 		//cout << this->nrOfNodes  << endl;
@@ -182,34 +183,34 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 {
      //for each vertex in tetraheder, get positon
     unsigned int nrOfTetraheds = mesh->getNrOfTetrahedra();
-   
-	
+
+
 	arma::Mat<double> M = arma::eye(this->nrOfNodes*3,this->nrOfNodes*3);
 	arma::Mat<double> C = arma::eye(this->nrOfNodes*3,this->nrOfNodes*3)*1;
 
-	
-	
+
+
 	for (int i = 0; i < this->nrOfNodes; i++) {
-	
+
 		X(3*i) = mesh->mVertices->at(i).getPosition()[0];
 		X(3*i+1) = mesh->mVertices->at(i).getPosition()[1];
 		X(3*i+2) =  mesh->mVertices->at(i).getPosition()[2];
-	
+
 	}
 
 	if (check == false) {
 		Xpre = this->X;
 		check = true;
-	} 
+	}
 	collisionForce = arma::zeros(3*this->nrOfNodes,1);
-	
+
 	//NY
 	arma::Mat<double> outerforce(3*this->nrOfNodes,1);
 	outerforce = arma::zeros(3*this->nrOfNodes,1);
 
 	arma::Mat<double> innerforce(3*this->nrOfNodes,1);
 	innerforce = arma::zeros(3*this->nrOfNodes,1);
-	
+
 
 	planeCollisionDetection(X);
 	arma::Mat<double> *u;
@@ -220,10 +221,10 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 	//conjugateGradient->solve(K,u,outerforce);
 	(*u) = this->X-Xpre;
 	innerforce = this->K*(*u);
-	
+
 	//cout << Fxt << endl;
 	//NY
-	
+
 	//NY
 	conjugateGradient->solve(M+C*dt+dt*dt*(this->K),&v,(M*Vpre + dt*(outerforce-innerforce)));
 	Vpre = v;
@@ -231,25 +232,30 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 
 	//GAMLA MED EN KRAFT!!!
 	//this->v = Vpre+dt*M*(Fxt+this->K*(*u)-C*Vpre);
-	
+
 	//cout << v << endl;
-	
-	
+
+
 	arma::Mat<double> x = this->X+dt*v;
 	//Xpre = this->X;
 
-	
+
 	for (int i = 0; i < this->nrOfNodes; i++) {
 
-		mesh->mVertices->at(i).setPosition(Vector3<float>(x(3*i),x(3*i+1), x(3*i+2)));
-	
+	    arma::Mat<double> tmp;
+	    tmp << x(3*i) << x(3*i+1) << x(3*i+2);
+
+	    mesh->mVertices->at(i).setPosition(tmp);
+
+		//mesh->mVertices->at(i).setPosition(arma::Mat<double>(x(3*i),x(3*i+1), x(3*i+2)));
+
 	}
 
 
 }
 
 void Solver::tetrahedronAssemble(arma::Mat<double> &K ,arma::Mat<double> k, int i, int j, int m, int n){
-	
+
 	int offset = -1;
 	K(3*i-2,3*i-2) = K(3*i-2,3*i-2) + k(1+offset,1+offset);
 	K(3*i-2,3*i-1) = K(3*i-2,3*i-1) + k(1+offset,2+offset);
@@ -352,7 +358,7 @@ void Solver::planeCollisionDetection(arma::Mat<double> X)
     {
         if(X(i*3+1) < planeY) //Check the Y value
             planeCollisionHandler(i*3+1);
-			
+
     }
 }
 //Handles collision by calculating a new force

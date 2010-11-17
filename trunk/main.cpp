@@ -29,10 +29,10 @@ int main(int argc, char* argv[])
 	glDisable(GL_DEPTH_TEST);
 
 	glutDisplayFunc(display);
-    glutReshapeFunc(reshape);
+   glutReshapeFunc(reshape);
 	glutKeyboardFunc(processNormalKeys);
-    glutMouseFunc(mouse);
-    glutMotionFunc(move);
+   glutMouseFunc(mouse);
+   glutMotionFunc(move);
 	glutIdleFunc(idle);
 	glutMainLoop();
 
