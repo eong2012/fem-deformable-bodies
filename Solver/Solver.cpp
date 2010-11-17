@@ -84,6 +84,19 @@ void Solver::contstructKe(TetrahedMesh *mesh){
             x3(1) = vPositions[3][1];
             x3(2) = vPositions[3][2];
 
+            cout << "--------" <<"TETRA" << k << "--------" << endl;
+            cout << "vertex 1" << endl;
+            cout << " x: " <<x0(0) << " y: " <<x0(1) << " z: " <<x0(2)<< endl;
+
+            cout << "vertex 2" << endl;
+            cout << " x: " <<x1(0) << " y: " <<x1(1) << " z: " <<x1(2)<< endl;
+
+            cout << "vertex 3" << endl;
+            cout << " x: " <<x2(0) << " y: " <<x2(1) << " z: " <<x2(2)<< endl;
+
+            cout << "vertex 4" << endl;
+            cout << " x: " <<x3(0) << " y: " <<x3(1) << " z: " <<x3(2)<< endl;
+
 			arma::Mat<double> xOrgin = join_cols(join_cols(join_cols(x0,x1), x2),x3);
 			this->xOrgin.push_back(xOrgin);
 
@@ -95,8 +108,8 @@ void Solver::contstructKe(TetrahedMesh *mesh){
 			Volmat = join_rows(arma::ones(4,1),join_cols(join_cols(join_cols(trans(x0),trans(x1)),trans(x2)),trans(x3)));
 
             double V = det(Volmat)/6.0;
+            cout << "VOLUME: " << V << endl;
 
-			cout << V << endl;
             X = inv(X);
 
             //beräknar motorseglare :D
@@ -114,9 +127,9 @@ void Solver::contstructKe(TetrahedMesh *mesh){
             y.push_back(y3);
 
             float a, b, c, vn, E;
-            vn = 0.08;
-            E = 0.02;
-			cout << V << endl;
+            vn = 0.1;
+            E = 0.01;
+
             //Paranthesis overflow :X DONT DIVIDE BY ZERO
 
             a = V*E*((1-vn)/((1+vn)*(1-2*vn)));

@@ -7,7 +7,8 @@ TetrahedMesh::TetrahedMesh()
 	mTetraheds = new vector<Tetrahed>();
 	mHalfEdges = new vector<HalfEdge>();
 	mFaces = new vector<Face>();
-	mVertices = new vector<Vertex>;
+	mVertices = new vector<Vertex>();
+	mVertexIndexOrder = new vector<unsigned int>();
 
 
 
@@ -25,6 +26,11 @@ void TetrahedMesh::buildTetrahedonMesh(vector<arma::Mat<double> > vertices, vect
     unsigned int vertexIndex1, vertexIndex2, vertexIndex3, vertexIndex4;
     setTetraGeometry(vertices,vertexIndex1, vertexIndex2, vertexIndex3, vertexIndex4, mVerticesTemp);
 
+    mVertexIndexOrder->push_back(vertexIndex1);
+    mVertexIndexOrder->push_back(vertexIndex2);
+    mVertexIndexOrder->push_back(vertexIndex3);
+    mVertexIndexOrder->push_back(vertexIndex4);
+
     //Add each tetrahedron face, send in vertex indices counter-clockwise
     unsigned int faceIndex1, faceIndex2,faceIndex3,faceIndex4;
 
@@ -32,6 +38,8 @@ void TetrahedMesh::buildTetrahedonMesh(vector<arma::Mat<double> > vertices, vect
     AddFace(vertexIndex1, vertexIndex3, vertexIndex2,faceIndex2, mFacesTemp, mEdgesTemp, mVerticesTemp);
     AddFace(vertexIndex2, vertexIndex3, vertexIndex4,faceIndex3, mFacesTemp, mEdgesTemp, mVerticesTemp);
     AddFace(vertexIndex1, vertexIndex2, vertexIndex4,faceIndex4, mFacesTemp, mEdgesTemp, mVerticesTemp);
+
+
 
 	//Add a tetrahed which contains pointers to all spanning faces
 	Tetrahed* temp = new Tetrahed();
@@ -448,7 +456,23 @@ int TetrahedMesh::GetVertexArraySize()
 
 
 vector<arma::Mat<double> > TetrahedMesh::getVertexPosition(unsigned int tetraIndex){
-    Tetrahed tempTetra;
+    vector<arma::Mat<double> > ret;
+    unsigned int vertexIndex[4];
+
+
+    for(int i=0; i<4;i++){
+        arma::Mat<double> tempVertexPos(3,1);
+        vertexIndex[i] = mVertexIndexOrder->at(tetraIndex*4+i);
+
+        tempVertexPos(0) = mVertices->at(vertexIndex[i]).getPosition()[0];
+        tempVertexPos(1) = mVertices->at(vertexIndex[i]).getPosition()[1];
+        tempVertexPos(2) = mVertices->at(vertexIndex[i]).getPosition()[2];
+        ret.push_back(tempVertexPos);
+    }
+    return ret;
+
+
+   /* Tetrahed tempTetra;
     tempTetra = mTetraheds->at(tetraIndex);
 
     vector<unsigned int> faceIndices = tempTetra.getFaceInd();
@@ -485,8 +509,8 @@ vector<arma::Mat<double> > TetrahedMesh::getVertexPosition(unsigned int tetraInd
 		//cout << *iter << endl;
         iter++;
     }
+*/
 
-    return ret;
 }
 
 int TetrahedMesh::getNrOfTetrahedra(){

@@ -55,6 +55,7 @@ public:
 	//temp debug thing
 	void printVertices(int ind);
 	vector<Vertex> *mVertices;
+	vector<unsigned int> *mVertexIndexOrder;
 
 private:
 
