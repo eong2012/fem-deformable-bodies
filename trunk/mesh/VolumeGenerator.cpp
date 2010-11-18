@@ -4,6 +4,7 @@
 VolumeGenerator::VolumeGenerator() {
 
 	tetrahedMesh = new TetrahedMesh();
+	meshReader = new MeshReader();
 	normalMode = 2;
 	edgeMode = 2;
 	triangleMode = 2;
@@ -13,26 +14,54 @@ void VolumeGenerator::generateVolume() {
 
 	arma::Mat<double> vertex1,vertex2,vertex3,vertex4, vertex5, vertex6, vertex7, vertex8;
 
-	// Skapa ett gäng vertexpunkter
+    vector<arma::Mat<double> > vertices;
+    vector<unsigned int> indices;
 
-    vertex1 <<  0.5f <<  0.5f <<  0.5f;
-	vertex2 << -0.5f <<  0.5f << -0.5f;
-    vertex3 <<  0.5f << -0.5f << -0.5f;
-    vertex4 << -0.5f << -0.5f <<  0.5f;
-    vertex5 <<  0.5f <<  0.5f << -0.5f;
-    vertex6 << -0.5f <<  0.5f <<  0.5f;
-    vertex7 << -0.5f << -0.5f << -0.5f;
-    vertex8 <<  0.5f << -0.5f <<  0.5f;
+	vertices = meshReader->readVertices("P.txt");
+	indices = meshReader->readTetras("P.ele");
+
+
+
+	for(int i = 0; i <(indices.size()*0.25-4); i++){
+
+
+        vertex1 = vertices.at(indices.at(i*4));
+        vertex2 = vertices.at(indices.at(i*4+1));
+        vertex3 = vertices.at(indices.at(i*4+2));
+        vertex4 = vertices.at(indices.at(i*4+3));
+
+        createTetra(vertex1,vertex2, vertex3, vertex4);
+
+    }
+    cout << indices.size();
+
+  //  createTetra(vertex1,vertex2, vertex3, vertex4);
+
+	// Skapa ett gäng vertexpunkter
+//	vertex1 = vertices.at(indices.at(0));
+//	vertex3 = vertices.at(indices.at(1));
+//	vertex8 = vertices.at(indices.at(2));
+//	vertex4 = vertices.at(indices.at(3));
+
+
+//    vertex1 <<  0.5f <<  0.5f <<  0.5f;
+//	vertex2 << -0.5f <<  0.5f << -0.5f;
+//    vertex3 <<  0.5f << -0.5f << -0.5f;
+//    vertex4 << -0.5f << -0.5f <<  0.5f;
+//    vertex5 <<  0.5f <<  0.5f << -0.5f;
+//    vertex6 << -0.5f <<  0.5f <<  0.5f;
+//    vertex7 << -0.5f << -0.5f << -0.5f;
+//    vertex8 <<  0.5f << -0.5f <<  0.5f;
 
     //Tetror med negativ volym
-    createTetra(vertex1,vertex3, vertex8, vertex4);
+   // createTetra(vertex1,vertex3, vertex8, vertex4);
 
 
     //Tetror med positiv volym
-    createTetra(vertex1,vertex2, vertex3, vertex4); //Tetra 1
-    createTetra(vertex1,vertex2, vertex4, vertex6); //Tetra 4
-    createTetra(vertex2,vertex3, vertex4, vertex7); //Tetra 5
-    createTetra(vertex1,vertex2, vertex5, vertex3);
+   // createTetra(vertex1,vertex2, vertex3, vertex4); //Tetra 1
+    //createTetra(vertex1,vertex2, vertex4, vertex6); //Tetra 4
+    //createTetra(vertex2,vertex3, vertex4, vertex7); //Tetra 5
+    //createTetra(vertex1,vertex2, vertex5, vertex3);
 
 
 }
@@ -53,7 +82,7 @@ void VolumeGenerator::createTetra(arma::Mat<double> v1, arma::Mat<double> v2, ar
         vertices.push_back(v2*scale+t);
         vertices.push_back(v3*scale+t);
         vertices.push_back(v4*scale+t);
-        std::cout << V << endl;
+
 
         tetrahedMesh->AddTetrahedron(vertices);
     }
