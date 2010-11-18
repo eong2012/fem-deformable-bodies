@@ -12,7 +12,7 @@ Solver::Solver(int nrOfNodes){
 	check = false;
 	update = false;
 	grav = arma::zeros(this->nrOfNodes*3,1);
-	int i = 0;
+	unsigned int i = 0;
 	X = arma::zeros(this->nrOfNodes*3,1);
 	dt = 0.01;
 	mass = 1.1;
@@ -52,7 +52,7 @@ void Solver::contstructKe(TetrahedMesh *mesh){
 	vOVer1 = new arma::Mat<double>[nrOfTetraheds];
 	vOVer2 = new arma::Mat<double>[nrOfTetraheds];
 
-		for(int i = 0; i < nrOfTetraheds; i++){
+		for(unsigned int i = 0; i < nrOfTetraheds; i++){
 
 			xOVer1[i] = arma::zeros(12,1);
 			xOVer2[i] = arma::zeros(12,1);
@@ -62,7 +62,7 @@ void Solver::contstructKe(TetrahedMesh *mesh){
 		}
 
     vector<arma::Mat<double> > vPositions;
-    for(int k = 0; k < nrOfTetraheds; k++) {
+    for(unsigned int k = 0; k < nrOfTetraheds; k++) {
 
             vPositions = mesh->getVertexPosition(k);
 

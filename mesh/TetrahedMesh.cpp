@@ -178,7 +178,8 @@ void TetrahedMesh::AddHalfEdgePair(unsigned int vertexIndex1,unsigned int vertex
    // Store the edges in mEdges
   mEdgesTemp->push_back(*halfEdge1);
   mEdgesTemp->push_back(*halfEdge2);
-  delete halfEdge1,halfEdge2;
+  delete halfEdge1;
+  delete halfEdge2;
 
   // Store the first edge in the map as an OrderedPair
  // OrderedPair op(v1, v2);
@@ -320,7 +321,7 @@ void TetrahedMesh::RenderNormals(int mode) {
 
 	arma::Mat<double> vCenter, normal;
 	normal = face.getNormal();
-	norm(normal, 1);
+	normal = norm(normal, 1);
 	vCenter = (v1.getPosition()+v2.getPosition()+v3.getPosition())/3.0;
 
 		if (mode == 0) {
@@ -439,7 +440,7 @@ float* TetrahedMesh::GetVertexArray()
 {
     float *vertexArray = new float[4*mVertices->size()];
 
-    for(int i = 0; i < mVertices->size(); i++)
+    for(unsigned int i = 0; i < mVertices->size(); i++)
     {
         vertexArray[i*4] = mVertices->at(i).getPosition()[0];
         vertexArray[i*4+1] = mVertices->at(i).getPosition()[1];
@@ -561,7 +562,7 @@ void TetrahedMesh::printVertices(int ind)
 bool TetrahedMesh::vecEquals(arma::Mat<double> A, arma::Mat<double> B){
 
       arma::umat C = (A == B);
-      for(int i= 0; i<C.n_elem;i++){
+      for(unsigned int i= 0; i<C.n_elem;i++){
           if(C(i)== 0) return false;
       }
       return true;
@@ -577,14 +578,14 @@ void TetrahedMesh::subdivide() {
     vector<Tetrahed> *newMTetraheds = new vector<Tetrahed>();
 	vector<Vertex> *newMVertices = new vector<Vertex>();
 
-	for(int i = 0; i < mTetraheds->size(); i++) {
+	for(unsigned int i = 0; i < mTetraheds->size(); i++) {
 
 		arma::Mat<double> v5;
 		v5 = arma::zeros(3,1);
 
 		vector<arma::Mat<double> > verticesList;
 		vector<arma::Mat<double> > verticesT = getVertexPosition(i);
-		for (int j= 0; j < verticesT.size(); j++) {
+		for (unsigned int j= 0; j < verticesT.size(); j++) {
 
 
 			v5 += verticesT[j].rows(0,2);

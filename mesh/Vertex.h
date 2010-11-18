@@ -1,5 +1,5 @@
 
-#include "armadillo.h"
+#include "../../usr/include/armadillo.h"
 
 #ifndef VERTEX_H
 #define VERTEX_H
