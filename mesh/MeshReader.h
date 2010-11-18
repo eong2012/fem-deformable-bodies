@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include "Vertex.h"
-#include "../../usr/include/armadillo.h"
+#include "armadillo.h"
 
 
 using namespace std;

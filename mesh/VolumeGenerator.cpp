@@ -12,28 +12,29 @@ VolumeGenerator::VolumeGenerator() {
 
 void VolumeGenerator::generateVolume() {
 
-	arma::Mat<double> vertex1,vertex2,vertex3,vertex4, vertex5, vertex6, vertex7, vertex8;
+	//arma::Mat<double> vertex1,vertex2,vertex3,vertex4, vertex5, vertex6, vertex7, vertex8;
 
-    vector<arma::Mat<double> > vertices;
+    vector<arma::Mat<double> > tempVertices;
     vector<unsigned int> indices;
 
-	vertices = meshReader->readVertices("P.txt");
+	tempVertices = meshReader->readVertices("P.node");
 	indices = meshReader->readTetras("P.ele");
 
 
-
-	for(int i = 0; i <(indices.size()*0.25-4); i++){
-
-
-        vertex1 = vertices.at(indices.at(i*4));
-        vertex2 = vertices.at(indices.at(i*4+1));
-        vertex3 = vertices.at(indices.at(i*4+2));
-        vertex4 = vertices.at(indices.at(i*4+3));
+    cout << tempVertices.size() << endl;
+	for(int i = 0; i <indices.size()/4-4; i++){
+	    arma::Mat<double> vertex1,vertex2,vertex3,vertex4;
+        //cout << "krash?" << endl;
+        //cout << tempVertices.at(indices.at(i*4+4)-1) << endl;
+        vertex1 = tempVertices.at(indices.at(i*4)-1)/10;
+        vertex2 = tempVertices.at(indices.at(i*4+1)-1)/10;
+        vertex3 = tempVertices.at(indices.at(i*4+2)-1)/10;
+        vertex4 = tempVertices.at(indices.at(i*4+3)-1)/10;
 
         createTetra(vertex1,vertex2, vertex3, vertex4);
 
     }
-    cout << indices.size();
+
 
   //  createTetra(vertex1,vertex2, vertex3, vertex4);
 
@@ -71,7 +72,7 @@ void VolumeGenerator::createTetra(arma::Mat<double> v1, arma::Mat<double> v2, ar
     //Kolla efter positivt volym
     arma::Mat<double> Volmat;
     Volmat = join_rows(arma::ones(4,1),join_cols(join_cols(join_cols(v1,v2),v3),v4));
-    double V = det(Volmat)/6.0;
+    double V = 1; //det(Volmat)/6.0;
     if(V > 0){
         //Skapa tetras
         arma::Mat<double> t = arma::zeros(1,3);
