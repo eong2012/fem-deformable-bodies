@@ -1,6 +1,6 @@
 #include "WindowHandler.h"
 
-int X;
+int X; 
 int Y;
 
 WindowHandler::WindowHandler(void)
@@ -12,14 +12,14 @@ WindowHandler::WindowHandler(void)
     glutCreateWindow("");
 
     //Set arcball
-    eye.setVec( 10.0f, 0.0f, 10.0f );
-    center.setVec( 0.0f, -1.0f, 0.0f );
+    eye.setVec( 0.0f, 2.0f, 5.0f );
+    center.setVec( 0.0f, 0.0f, 0.0f );
     up.setVec( 0.0f, 1.0f, 0.0f );
 
     SPHERE_RADIUS = 1.0f;
     PI = 3.141592654f;
     buttonPressed = -1;
-
+	
 }
 WindowHandler::~WindowHandler(void)
 {
@@ -29,7 +29,7 @@ WindowHandler::~WindowHandler(void)
 void WindowHandler::display()
 {
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    RenderFirstPass(); //Deformation Simulation
+    //RenderFirstPass(); //Deformation Simulation
     RenderSecondPass(); //Render the actual graphics
 
     glutSwapBuffers();
@@ -76,33 +76,39 @@ void WindowHandler::RenderSecondPass()
   glEnable(GL_CULL_FACE);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
+  //
 
   ///New --- Read the from the texture and store in an array
-  glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, positionTexID);
+  //glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
+  //glActiveTexture(GL_TEXTURE0);
+  //glBindTexture(GL_TEXTURE_2D, positionTexID);
 
-  GLfloat *textureData = new GLfloat[4*nrOfVertices];
+  //GLfloat *textureData = new GLfloat[4*nrOfVertices];
 
-  glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
-  glReadPixels(0, 0, textureSize, textureSize,GL_RGBA, GL_FLOAT, &textureData[0]);
+  //glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
+  //glReadPixels(0, 0, textureSize, textureSize,GL_RGBA, GL_FLOAT, &textureData[0]);
 
-  glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+  //glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
   ///---
 
-
+  
 
   //cout << temp << endl;
-  arcball_rotate();
+  
 
+  glPushMatrix();
+  arcball_rotate();
   solver->calcNewPosition(volumeGenerator->getTetrahedMesh(), this->Fxt);
   this->Fxt = arma::zeros(this->Fxt.n_rows,this->Fxt.n_cols);
-
+ 
   lightShader->use();
-
   volumeGenerator->render();
   lightShader->disable();
+  
+  //
+  
+  this->drawForceArrow();
+  glPopMatrix();
 
 }
 
@@ -111,7 +117,7 @@ void WindowHandler::setupTextures()
     ///Example, if we need the position of the vertices
     //Get the position data for each vertex
 	/*GLfloat *positionData = volumeGenerator->getTetrahedMesh().GetVertexArray();
-
+	
 
     //Create the position texture that will be sent to the shader for integration
 	glGenTextures(1, &positionTexID);
@@ -142,7 +148,7 @@ void WindowHandler::setupTextures()
 
 void WindowHandler::init()
 {
-
+	
     lightShader = new Shader();
     lightShader->load("Shader/vertexPhongShader.glsl","Shader/fragmentPhongShader.glsl");
 
@@ -151,19 +157,19 @@ void WindowHandler::init()
 
 	volumeGenerator = new VolumeGenerator();
 	volumeGenerator->generateVolume();
-
-
+	
+	
 	solver = new Solver(volumeGenerator->getTetrahedMesh()->getNrOfNodes());
 	Fxt = arma::zeros(volumeGenerator->getTetrahedMesh()->getNrOfNodes()*3,1);
-
+	
 	//volumeGenerator->subdivide();
-
+	
 	//For the deformation
     textureSize = volumeGenerator->getTetrahedMesh()->GetVertexArraySize(); //a texture is optimal if 2^n large
     //
 	this->nrOfVertices = textureSize*textureSize;
     //Setup textures used for the deformation shader
-	setupTextures();
+	//setupTextures();
 	solver->contstructKe(volumeGenerator->getTetrahedMesh());
 
 
@@ -180,15 +186,16 @@ void WindowHandler::reshape(int w, int h)
     glViewport(0, 0, windowWidth, windowHeight);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective( 45.0f, aspect_ratio, 0.1f, 1000.0f );
-    gluLookAt(
-        eye.x, eye.y, eye.z,   //eye
-        center.x, center.y, center.z,   //lookat
-        up.x, up.y, up.z );  //up vector
+    gluPerspective( 60.0f, aspect_ratio, 1.0f, 650.0f );
+  
     arcball_setzoom( SPHERE_RADIUS, eye, up );
 
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity() ;
+    //glLoadIdentity() ;
+	gluLookAt(
+        eye.x, eye.y, eye.z,   //eye
+        center.x, center.y, center.z,   //lookat
+        up.x, up.y, up.z );  //up vector
 
 }
 void WindowHandler::idle()
@@ -252,24 +259,30 @@ void WindowHandler::processNormalKeys(unsigned char key, int x, int y) {
 
 	if (key == 102)
 	{
-		this->Fxt(0) = 0.3;
-		this->Fxt(1) = 0.3;
-		this->Fxt(2) = 0.3;
-
-
-
+		unsigned int cNode = this->volumeGenerator->getTetrahedMesh()->getCurrentNode();
+		this->Fxt(cNode*3) =  0.60;
+		this->Fxt(cNode*3+1) = 0.60;
+		this->Fxt(cNode*3+2) = 0.60;
+		cout << cNode << endl;
 
 	}
 
 
 	if (key == 103)
 	{
-		this->Fxt(0) = -0.3;
-		this->Fxt(1) = -0.3;
-		this->Fxt(2) = -0.3;
-
+		
+		unsigned int cNode = this->volumeGenerator->getTetrahedMesh()->getCurrentNode();
+		this->Fxt(cNode*3) = -0.60;
+		this->Fxt(cNode*3+1) = -0.60;
+		this->Fxt(cNode*3+2) = -0.60;
+		cout << cNode << endl;
+		
 	}
 
+	if (key == 112)
+	{
+	this->volumeGenerator->getTetrahedMesh()->pickNextNode();
+	}
 
 
 }
@@ -287,6 +300,17 @@ void WindowHandler::drawQuad()
         glTexCoord2f(0.0, 1.0);
         glVertex2f(0.0, textureSize);
     glEnd();
+}
+
+void WindowHandler::drawForceArrow() {
+
+	glColor3f(1.0,1.0,1.0);
+	arma::Mat<double> temp = this->volumeGenerator->getTetrahedMesh()->pickNode();
+	glBegin(GL_LINES);
+	glVertex3f(temp(0), temp(1), temp(2));
+	glVertex3f(50.0, 50.0, 50.0);
+	glEnd();
+
 }
 
 

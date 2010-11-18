@@ -1,15 +1,15 @@
 
 #define GLUT_DISABLE_ATEXIT_HACK
 #define GLEW_STATIC
-
+#include <Windows.h>
 #include <GL/glew.h>
-#include <GL/glut.h>
+#include <glut.h>
 
 #include "Tetrahed.h"
 #include "Face.h"
 #include "Vertex.h"
 #include "HalfEdge.h"
-#include "../../usr/include/armadillo.h"
+#include "armadillo"
 
 
 #include <vector>
@@ -52,6 +52,10 @@ public:
 
 	void updatePosition(unsigned int tetraIndex, vector<arma::Mat<double> > vertexPos);
 
+	arma::Mat<double> pickNode();
+	void pickNextNode();
+	unsigned int getCurrentNode();
+
 	//temp debug thing
 	void printVertices(int ind);
 	vector<Vertex> *mVertices;
@@ -64,6 +68,8 @@ private:
     vector<HalfEdge> *mHalfEdges;
     vector<Face> *mFaces;
     vector<Tetrahed> *mTetraheds;
+
+	unsigned int currentNode;
 
 };
 

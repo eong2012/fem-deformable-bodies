@@ -9,6 +9,7 @@ TetrahedMesh::TetrahedMesh()
 	mFaces = new vector<Face>();
 	mVertices = new vector<Vertex>();
 	mVertexIndexOrder = new vector<unsigned int>();
+	this->currentNode = 0;
 
 
 
@@ -321,7 +322,7 @@ void TetrahedMesh::RenderNormals(int mode) {
 
 	arma::Mat<double> vCenter, normal;
 	normal = face.getNormal();
-	normal = norm(normal, 1);
+
 	vCenter = (v1.getPosition()+v2.getPosition()+v3.getPosition())/3.0;
 
 		if (mode == 0) {
@@ -687,4 +688,29 @@ void TetrahedMesh::subdivide() {
 	this->mVertices = newMVertices;
 
 
+}
+
+arma::Mat<double> TetrahedMesh::pickNode() {
+
+
+	arma::Mat<double> temp = this->mVertices->at(currentNode).getPosition();
+	
+	return temp;
+}
+
+void TetrahedMesh::pickNextNode() {
+
+	if (this->currentNode < mVertices->size()-1){
+	this->currentNode += 1;
+		
+	} else {
+	this->currentNode = 0;
+	}
+	
+}
+
+unsigned int TetrahedMesh::getCurrentNode() {
+
+
+return this->currentNode;
 }
