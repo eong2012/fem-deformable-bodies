@@ -22,7 +22,7 @@ Solver::Solver(int nrOfNodes){
 
 	while(i*3+1 < grav.n_rows) {
 
-	grav(i*3+1) = -9.82;
+	grav(i*3+1) = -9.82*0;
 	i++;
 	}
 
@@ -131,7 +131,7 @@ void Solver::contstructKe(TetrahedMesh *mesh){
 
             float a, b, c, vn, E;
             vn = 0.08;
-            E = 0.5;
+            E = 0.8;
 
             //Paranthesis overflow :X DONT DIVIDE BY ZERO
 
