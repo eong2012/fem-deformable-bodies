@@ -1,4 +1,5 @@
 #include "TetrahedMesh.h"
+#include "MeshReader.h"
 #include <string>
 
 #define INNER   0
@@ -26,6 +27,7 @@ public:
 
 private :
 	TetrahedMesh *tetrahedMesh;
+	MeshReader *meshReader;
 	int normalMode;
 	int edgeMode;
 	int triangleMode;
