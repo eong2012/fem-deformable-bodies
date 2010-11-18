@@ -87,18 +87,18 @@ void Solver::contstructKe(TetrahedMesh *mesh){
             x3(1) = vPositions[3][1];
             x3(2) = vPositions[3][2];
 
-            cout << "--------" <<"TETRA" << k << "--------" << endl;
-            cout << "vertex 1" << endl;
-            cout << " x: " <<x0(0) << " y: " <<x0(1) << " z: " <<x0(2)<< endl;
-
-            cout << "vertex 2" << endl;
-            cout << " x: " <<x1(0) << " y: " <<x1(1) << " z: " <<x1(2)<< endl;
-
-            cout << "vertex 3" << endl;
-            cout << " x: " <<x2(0) << " y: " <<x2(1) << " z: " <<x2(2)<< endl;
-
-            cout << "vertex 4" << endl;
-            cout << " x: " <<x3(0) << " y: " <<x3(1) << " z: " <<x3(2)<< endl;
+//            cout << "--------" <<"TETRA" << k << "--------" << endl;
+//            cout << "vertex 1" << endl;
+//            cout << " x: " <<x0(0) << " y: " <<x0(1) << " z: " <<x0(2)<< endl;
+//
+//            cout << "vertex 2" << endl;
+//            cout << " x: " <<x1(0) << " y: " <<x1(1) << " z: " <<x1(2)<< endl;
+//
+//            cout << "vertex 3" << endl;
+//            cout << " x: " <<x2(0) << " y: " <<x2(1) << " z: " <<x2(2)<< endl;
+//
+//            cout << "vertex 4" << endl;
+//            cout << " x: " <<x3(0) << " y: " <<x3(1) << " z: " <<x3(2)<< endl;
 
 			arma::Mat<double> xOrgin = join_cols(join_cols(join_cols(x0,x1), x2),x3);
 			this->xOrgin.push_back(xOrgin);
@@ -241,7 +241,6 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 	(*u) = this->X-xLocal;
 	innerforce = this->K*(*u);
 
-	cout << (*u) << endl;
 	//NY
 
 	//NY

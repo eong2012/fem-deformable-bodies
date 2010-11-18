@@ -1,6 +1,6 @@
 #include "WindowHandler.h"
 
-int X; 
+int X;
 int Y;
 
 WindowHandler::WindowHandler(void)
@@ -12,14 +12,14 @@ WindowHandler::WindowHandler(void)
     glutCreateWindow("");
 
     //Set arcball
-    eye.setVec( 0.0f, 2.0f, 5.0f );
+    eye.setVec( 0.0f, 0.0f, 5.0f );
     center.setVec( 0.0f, 0.0f, 0.0f );
     up.setVec( 0.0f, 1.0f, 0.0f );
 
     SPHERE_RADIUS = 1.0f;
     PI = 3.141592654f;
     buttonPressed = -1;
-	
+
 }
 WindowHandler::~WindowHandler(void)
 {
@@ -91,22 +91,22 @@ void WindowHandler::RenderSecondPass()
   //glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
   ///---
 
-  
+
 
   //cout << temp << endl;
-  
+
 
   glPushMatrix();
   arcball_rotate();
-  solver->calcNewPosition(volumeGenerator->getTetrahedMesh(), this->Fxt);
+  //solver->calcNewPosition(volumeGenerator->getTetrahedMesh(), this->Fxt);
   this->Fxt = arma::zeros(this->Fxt.n_rows,this->Fxt.n_cols);
- 
+
   lightShader->use();
   volumeGenerator->render();
   lightShader->disable();
-  
+
   //
-  
+
   this->drawForceArrow();
   glPopMatrix();
 
@@ -117,7 +117,7 @@ void WindowHandler::setupTextures()
     ///Example, if we need the position of the vertices
     //Get the position data for each vertex
 	/*GLfloat *positionData = volumeGenerator->getTetrahedMesh().GetVertexArray();
-	
+
 
     //Create the position texture that will be sent to the shader for integration
 	glGenTextures(1, &positionTexID);
@@ -148,7 +148,7 @@ void WindowHandler::setupTextures()
 
 void WindowHandler::init()
 {
-	
+
     lightShader = new Shader();
     lightShader->load("Shader/vertexPhongShader.glsl","Shader/fragmentPhongShader.glsl");
 
@@ -157,13 +157,13 @@ void WindowHandler::init()
 
 	volumeGenerator = new VolumeGenerator();
 	volumeGenerator->generateVolume();
-	
-	
+
+
 	solver = new Solver(volumeGenerator->getTetrahedMesh()->getNrOfNodes());
 	Fxt = arma::zeros(volumeGenerator->getTetrahedMesh()->getNrOfNodes()*3,1);
-	
+
 	//volumeGenerator->subdivide();
-	
+
 	//For the deformation
     textureSize = volumeGenerator->getTetrahedMesh()->GetVertexArraySize(); //a texture is optimal if 2^n large
     //
@@ -187,7 +187,7 @@ void WindowHandler::reshape(int w, int h)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective( 60.0f, aspect_ratio, 1.0f, 650.0f );
-  
+
     arcball_setzoom( SPHERE_RADIUS, eye, up );
 
     glMatrixMode(GL_MODELVIEW);
@@ -270,13 +270,13 @@ void WindowHandler::processNormalKeys(unsigned char key, int x, int y) {
 
 	if (key == 103)
 	{
-		
+
 		unsigned int cNode = this->volumeGenerator->getTetrahedMesh()->getCurrentNode();
 		this->Fxt(cNode*3) = -0.60;
 		this->Fxt(cNode*3+1) = -0.60;
 		this->Fxt(cNode*3+2) = -0.60;
 		cout << cNode << endl;
-		
+
 	}
 
 	if (key == 112)
