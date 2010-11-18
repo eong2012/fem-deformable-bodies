@@ -53,6 +53,8 @@
 		<Unit filename="Shader/fragmentPhongShader.glsl" />
 		<Unit filename="Shader/vertexDeformationShader.glsl" />
 		<Unit filename="Shader/vertexPhongShader.glsl" />
+		<Unit filename="Solver/ConjugateGradient.cpp" />
+		<Unit filename="Solver/ConjugateGradient.h" />
 		<Unit filename="Solver/Solver.cpp" />
 		<Unit filename="Solver/Solver.h" />
 		<Unit filename="WindowHandler.cpp" />

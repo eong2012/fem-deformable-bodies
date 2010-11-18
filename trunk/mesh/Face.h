@@ -1,6 +1,6 @@
 
 
-#include "armadillo.h"
+#include "../../usr/include/armadillo.h"
 
 #ifndef FACE_H
 #define FACE_H

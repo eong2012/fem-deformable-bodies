@@ -9,7 +9,7 @@
 #include "Face.h"
 #include "Vertex.h"
 #include "HalfEdge.h"
-#include "armadillo.h"
+#include "../../usr/include/armadillo.h"
 
 
 #include <vector>
