@@ -41,10 +41,9 @@ vector<arma::Mat<double> > MeshReader::readVertices(char *filename){
     getline(infile, trash);
 
     double tmp, x, y, z;
-
+    arma::Mat<double> tmpVert;
 
     while (infile.good()){
-        arma::Mat<double> tmpVert;
         infile >> tmp;
         infile >> x;
         infile >> y;

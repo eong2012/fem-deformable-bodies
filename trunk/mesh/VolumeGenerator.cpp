@@ -19,11 +19,10 @@ void VolumeGenerator::generateVolume() {
 
 	tempVertices = meshReader->readVertices("P.node");
 	indices = meshReader->readTetras("P.ele");
+    arma::Mat<double> vertex1,vertex2,vertex3,vertex4;
 
-
-    cout << tempVertices.size() << endl;
 	for(int i = 0; i <indices.size()/4-4; i++){
-	    arma::Mat<double> vertex1,vertex2,vertex3,vertex4;
+
         //cout << "krash?" << endl;
         //cout << tempVertices.at(indices.at(i*4+4)-1) << endl;
         vertex1 = tempVertices.at(indices.at(i*4)-1)/10;
