@@ -12,7 +12,7 @@ WindowHandler::WindowHandler(void)
     glutCreateWindow("");
 
     //Set arcball
-    eye.setVec( 0.0f, 0.0f, 5.0f );
+    eye.setVec( 0.0f, 0.0f, 1.1f );
     center.setVec( 0.0f, 0.0f, 0.0f );
     up.setVec( 0.0f, 1.0f, 0.0f );
 
@@ -98,7 +98,7 @@ void WindowHandler::RenderSecondPass()
 
   glPushMatrix();
   arcball_rotate();
-  //solver->calcNewPosition(volumeGenerator->getTetrahedMesh(), this->Fxt);
+  solver->calcNewPosition(volumeGenerator->getTetrahedMesh(), this->Fxt);
   this->Fxt = arma::zeros(this->Fxt.n_rows,this->Fxt.n_cols);
 
   lightShader->use();
@@ -170,7 +170,8 @@ void WindowHandler::init()
 	this->nrOfVertices = textureSize*textureSize;
     //Setup textures used for the deformation shader
 	//setupTextures();
-	solver->contstructKe(volumeGenerator->getTetrahedMesh());
+	solver->constructKe(volumeGenerator->getTetrahedMesh());
+	solver->constructMe(volumeGenerator->getTetrahedMesh());
 
 
 }
@@ -256,13 +257,13 @@ void WindowHandler::processNormalKeys(unsigned char key, int x, int y) {
 
 		volumeGenerator->changeTriangleRenderMode();
 	}
-
+    double force = 100.0;
 	if (key == 102)
 	{
 		unsigned int cNode = this->volumeGenerator->getTetrahedMesh()->getCurrentNode();
-		this->Fxt(cNode*3) =  0.60;
-		this->Fxt(cNode*3+1) = 0.60;
-		this->Fxt(cNode*3+2) = 0.60;
+		this->Fxt(cNode*3) =  force;
+		this->Fxt(cNode*3+1) = force;
+		this->Fxt(cNode*3+2) = force;
 		cout << cNode << endl;
 
 	}
@@ -272,9 +273,9 @@ void WindowHandler::processNormalKeys(unsigned char key, int x, int y) {
 	{
 
 		unsigned int cNode = this->volumeGenerator->getTetrahedMesh()->getCurrentNode();
-		this->Fxt(cNode*3) = -0.60;
-		this->Fxt(cNode*3+1) = -0.60;
-		this->Fxt(cNode*3+2) = -0.60;
+		this->Fxt(cNode*3) = -force;
+		this->Fxt(cNode*3+1) = -force;
+		this->Fxt(cNode*3+2) = -force;
 		cout << cNode << endl;
 
 	}

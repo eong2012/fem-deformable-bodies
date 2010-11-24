@@ -1,4 +1,4 @@
-	
+
 #include "ConjugateGradient.h"
 
 
@@ -10,13 +10,13 @@ bool ConjugateGradient::solve(arma::Mat<double> A, arma::Mat<double> *x, arma::M
     unsigned int max_iter = mMaxIter;
     double tol = mMaxTolerance;
 
-	double normb = arma::norm(b, "inf");
+	double normb = arma::norm(b, 2);
 
     arma::Mat<double> r = b - A*(*x); // N + M*N*fill
-	
+
     if (normb == 0.0)
       normb = 1;
-    if ((resid = arma::norm(r, "inf") / normb) <= tol) { // N
+    if ((resid = arma::norm(r, 2) / normb) <= tol) { // N
       mTolerance = resid;
       mIter = 0;
       return true;
@@ -37,7 +37,7 @@ bool ConjugateGradient::solve(arma::Mat<double> A, arma::Mat<double> *x, arma::M
       (*x) = (*x) + alpha * p; // N + N
       r = r - alpha * q; // N + N
 
-      if ((resid = arma::norm(b, "inf") / normb) <= tol) { // N
+      if ((resid = arma::norm(b, 2) / normb) <= tol) { // N
         mTolerance = resid;
         mIter = i;
 

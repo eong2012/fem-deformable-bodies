@@ -10,18 +10,20 @@ public:
 	Solver(int nrOfNodes);
     ~Solver();
 
-    void contstructKe(TetrahedMesh *mesh);
+    void constructKe(TetrahedMesh *mesh);
     void calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt);
 	void tetrahedronAssemble(arma::Mat<double> &K ,arma::Mat<double> k, int i, int j, int m, int n);
 	void setStaticState() {update = true;}
 	void planeCollisionDetection(arma::Mat<double> X);
 	void planeCollisionHandler(unsigned int forceIndex);
+	void constructMe(TetrahedMesh *mesh);
 
 private:
 
 	ConjugateGradient *conjugateGradient;
     vector<arma::Mat<double> > mKMatrices;
 	arma::Mat<double> K;
+	arma::Mat<double> M;
 	arma::Mat<double>  *xOVer1;
 	arma::Mat<double>  *xOVer2;
 	arma::Mat<double>  *vOVer1;
@@ -41,6 +43,7 @@ private:
 	arma::Mat<double> collisionForce;
 	double dt;
 	double mass;
+	double density;
 
 	vector<Vertex>* mOriginalPos;
 	arma::Mat<double> localVpre;

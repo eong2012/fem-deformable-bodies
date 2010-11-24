@@ -14,7 +14,7 @@ vector<unsigned int> MeshReader::readTetras(char *filename){
     int tmp, ind0, ind1, ind2, ind3;
 
     while (infile.good()){
-        infile >> tmp;
+        //infile >> tmp;
         infile >> ind0;
         infile >> ind1;
         infile >> ind2;
@@ -24,8 +24,9 @@ vector<unsigned int> MeshReader::readTetras(char *filename){
         indices.push_back(ind2);
         indices.push_back(ind3);
         getline(infile, trash);
-    }
 
+    }
+    cout << indices.size() << endl;
     infile.close();
     return indices;
 
@@ -44,7 +45,7 @@ vector<arma::Mat<double> > MeshReader::readVertices(char *filename){
     arma::Mat<double> tmpVert;
 
     while (infile.good()){
-        infile >> tmp;
+        //infile >> tmp;
         infile >> x;
         infile >> y;
         infile >> z;

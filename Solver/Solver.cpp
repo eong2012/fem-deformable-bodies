@@ -4,8 +4,9 @@
 Solver::Solver(int nrOfNodes){
 
 	this->nrOfNodes = nrOfNodes;
-	conjugateGradient = new ConjugateGradient(20.0,0.0001);
+	conjugateGradient = new ConjugateGradient(20,0.001);
 	K = arma::zeros(this->nrOfNodes*3+1,this->nrOfNodes*3+1);
+	M = arma::zeros(this->nrOfNodes*3+1,this->nrOfNodes*3+1);
 	Xpre = arma::zeros(this->nrOfNodes*3,1);
 	Vpre = arma::zeros(this->nrOfNodes*3,1);
 	localVpre = arma::zeros(this->nrOfNodes*3,1);
@@ -14,15 +15,16 @@ Solver::Solver(int nrOfNodes){
 	grav = arma::zeros(this->nrOfNodes*3,1);
 	unsigned int i = 0;
 	X = arma::zeros(this->nrOfNodes*3,1);
-	dt = 0.01;
-	mass = 1.1;
+	dt = 0.001;
+
+	density =1000.0;
 	this->v = arma::zeros(this->nrOfNodes*3,1);
 
 	collisionForce = arma::zeros(this->nrOfNodes*3,1);
 
 	while(i*3+1 < grav.n_rows) {
 
-	grav(i*3+1) = -9.82*0;
+	grav(i*3+1) = -9.82*0.0;
 	i++;
 	}
 
@@ -39,7 +41,7 @@ Solver::~Solver(){
 	delete[] this->xOVer2;
 }
 
-void Solver::contstructKe(TetrahedMesh *mesh){
+void Solver::constructKe(TetrahedMesh *mesh){
 
     mOriginalPos = new vector<Vertex>((*mesh->mVertices));
 
@@ -62,6 +64,7 @@ void Solver::contstructKe(TetrahedMesh *mesh){
 		}
 
     vector<arma::Mat<double> > vPositions;
+
     for(unsigned int k = 0; k < nrOfTetraheds; k++) {
 
             vPositions = mesh->getVertexPosition(k);
@@ -87,19 +90,6 @@ void Solver::contstructKe(TetrahedMesh *mesh){
             x3(1) = vPositions[3][1];
             x3(2) = vPositions[3][2];
 
-//            cout << "--------" <<"TETRA" << k << "--------" << endl;
-//            cout << "vertex 1" << endl;
-//            cout << " x: " <<x0(0) << " y: " <<x0(1) << " z: " <<x0(2)<< endl;
-//
-//            cout << "vertex 2" << endl;
-//            cout << " x: " <<x1(0) << " y: " <<x1(1) << " z: " <<x1(2)<< endl;
-//
-//            cout << "vertex 3" << endl;
-//            cout << " x: " <<x2(0) << " y: " <<x2(1) << " z: " <<x2(2)<< endl;
-//
-//            cout << "vertex 4" << endl;
-//            cout << " x: " <<x3(0) << " y: " <<x3(1) << " z: " <<x3(2)<< endl;
-
 			arma::Mat<double> xOrgin = join_cols(join_cols(join_cols(x0,x1), x2),x3);
 			this->xOrgin.push_back(xOrgin);
 
@@ -111,7 +101,7 @@ void Solver::contstructKe(TetrahedMesh *mesh){
 			Volmat = join_rows(arma::ones(4,1),join_cols(join_cols(join_cols(trans(x0),trans(x1)),trans(x2)),trans(x3)));
 
             double V = det(Volmat)/6.0;
-            cout << "VOLUME: " << V << endl;
+            mass += V*density;
 
             X = inv(X);
 
@@ -130,8 +120,8 @@ void Solver::contstructKe(TetrahedMesh *mesh){
             y.push_back(y3);
 
             float a, b, c, vn, E;
-            vn = 0.08;
-            E = 0.8;
+            vn = 0.33;
+            E = 10000.0;
 
             //Paranthesis overflow :X DONT DIVIDE BY ZERO
 
@@ -177,31 +167,88 @@ void Solver::contstructKe(TetrahedMesh *mesh){
                     Ke.submat(i*3,j*3,i*3+2,j*3+2) =  K1*AB*K2 + K3*C*K4;
                 }
             }
-			//cout << vPositions[0][3] << " " << vPositions[1][3] << " " << vPositions[2][3] << " " << vPositions[3][3] << endl;
+
 			this->tetrahedronAssemble(this->K,Ke,vPositions[0][3]+1,vPositions[1][3]+1,vPositions[2][3]+1, vPositions[3][3]+1);
             this->mKMatrices.push_back(Ke);
 
             vPositions.clear();
     }
-
-
-		cout << "------" << endl;
-
+        cout << mass << endl;
 		K.shed_col(0);
 		K.shed_row(0);
-		//cout << this->nrOfNodes  << endl;
-	//cout << this->K << endl;
+
+}
+
+void Solver::constructMe(TetrahedMesh *mesh){
+
+    arma::Mat<double> constantMatrix;
+    arma::Mat<double> Me;
+    arma::Mat<double> eyeMatrix = arma::eye(3,3);
+
+    arma::Mat<double> col1 = join_rows(join_rows(join_rows(eyeMatrix*2, eyeMatrix), eyeMatrix), eyeMatrix);
+    arma::Mat<double> col2 = join_rows(join_rows(join_rows(eyeMatrix, eyeMatrix*2), eyeMatrix), eyeMatrix);
+    arma::Mat<double> col3 = join_rows(join_rows(join_rows(eyeMatrix, eyeMatrix), eyeMatrix*2), eyeMatrix);
+    arma::Mat<double> col4 = join_rows(join_rows(join_rows(eyeMatrix, eyeMatrix), eyeMatrix), eyeMatrix*2);
+
+    constantMatrix = join_cols(join_cols(join_cols(col1, col2), col3), col4);
+
+    vector<arma::Mat<double> > vPositions;
+
+    for(unsigned int k = 0; k < mesh->getNrOfTetrahedra(); k++) {
+
+            vPositions = mesh->getVertexPosition(k);
+
+            arma::Col<double> x0(3);
+            arma::Col<double> x1(3);
+            arma::Col<double> x2(3);
+            arma::Col<double> x3(3);
+
+            x0(0) = vPositions[0][0];
+            x0(1) = vPositions[0][1];
+            x0(2) = vPositions[0][2];
+
+            x1(0) = vPositions[1][0];
+            x1(1) = vPositions[1][1];
+            x1(2) = vPositions[1][2];
+
+            x2(0) = vPositions[2][0];
+            x2(1) = vPositions[2][1];
+            x2(2) = vPositions[2][2];
+
+            x3(0) = vPositions[3][0];
+            x3(1) = vPositions[3][1];
+            x3(2) = vPositions[3][2];
+
+            arma::Mat<double> Volmat;
+
+			Volmat = join_rows(arma::ones(4,1),join_cols(join_cols(join_cols(trans(x0),trans(x1)),trans(x2)),trans(x3)));
+
+            double V = det(Volmat)/6.0;
+
+            Me = density*V*0.05*constantMatrix;
+
+            this->tetrahedronAssemble(this->M,Me,vPositions[0][3]+1,vPositions[1][3]+1,vPositions[2][3]+1, vPositions[3][3]+1);
+    }
+
+    M.shed_col(0);
+    M.shed_row(0);
+
+
 
 }
 
 void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 {
-     //for each vertex in tetraheder, get positon
+    //for each vertex in tetrahedron, get position
     unsigned int nrOfTetraheds = mesh->getNrOfTetrahedra();
 
-	arma::Mat<double> M = arma::eye(this->nrOfNodes*3,this->nrOfNodes*3);
 	arma::Mat<double> C = arma::eye(this->nrOfNodes*3,this->nrOfNodes*3)*1;
 	arma::Mat<double> xLocal = arma::zeros(this->nrOfNodes*3,1);
+
+	double alpha, beta;
+    alpha = 1.55;
+    beta = 1.51;
+	C = alpha*M+beta*K;
 
 
 
@@ -223,7 +270,6 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 	}
 	collisionForce = arma::zeros(3*this->nrOfNodes,1);
 
-	//NY
 	arma::Mat<double> outerforce(3*this->nrOfNodes,1);
 	outerforce = arma::zeros(3*this->nrOfNodes,1);
 
@@ -235,29 +281,20 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 	arma::Mat<double> *u;
 	u = new arma::Mat<double>(this->nrOfNodes*3,1);
 
-	outerforce = Fxt+grav+collisionForce;
+	outerforce = Fxt+grav*mass+collisionForce;
 
-	//conjugateGradient->solve(K,u,outerforce);
 	(*u) = this->X-xLocal;
-	innerforce = this->K*(*u);
+	innerforce = this->K*(*u)*1.0;
 
-	//NY
-
-	//NY
-	conjugateGradient->solve(M+C*dt+dt*dt*(this->K),&v,(M*Vpre + dt*(outerforce-innerforce)));
+    v = arma::zeros(3*this->nrOfNodes,1);
+	conjugateGradient->solve(this->M+C*dt+dt*dt*(this->K),&v,(this->M*Vpre - dt*(-outerforce+innerforce)));
 	Vpre = v;
-	//cout << v << endl;
-
-	//GAMLA MED EN KRAFT!!!
-	//this->v = Vpre+dt*M*(Fxt+this->K*(*u)-C*Vpre);
-
-	//cout << v << endl;
 
 
 	arma::Mat<double> x = this->X+dt*v;
-	//Xpre = this->X;
 
-	//update the local positions
+
+	//update the local positions FOR GHOST BUNNY
 	arma::Mat<double> vLocal = localVpre + (grav+collisionForce)*dt;
 	localVpre = vLocal;
 	arma::Mat<double> newXLocal = xLocal+dt*vLocal;
@@ -271,9 +308,6 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 
 	    mesh->mVertices->at(i).setPosition(tmp);
 	    mOriginalPos->at(i).setPosition(localTmp);
-
-		//mesh->mVertices->at(i).setPosition(arma::Mat<double>(x(3*i),x(3*i+1), x(3*i+2)));
-
 	}
 
 
@@ -377,7 +411,7 @@ void Solver::tetrahedronAssemble(arma::Mat<double> &K ,arma::Mat<double> k, int 
 //Detects collisions
 void Solver::planeCollisionDetection(arma::Mat<double> X)
 {
-    double planeY = -0.7;
+    double planeY = -0.4;
 
     for(int i = 0; i < (X.n_rows/3.0); i++)
     {
@@ -391,7 +425,7 @@ void Solver::planeCollisionHandler(unsigned int forceIndex)
 {
 
     //F = m(v_final - v_initial) == F = -m(v_initial + v_initial) :)))
-    collisionForce(forceIndex) =-mass*(v(forceIndex) + v(forceIndex))/dt;
+    collisionForce(forceIndex) =-mass*( v(forceIndex))/dt;
 	Xpre = this->X;
 }
 
