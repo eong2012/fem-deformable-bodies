@@ -12,7 +12,7 @@ WindowHandler::WindowHandler(void)
     glutCreateWindow("");
 
     //Set arcball
-    eye.setVec( 0.0f, 0.0f, 1.1f );
+    eye.setVec( 0.0f, 0.2f, 1.5f );
     center.setVec( 0.0f, 0.0f, 0.0f );
     up.setVec( 0.0f, 1.0f, 0.0f );
 
@@ -187,7 +187,7 @@ void WindowHandler::reshape(int w, int h)
     glViewport(0, 0, windowWidth, windowHeight);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective( 60.0f, aspect_ratio, 1.0f, 650.0f );
+    gluPerspective( 60.0f, aspect_ratio, 0.05f, 650.0f );
 
     arcball_setzoom( SPHERE_RADIUS, eye, up );
 
@@ -257,14 +257,14 @@ void WindowHandler::processNormalKeys(unsigned char key, int x, int y) {
 
 		volumeGenerator->changeTriangleRenderMode();
 	}
-    double force = 100.0;
+    double force = 400.1000;
 	if (key == 102)
 	{
 		unsigned int cNode = this->volumeGenerator->getTetrahedMesh()->getCurrentNode();
 		this->Fxt(cNode*3) =  force;
 		this->Fxt(cNode*3+1) = force;
 		this->Fxt(cNode*3+2) = force;
-		cout << cNode << endl;
+		
 
 	}
 
@@ -276,7 +276,7 @@ void WindowHandler::processNormalKeys(unsigned char key, int x, int y) {
 		this->Fxt(cNode*3) = -force;
 		this->Fxt(cNode*3+1) = -force;
 		this->Fxt(cNode*3+2) = -force;
-		cout << cNode << endl;
+		
 
 	}
 

@@ -3,7 +3,7 @@
 #define GLEW_STATIC
 #include <Windows.h>
 #include <GL/glew.h>
-#include <GL/glut.h>
+#include <glut.h>
 
 #include "Tetrahed.h"
 #include "Face.h"

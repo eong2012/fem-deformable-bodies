@@ -12,27 +12,27 @@ VolumeGenerator::VolumeGenerator() {
 
 void VolumeGenerator::generateVolume() {
 
-//	arma::Mat<double> vertex1,vertex2,vertex3,vertex4, vertex5, vertex6, vertex7, vertex8;
+	arma::Mat<double> vertex1,vertex2,vertex3,vertex4, vertex5, vertex6, vertex7, vertex8;
 
-    vector<arma::Mat<double> > tempVertices;
+    /*vector<arma::Mat<double> > tempVertices;
     vector<unsigned int> indices;
-
-	tempVertices = meshReader->readVertices("Bunny.node");
-	indices = meshReader->readTetras("Bunny.ele");
+	
+	tempVertices = meshReader->readVertices("Snake.node");
+	indices = meshReader->readTetras("Snake.ele");
     arma::Mat<double> vertex1,vertex2,vertex3,vertex4;
 
     cout << indices.size() << endl;
     cout << tempVertices.size() << endl;
 	for(int i = 0; i <indices.size()/4; i++){
 
-        vertex1 = tempVertices.at(indices.at(i*4));
-        vertex2 = tempVertices.at(indices.at(i*4+1));
-        vertex3 = tempVertices.at(indices.at(i*4+2));
-        vertex4 = tempVertices.at(indices.at(i*4+3));
+        vertex1 = tempVertices.at(indices.at(i*4))*20;
+        vertex2 = tempVertices.at(indices.at(i*4+1))*20;
+        vertex3 = tempVertices.at(indices.at(i*4+2))*20;
+        vertex4 = tempVertices.at(indices.at(i*4+3))*20;
 
         createTetra(vertex1,vertex2, vertex3, vertex4);
     }
-
+	*/
 
 //    createTetra(vertex1,vertex2, vertex3, vertex4);
 //
@@ -43,25 +43,24 @@ void VolumeGenerator::generateVolume() {
 //	vertex4 = vertices.at(indices.at(3));
 
 
-//    vertex1 <<  0.05f <<  0.05f <<  0.05f;
-//	vertex2 << -0.05f <<  0.05f << -0.05f;
-//    vertex3 <<  0.05f << -0.05f << -0.05f;
-//    vertex4 << -0.05f << -0.05f <<  0.05f;
-//    vertex5 <<  0.05f <<  0.05f << -0.05f;
-//    vertex6 << -0.05f <<  0.05f <<  0.05f;
-//    vertex7 << -0.05f << -0.05f << -0.05f;
-//    vertex8 <<  0.05f << -0.05f <<  0.05f;
-//
-//
-//    createTetra(vertex1,vertex3, vertex8, vertex4);
-//
-//
-//
-//    createTetra(vertex1,vertex2, vertex3, vertex4); //Tetra 1
-//    createTetra(vertex1,vertex2, vertex4, vertex6); //Tetra 4
-//    createTetra(vertex2,vertex3, vertex4, vertex7); //Tetra 5
-//    createTetra(vertex1,vertex2, vertex5, vertex3);
+   vertex1 <<  0.5f <<  0.5f <<  0.5f;
+   vertex2 << -0.5f <<  0.5f << -0.5f;
+   vertex3 <<  0.5f << -0.5f << -0.5f;
+   vertex4 << -0.5f << -0.5f <<  0.5f;
+   vertex5 <<  0.5f <<  0.5f << -0.5f;
+   vertex6 << -0.5f <<  0.5f <<  0.5f;
+   vertex7 << -0.5f << -0.5f << -0.5f;
+   vertex8 <<  0.5f << -0.5f <<  0.5f;
 
+  
+
+
+
+    createTetra(vertex1,vertex2, vertex3, vertex4); //Tetra 1
+    createTetra(vertex1,vertex2, vertex4, vertex6); //Tetra 4
+    createTetra(vertex2,vertex3, vertex4, vertex7); //Tetra 5
+    createTetra(vertex1,vertex2, vertex5, vertex3);
+	createTetra(vertex1,vertex3, vertex4, vertex8);
 
 }
 
@@ -74,7 +73,7 @@ void VolumeGenerator::createTetra(arma::Mat<double> v1, arma::Mat<double> v2, ar
     if(V > 0){
         //Skapa tetras
         arma::Mat<double> t = arma::zeros(1,3);
-        float scale = 1.0;
+        float scale = 0.1;
 
         vertices.clear();
         vertices.push_back(v1*scale+t);

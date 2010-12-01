@@ -13,12 +13,16 @@ bool ConjugateGradient::solve(arma::Mat<double> A, arma::Mat<double> *x, arma::M
 	double normb = arma::norm(b, 2);
 
     arma::Mat<double> r = b - A*(*x); // N + M*N*fill
-
+	
     if (normb == 0.0)
       normb = 1;
+
+	//std::cout << std::endl<< "re" << arma::norm(r,2) << std::endl;
+	//std::cout << std::endl << "normb"<< normb << std::endl;
     if ((resid = arma::norm(r, 2) / normb) <= tol) { // N
       mTolerance = resid;
-      mIter = 0;
+	
+	  mIter = 0;
       return true;
     }
 
@@ -36,11 +40,13 @@ bool ConjugateGradient::solve(arma::Mat<double> A, arma::Mat<double> *x, arma::M
 
       (*x) = (*x) + alpha * p; // N + N
       r = r - alpha * q; // N + N
-
-      if ((resid = arma::norm(b, 2) / normb) <= tol) { // N
+	 //std::cout << "Iter: " << i << std::endl;
+	 //std::cout << "fel: " << arma::norm(r, 2) / normb << std::endl;
+      if ((resid = arma::norm(r, 2) / normb) <= tol) { // N
         mTolerance = resid;
         mIter = i;
-
+		
+		
         return true;
       }
       rho_1 = rho;
