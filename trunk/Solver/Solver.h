@@ -1,4 +1,4 @@
-#include "armadillo.h"
+#include "armadillo"
 #include "ConjugateGradient.h"
 #include "../mesh/TetrahedMesh.h"
 #include <vector>
@@ -17,6 +17,8 @@ public:
 	void planeCollisionDetection(arma::Mat<double> X);
 	void planeCollisionHandler(unsigned int forceIndex);
 	void constructMe(TetrahedMesh *mesh);
+	arma::Mat<double> TetrahedronElementStiffness(float E,float NU,arma::Mat<double> x1,arma::Mat<double> x2, arma::Mat<double> x3, arma::Mat<double> x4);
+
 
 private:
 

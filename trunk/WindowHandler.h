@@ -3,7 +3,7 @@
 #include "mesh/VolumeGenerator.h"
 #include "Solver\Solver.h"
 #include <GL/glew.h>
-#include <GL/glut.h>
+#include <glut.h>
 
 #include <iostream>
 
