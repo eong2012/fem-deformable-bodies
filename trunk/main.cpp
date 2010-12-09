@@ -1,6 +1,6 @@
 #include "WindowHandler.h"
-#include <AntTweakBar.h>
-#include "armadillo"
+#include "AntTweakBar.h"
+#include "../usr/include/armadillo.h"
 
 using namespace std;
 
@@ -16,7 +16,7 @@ void processNormalKeys(unsigned char key, int x, int y)	{ mainWindow->processNor
 
 int main(int argc, char* argv[])
 {
-	
+
 
 
 
@@ -27,8 +27,8 @@ int main(int argc, char* argv[])
 	mainWindow = new WindowHandler();
 
 	GLenum err = glewInit();
-	
-	
+
+
 
     mainWindow->init();
     glClearColor(1., 1., 1., 0.);
@@ -55,10 +55,10 @@ int main(int argc, char* argv[])
     // - Send 'glutGetModifers' function pointer to AntTweakBar;
     //   required because the GLUT key event functions do not report key modifiers states.
     TwGLUTModifiersFunc(glutGetModifiers);
-	
 
-	
-	
+
+
+
 
     //TwDefine(" GLOBAL help='This example shows how to integrate AntTweakBar with GLUT and OpenGL.' "); // Message added to the help bar.
     //TwDefine(" TweakBar size='60 60' color='96 216 224' "); // change default tweak bar size and color

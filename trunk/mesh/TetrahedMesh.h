@@ -1,15 +1,15 @@
 
 #define GLUT_DISABLE_ATEXIT_HACK
 #define GLEW_STATIC
-#include <Windows.h>
+
 #include <GL/glew.h>
-#include <glut.h>
+#include <GL/glut.h>
 
 #include "Tetrahed.h"
 #include "Face.h"
 #include "Vertex.h"
 #include "HalfEdge.h"
-#include "armadillo"
+#include "../../usr/include/armadillo.h"
 
 
 #include <vector>
@@ -30,7 +30,7 @@ public:
     void AddHalfEdgePair(unsigned int vertexIndex1,unsigned int vertexIndex2,unsigned int &edgeIndex1,unsigned int &edgeIndex2, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp);
     bool AddVertex(arma::Mat<double> vertexPos, unsigned int &index, vector<Vertex> *mVerticesTemp);
     void AddFace(unsigned int vertexIndex1,unsigned int vertexIndex2, unsigned int vertexIndex3,unsigned int &faceIndex, vector<Face> *mFacesTemp, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp);
-	
+
 
     arma::Mat<double> FaceNormal(unsigned int faceIndex, vector<Face> *mFacesTemp, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp);
     void setTetraGeometry(vector<arma::Mat<double> > vertices, unsigned int &index1,unsigned int &index2,unsigned int &index3,unsigned int &index4, vector<Vertex> *mVerticesTemp);
