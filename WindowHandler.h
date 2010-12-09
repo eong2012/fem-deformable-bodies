@@ -13,6 +13,8 @@
 
 #include "arcball.h"
 
+#include <AntTweakBar.h>
+
 using namespace std;
 
 #ifndef WindowHandler_H
@@ -42,7 +44,15 @@ public:
     void mouseButtonEvent(int button, int state, int x, int y);
     void mouseMoveEvent(int x, int y);
 
+	void MultiplyQuaternions(const float *q1, const float *q2, float *qout);
+	void WindowHandler::ConvertQuaternionToMatrix(const float *quat, float *mat);
+	void SetQuaternionFromAxisAngle(const float *axis, float angle, float *quat);
+	void keyHandler();
+	friend void TW_CALL normalCB(void *clientdata);
+	friend void TW_CALL edgeCB(void *clientdata);
+	friend void TW_CALL triangleCB(void *clientdata);
 
+	
 private:
 
     int windowWidth, windowHeight;
@@ -66,6 +76,26 @@ private:
     float PI;
     int buttonPressed;
 	arma::Mat<double> Fxt;
+
+	TwBar *bar; 
+	float g_ForceDirection[3];
+
+	float g_Rotation[4];
+	
+	
+	
+	float g_RotateStart[4];
+
+	float g_Force;
+	int g_NormalMode;
+	int g_EdgeMode;
+	int g_TriangleMode;
+	
+
+	float g_Mass;
+	float g_Dampening;
+
+	float g_fractureThresh;
 
 };
 #endif
