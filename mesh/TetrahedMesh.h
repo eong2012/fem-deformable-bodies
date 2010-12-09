@@ -30,10 +30,17 @@ public:
     void AddHalfEdgePair(unsigned int vertexIndex1,unsigned int vertexIndex2,unsigned int &edgeIndex1,unsigned int &edgeIndex2, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp);
     bool AddVertex(arma::Mat<double> vertexPos, unsigned int &index, vector<Vertex> *mVerticesTemp);
     void AddFace(unsigned int vertexIndex1,unsigned int vertexIndex2, unsigned int vertexIndex3,unsigned int &faceIndex, vector<Face> *mFacesTemp, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp);
+	
 
     arma::Mat<double> FaceNormal(unsigned int faceIndex, vector<Face> *mFacesTemp, vector<HalfEdge> *mEdgesTemp, vector<Vertex> *mVerticesTemp);
     void setTetraGeometry(vector<arma::Mat<double> > vertices, unsigned int &index1,unsigned int &index2,unsigned int &index3,unsigned int &index4, vector<Vertex> *mVerticesTemp);
 
+	void crackStructure(unsigned int ind, arma::Mat<double> eigVec);
+	vector<unsigned int> getAdjecentTetraheds(unsigned int ind, arma::Mat<double> v);
+	void getAdjecent(unsigned int currentind, unsigned int baseind, vector<unsigned int> *tetraIndices, arma::Mat<double> v, int count);
+	arma::Mat<double> tetCenterOfMass(unsigned int tInd);
+	arma::Mat<double> determineLocationOfCrack(unsigned int tInd, vector<unsigned int> adjecentList, arma::Mat<double> v, arma::Mat<double> eigVec);
+	void deconnect(vector<unsigned int> adjecentList, arma::Mat<double> v);
 
     void Render(int mode);
 	void RenderNormals(int mode);

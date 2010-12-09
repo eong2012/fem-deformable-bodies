@@ -33,3 +33,13 @@ int Face::getOppositeFaceInd() {
 
 return this->oppositeFaceInd;
 }
+
+void Face::setTetrahedInd(unsigned int tind){
+
+	this->tetraIndex = tind;
+}
+
+unsigned int Face::getTetrahedInd(){
+
+return this->tetraIndex;
+}

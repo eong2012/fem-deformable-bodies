@@ -10,7 +10,7 @@ TetrahedMesh::TetrahedMesh()
 	mVertices = new vector<Vertex>();
 	mVertexIndexOrder = new vector<unsigned int>();
 	this->currentNode = 0;
-
+	srand(time(0));
 
 
 }
@@ -49,8 +49,17 @@ void TetrahedMesh::buildTetrahedonMesh(vector<arma::Mat<double> > vertices, vect
 	temp->setFaceInd3(faceIndex3);
 	temp->setFaceInd4(faceIndex4);
 
+	
+
+	
+
 
 	mtetrahedsTemp->push_back((*temp));
+	int sis = mtetrahedsTemp->size();
+	mFacesTemp->at(faceIndex1).setTetrahedInd(mtetrahedsTemp->size()-1);
+	mFacesTemp->at(faceIndex2).setTetrahedInd(mtetrahedsTemp->size()-1);
+	mFacesTemp->at(faceIndex3).setTetrahedInd(mtetrahedsTemp->size()-1);
+	mFacesTemp->at(faceIndex4).setTetrahedInd(mtetrahedsTemp->size()-1);
 	delete temp;
 
 	if (subdivide == false){
@@ -322,7 +331,7 @@ void TetrahedMesh::RenderNormals(int mode) {
 
 	arma::Mat<double> vCenter, normal;
 	normal = face.getNormal();
-
+	float scale= 100;
 	vCenter = (v1.getPosition()+v2.getPosition()+v3.getPosition())/3.0;
 
 		if (mode == 0) {
@@ -330,7 +339,7 @@ void TetrahedMesh::RenderNormals(int mode) {
 			glColor3f(1.0f, 0.0f, 1.0f);
 			glBegin(GL_LINES);
 			glVertex3f(vCenter[0], vCenter[1], vCenter[2]);
-			glVertex3f(vCenter[0]+normal[0]/4, vCenter[1]+normal[1]/4, vCenter[2]+normal[2]/4);
+			glVertex3f(vCenter[0]+normal[0]/scale, vCenter[1]+normal[1]/scale, vCenter[2]+normal[2]/scale);
 
 			glEnd();
 			}
@@ -342,7 +351,7 @@ void TetrahedMesh::RenderNormals(int mode) {
 			glColor3f(1.0f, 0.0f, 1.0f);
 			glBegin(GL_LINES);
 			glVertex3f(vCenter[0], vCenter[1], vCenter[2]);
-			glVertex3f(vCenter[0]+normal[0]/4, vCenter[1]+normal[1]/4, vCenter[2]+normal[2]/4);
+			glVertex3f(vCenter[0]+normal[0]/scale, vCenter[1]+normal[1]/scale, vCenter[2]+normal[2]/scale);
 
 			glEnd();
 			}
@@ -354,7 +363,7 @@ void TetrahedMesh::RenderNormals(int mode) {
 			glColor3f(1.0f, 0.0f, 1.0f);
 			glBegin(GL_LINES);
 			glVertex3f(vCenter[0], vCenter[1], vCenter[2]);
-			glVertex3f(vCenter[0]+normal[0]/4, vCenter[1]+normal[1]/4, vCenter[2]+normal[2]/4);
+			glVertex3f(vCenter[0]+normal[0]/scale, vCenter[1]+normal[1]/scale, vCenter[2]+normal[2]/scale);
 
 			glEnd();
 
@@ -713,4 +722,237 @@ unsigned int TetrahedMesh::getCurrentNode() {
 
 
 return this->currentNode;
+}
+
+
+void TetrahedMesh::crackStructure(unsigned int ind, arma::Mat<double> eigVec) {
+
+	Tetrahed tempTetra = mTetraheds->at(ind);
+
+	vector<unsigned int> faceIndices = tempTetra.getFaceInd();
+	vector<unsigned int> vertexIndices;
+
+     for(int i=0; i<4;i++){
+
+        Face & face = mFaces->at(faceIndices[i]);
+
+        HalfEdge* edge = &mHalfEdges->at(face.getEdgeInd());
+
+        vertexIndices.push_back(edge->getVertexInd());
+
+        edge = &mHalfEdges->at(edge->getNextInd());
+        vertexIndices.push_back(edge->getVertexInd());
+
+        edge = &mHalfEdges->at(edge->getNextInd());
+        vertexIndices.push_back(edge->getVertexInd());
+    }
+	 
+	 int size = vertexIndices.size();
+
+	unsigned int rIndex = rand() % size;
+	unsigned int vIndex = vertexIndices.at(rIndex);
+	
+	arma::Mat<double> v(3,1);
+	
+	v= mVertices->at(vIndex).getPosition();
+	
+	
+	
+	
+	
+
+	vector<unsigned int> adjecentList = getAdjecentTetraheds(ind, v);
+	if (adjecentList.size() > 0) {
+	determineLocationOfCrack(ind,adjecentList,v,eigVec);
+	}
+	
+
+}
+
+vector<unsigned int> TetrahedMesh::getAdjecentTetraheds(unsigned int ind, arma::Mat<double> v) {
+
+	vector<unsigned int> tetraIndices; 
+	Tetrahed tempTetra = mTetraheds->at(ind);
+	vector<unsigned int> faceIndices = tempTetra.getFaceInd();
+	int count = 0;
+
+	for(int i=0; i<4;i++){
+
+		 //get face
+		Face & face = mFaces->at(faceIndices[i]);
+		//get all vertices of that face
+		HalfEdge* edge = &mHalfEdges->at(face.getEdgeInd());
+
+		Vertex & v1 = mVertices->at(edge->getVertexInd());
+		edge = &mHalfEdges->at(edge->getNextInd());
+
+		Vertex & v2 = mVertices->at(edge->getVertexInd());
+		edge = &mHalfEdges->at(edge->getNextInd());
+
+		Vertex & v3 = mVertices->at(edge->getVertexInd());
+		int index = face.getOppositeFaceInd();
+		if  (index != -1 && (vecEquals(v, v1.getPosition()) || vecEquals(v, v2.getPosition()) || vecEquals(v, v3.getPosition()))){
+			
+			getAdjecent(mFaces->at(index).getTetrahedInd(), ind, &tetraIndices, v, count);
+			break;
+		}
+
+		
+	}
+	return tetraIndices;
+
+}
+
+void TetrahedMesh::getAdjecent(unsigned int currentind, unsigned int baseind, vector<unsigned int> *tetraIndices, arma::Mat<double> v, int count){
+	
+	count += 1;
+	
+
+	Tetrahed tempTetra = mTetraheds->at(currentind);
+	vector<unsigned int> faceIndices = tempTetra.getFaceInd();
+
+	 for(int i=0; i<4;i++){
+		bool check = false;
+		 //get face
+		Face & face = mFaces->at(faceIndices[i]);
+
+		//get all vertices of that face
+		HalfEdge* edge = &mHalfEdges->at(face.getEdgeInd());
+
+		Vertex & v1 = mVertices->at(edge->getVertexInd());
+		edge = &mHalfEdges->at(edge->getNextInd());
+
+		Vertex & v2 = mVertices->at(edge->getVertexInd());
+		edge = &mHalfEdges->at(edge->getNextInd());
+
+		Vertex & v3 = mVertices->at(edge->getVertexInd());
+		int index = face.getOppositeFaceInd();
+
+	if (index != -1 && (vecEquals(v, v1.getPosition()) || vecEquals(v, v2.getPosition()) || vecEquals(v, v3.getPosition()))){
+		
+			     
+				currentind = mFaces->at(index).getTetrahedInd();
+				if(currentind != baseind) {
+				 for (int j = 0; j < tetraIndices->size(); j++) {
+					 if (tetraIndices->at(j) == currentind) {
+						 check = true;
+						 break;
+					 }
+				 }
+				 if (check == false) {
+				
+				 tetraIndices->push_back(currentind);
+				 
+				 getAdjecent(currentind,  baseind, tetraIndices, v,count);
+				 } 
+
+			
+		 }
+    }
+
+	}
+
+
+}
+
+
+arma::Mat<double> TetrahedMesh::tetCenterOfMass(unsigned int tInd) {
+	
+	vector<arma::Mat<double>> vertexList = getVertexPosition(tInd);
+	arma::Mat<double> center;
+	center = arma::zeros(3,1);
+	for(int i = 0; i <vertexList.size(); i++) {
+	
+		center += vertexList.at(i).rows(0,2);
+	
+	}
+
+	center = center/vertexList.size();
+
+	return center;
+}
+
+
+arma::Mat<double> TetrahedMesh::determineLocationOfCrack(unsigned int tInd, vector<unsigned int> adjecentList, arma::Mat<double> v, arma::Mat<double> eigVec) {
+
+	double D = arma::dot(trans(v),eigVec);
+	vector<unsigned int> Xpos;
+	vector<unsigned int> Xneg;
+
+	for(int i = 0; i < adjecentList.size();i++) {
+	
+		arma::Mat<double> cMass = tetCenterOfMass(adjecentList.at(i));
+		
+		double distanceFromPlane = arma::dot(cMass,eigVec)-D;
+		if (distanceFromPlane > 0.0) {
+
+			Xpos.push_back(adjecentList.at(i));
+
+		} else if (distanceFromPlane < 0.0) {
+		
+			Xneg.push_back(adjecentList.at(i));
+		}
+	}
+
+	deconnect(Xpos, v);
+	deconnect(Xneg, v);
+
+	arma::Mat<double> mm;
+	return mm;
+}
+
+void TetrahedMesh::deconnect(vector<unsigned int> adjecentList, arma::Mat<double> v) {
+	unsigned int vInd;
+	Vertex temp;
+	temp.setPosition(v);
+
+	mVertices->push_back(temp);
+	vInd = mVertices->size()-1;
+
+	for (int j = 0; j < adjecentList.size(); j++) {
+
+		vector<unsigned int> faceIndices = mTetraheds->at(adjecentList.at(j)).getFaceInd();
+
+			for (int i = 0; i< faceIndices.size();i++) {
+
+				Face & face = mFaces->at(faceIndices[i]);
+
+
+				HalfEdge* edge = &mHalfEdges->at(face.getEdgeInd());
+
+				Vertex & v1 = mVertices->at(edge->getVertexInd());
+
+				if(vecEquals(v1.getPosition(),v)) {
+					//mFaces->at(faceIndices[i]).setOppositeFaceInd(-1);
+					edge->setVertexInd(vInd);
+					
+					break;
+				}
+
+				edge = &mHalfEdges->at(edge->getNextInd());
+
+				Vertex & v2 = mVertices->at(edge->getVertexInd());
+
+					if(vecEquals(v2.getPosition(),v)) {
+					//mFaces->at(faceIndices[i]).setOppositeFaceInd(-1);
+					edge->setVertexInd(vInd);
+					
+					break;
+				}
+
+				edge = &mHalfEdges->at(edge->getNextInd());
+
+				Vertex & v3 = mVertices->at(edge->getVertexInd());
+
+					if(vecEquals(v3.getPosition(),v)) {
+						//mFaces->at(faceIndices[i]).setOppositeFaceInd(-1);
+					edge->setVertexInd(vInd);
+					
+					break;
+				}
+
+
+
+			}
+	}
 }
