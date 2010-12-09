@@ -10,11 +10,13 @@ Solver::Solver(int nrOfNodes){
 	Xpre = arma::zeros(this->nrOfNodes*3,1);
 	Vpre = arma::zeros(this->nrOfNodes*3,1);
 	localVpre = arma::zeros(this->nrOfNodes*3,1);
-	check = false;
-	update = false;
+	stress = arma::zeros(12,1);
+	allowFracture = false;
+	
 	grav = arma::zeros(this->nrOfNodes*3,1);
 	unsigned int i = 0;
 	X = arma::zeros(this->nrOfNodes*3,1);
+	
 	dt = 0.001;
 
 	density =1.0;
@@ -30,38 +32,36 @@ Solver::Solver(int nrOfNodes){
 
 	ForcePrev = arma::zeros(this->nrOfNodes*3,1);
 
+	this->vn = 0.33;
+    this->E = 23000.300000;
+
+
+
+
+}
+
+void Solver::setParameter(float mass, float fracture) {
+
+	this->mass = mass;
+	this->alpha = 10;
+    this->beta = 0.2;
+	this->FractureThresh = fracture;
 
 }
 
 Solver::~Solver(){
 
-	delete[] this->vOVer1;
-	delete[] this->vOVer2;
-	delete[] this->xOVer1;
-	delete[] this->xOVer2;
+	
 }
+
 
 void Solver::constructKe(TetrahedMesh *mesh){
 
     mOriginalPos = new vector<Vertex>((*mesh->mVertices));
-
+	arma::Mat<double> R = findRotation(mesh,0);
+	
     //for each vertex in tetraheder, get positon
     unsigned int nrOfTetraheds = mesh->getNrOfTetrahedra();
-
-
-	xOVer1 = new arma::Mat<double>[nrOfTetraheds];
-	xOVer2 = new arma::Mat<double>[nrOfTetraheds];
-	vOVer1 = new arma::Mat<double>[nrOfTetraheds];
-	vOVer2 = new arma::Mat<double>[nrOfTetraheds];
-
-		for(unsigned int i = 0; i < nrOfTetraheds; i++){
-
-			xOVer1[i] = arma::zeros(12,1);
-			xOVer2[i] = arma::zeros(12,1);
-			vOVer1[i] = arma::zeros(12,1);
-			vOVer2[i] = arma::zeros(12,1);
-
-		}
 
     vector<arma::Mat<double> > vPositions;
 
@@ -90,95 +90,20 @@ void Solver::constructKe(TetrahedMesh *mesh){
             x3(1) = vPositions[3][1];
             x3(2) = vPositions[3][2];
 
-			arma::Mat<double> xOrgin = join_cols(join_cols(join_cols(x0,x1), x2),x3);
-			this->xOrgin.push_back(xOrgin);
-
-            arma::Mat<double> X, Volmat;
-
-            X = join_rows(join_rows((x1-x0),(x2-x0)), (x3-x0));
-
-
-			Volmat = join_rows(arma::ones(4,1),join_cols(join_cols(join_cols(trans(x0),trans(x1)),trans(x2)),trans(x3)));
-
-            double V = det(Volmat)/6.0;
-			cout << endl << "Volume: " << V << endl;
-            mass += V*density;
-
-            X = inv(X);
-
-            //beräknar motorseglare :D
-            arma::Row<double> y1 = X.row(0);
-            arma::Row<double> y2 = X.row(1);
-            arma::Row<double> y3 = X.row(2);
-            arma::Row<double> y0 = -y1 -y2 -y3;
-
-            vector<arma::Row<double> > y;
-
-
-            y.push_back(y0);
-            y.push_back(y1);
-            y.push_back(y2);
-            y.push_back(y3);
-
-            float a, b, c, vn, E;
-            vn = 0.33;
-            E = 5000.300000;
-
-            //Paranthesis overflow :X DONT DIVIDE BY ZERO
-			/*
-            a = V*E*((1-vn)/((1+vn)*(1-2*vn)));
-            b = V*E*(vn/((1+vn)*(1-2*vn)));
-            c = V*E*((1-2*vn)/(2*((1+vn)*(1-2*vn))));
-
-            arma::Mat<double> AB;
-            arma::Mat<double> C;
-            AB << a << b << b << arma::endr
-               << b << a << b << arma::endr
-               << b << b << a << arma::endr;
-
-            C  << c << 0 << 0 << arma::endr
-               << 0 << c << 0 << arma::endr
-               << 0 << 0 << c << arma::endr;
-
-            arma::Mat<double> K1,K2,K3,K4, Ksub;
-            arma::Mat<double> Ke(12,12);
-            Ke = arma::zeros<arma::mat>(12,12);
-
-            for(int i = 0; i < 4; i++){
-                for(int j = 0; j < 4; j++){
-
-                    K1 << y[i][0] << 0 << 0 << arma::endr
-                          << 0 << y[i][1] << 0 << arma::endr
-                          << 0 << 0 << y[i][2] << arma::endr;
-                    K2 << y[j][0] << 0 << 0 << arma::endr
-                          << 0 << y[j][1] << 0 << arma::endr
-                          << 0 << 0 << y[j][2] << arma::endr;
-                    K3 << y[i][1] << 0 << y[i][2] << arma::endr
-                         << y[i][0] << y[i][2] << 0 << arma::endr
-                          << 0 << y[i][1] << y[i][1] << arma::endr;
-                    K4 << y[j][1] << 0 << y[j][2] << arma::endr
-                          << y[j][0] << y[j][2] << 0 << arma::endr
-                          << 0 << y[j][1] << y[j][1] << arma::endr;
-
-                    K4 = trans(K4); //Same as Ksub3 but transp
-
-                    //.submat( first_row, first_col, last_row, last_col )
-                    Ksub = K1*AB*K2 + K3*C*K4;
-
-                    Ke.submat(i*3,j*3,i*3+2,j*3+2) =  K1*AB*K2 + K3*C*K4;
-                }
-            }*/
 			arma::Mat<double> Ke(12,12);
 			Ke = arma::zeros<arma::mat>(12,12);
-			Ke = TetrahedronElementStiffness(E,vn, x0, x1, x2, x3);
+
 			
+			Ke = TetrahedronElementStiffness(E,vn, x0, x1, x2, x3);
+			arma::Mat<double> X = join_cols(join_cols(join_cols(x0, x1), x2), x3);
+		
 			this->tetrahedronAssemble(this->K,Ke,vPositions[0][3]+1,vPositions[1][3]+1,vPositions[2][3]+1, vPositions[3][3]+1);
 			
             this->mKMatrices.push_back(Ke);
 				
             vPositions.clear();
     }
-        //cout << mass << endl;
+       
 		K.shed_col(0);
 		K.shed_row(0);
 		
@@ -246,20 +171,11 @@ void Solver::constructMe(TetrahedMesh *mesh){
 
 void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 {
-    //for each vertex in tetrahedron, get position
-    unsigned int nrOfTetraheds = mesh->getNrOfTetrahedra();
-
-	arma::Mat<double> C = arma::eye(this->nrOfNodes*3,this->nrOfNodes*3);
-	arma::Mat<double> M1 = arma::eye(this->nrOfNodes*3,this->nrOfNodes*3)*10;
+	
 	arma::Mat<double> xLocal = arma::zeros(this->nrOfNodes*3,1);
 
-	double alpha, beta;
-    alpha = 10;
-    beta = 0.2;
-	C = alpha*M1+beta*K;
 
-
-
+	//Get all updated positions,
 	for (int i = 0; i < this->nrOfNodes; i++) {
 
 		X(3*i) = mesh->mVertices->at(i).getPosition()[0];
@@ -272,10 +188,38 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 
 	}
 
-	if (check == false) {
-		Xpre = this->X;
-		check = true;
+    unsigned int nrOfTetraheds = mesh->getNrOfTetrahedra();
+
+	vector<arma::Mat<double> > vPositions;
+	this->K = arma::zeros(this->nrOfNodes*3+1,this->nrOfNodes*3+1);
+	arma::Mat<double> Kf0 = arma::zeros(this->nrOfNodes*3+1,this->nrOfNodes*3+1); 
+	for(int i = 0; i<nrOfTetraheds;i++){
+
+		vPositions = mesh->getVertexPosition(i);
+		arma::Mat<double> Ke = this->mKMatrices.at(i);
+		arma::Mat<double> Re = arma::zeros<arma::mat>(12,12);
+		Re = findRotation(mesh,i);
+		
+		this->tetrahedronAssemble(this->K,Re*Ke*trans(Re),vPositions[0][3]+1,vPositions[1][3]+1,vPositions[2][3]+1, vPositions[3][3]+1);
+		this->tetrahedronAssemble(Kf0,Re*Ke,vPositions[0][3]+1,vPositions[1][3]+1,vPositions[2][3]+1, vPositions[3][3]+1);
+		if (allowFracture == true) {
+		arma::Mat<double> stresstensor = calculateStress(mesh,i, this->E,this->vn, Re);
+		crackIT(mesh, i, stresstensor);
+		}
+	
 	}
+		Kf0.shed_col(0);
+		Kf0.shed_row(0);
+		this->K.shed_col(0);
+		this->K.shed_row(0);
+
+	//Init mass and dampening matrix
+	this->M = arma::eye(this->nrOfNodes*3,this->nrOfNodes*3)*this->mass;
+	this->C = arma::eye(this->nrOfNodes*3,this->nrOfNodes*3);
+	C = this->alpha*M+this->beta*K;
+
+
+
 	collisionForce = arma::zeros(3*this->nrOfNodes,1);
 
 	arma::Mat<double> outerforce(3*this->nrOfNodes,1);
@@ -291,11 +235,11 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 	
 	outerforce = Fxt+grav+collisionForce;
 
-	(*u) = this->X-xLocal;
-	innerforce = this->K*(*u);
+	
+	innerforce =  this->K*this->X-Kf0*xLocal;
 
     v = arma::zeros(3*this->nrOfNodes,1);
-	conjugateGradient->solve(M1+C*dt+dt*dt*(this->K),&v,(M1*Vpre*1.0 - dt*(-outerforce+innerforce)));
+	conjugateGradient->solve(this->M+this->C*dt+dt*dt*(this->K),&v,(this->M*Vpre*1.0 - dt*(-outerforce+innerforce)));
 	Vpre = v;
 	
 
@@ -320,6 +264,11 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 	}
 
 
+}
+
+void Solver::changeFracture() {
+
+	this->allowFracture = true;
 }
 
 void Solver::tetrahedronAssemble(arma::Mat<double> &K ,arma::Mat<double> k, int i, int j, int m, int n){
@@ -518,6 +467,30 @@ xyz << 1 << x1(0) << x1(1) << x1(2) << arma::endr
 	<< 1 << x3(0) << x3(1) << x3(2) << arma::endr 
 	<< 1 << x4(0) << x4(1) << x4(2) << arma::endr; 
 
+double V = arma::det(xyz)/6;
+
+arma::Mat<double> B = arma::zeros(6,6);
+
+B = calculateB(x1, x2, x3,  x4);
+
+mBMatrices.push_back(B);
+
+arma::Mat<double> D; 
+
+D = calculateD(E,NU);
+
+arma::Mat<double> K =  V*trans(B)*D*B;
+
+return K;
+}
+
+arma::Mat<double> Solver::calculateB(arma::Mat<double> x1,arma::Mat<double> x2, arma::Mat<double> x3, arma::Mat<double> x4) {
+
+	arma::Mat<double> xyz = arma::zeros(4,4); 
+xyz << 1 << x1(0) << x1(1) << x1(2) << arma::endr 
+	<< 1 << x2(0) << x2(1) << x2(2) << arma::endr 
+	<< 1 << x3(0) << x3(1) << x3(2) << arma::endr 
+	<< 1 << x4(0) << x4(1) << x4(2) << arma::endr; 
 
 double V = arma::det(xyz)/6;
 
@@ -525,8 +498,6 @@ arma::Mat<double> mbeta1 = arma::zeros(3,3);
 mbeta1 << 1 << x2(1) << x2(2) <<  arma::endr 
 	   << 1 << x3(1) << x3(2) <<  arma::endr 
 	   << 1 << x4(1) << x4(2) <<  arma::endr;
-
-
 
 arma::Mat<double> mbeta2 = arma::zeros(3,3); 
 mbeta2 << 1 << x1(1) << x1(2) <<  arma::endr 
@@ -583,11 +554,9 @@ mdelta4 << 1 << x1(0) << x1(1) <<  arma::endr
 	   << 1 << x2(0) << x2(1) <<  arma::endr 
 	   << 1 << x3(0) << x3(1) <<  arma::endr;
 
-
-
 double beta1 = -1*det(mbeta1);
 
-cout<< endl << mbeta4 << endl;
+
 double beta2 = det(mbeta2);
 double beta3 = -1*det(mbeta3);
 double beta4 = det(mbeta4);
@@ -636,28 +605,213 @@ arma::Mat<double> B = arma::zeros(6,6);
 
 B = arma::join_rows(arma::join_rows(arma::join_rows(B1,B2),B3),B4)/(6*V);
 
+return B;
 
-double a = E*((1-NU)/((1+NU)*(1-2*NU)));
-double b = E*(NU/((1+NU)*(1-2*NU)));
-double c = E*((1-2*NU)/(2*((1+NU)*(1-2*NU))));
+}
 
-arma::Mat<double> AB;
-arma::Mat<double> C;
-AB << a << b << b << arma::endr
-<< b << a << b << arma::endr
-<< b << b << a << arma::endr;
+arma::Mat<double> Solver::calculateD(float E,float NU) {
 
-C  << c << 0 << 0 << arma::endr
-<< 0 << c << 0 << arma::endr
-<< 0 << 0 << c << arma::endr;
+	double a = E*((1-NU)/((1+NU)*(1-2*NU)));
+	double b = E*(NU/((1+NU)*(1-2*NU)));
+	double c = E*((1-2*NU)/(2*((1+NU)*(1-2*NU))));
 
-arma::Mat<double> fillout = arma::zeros(3,3);
-arma::Mat<double> D; 
-D = arma::join_cols(arma::join_rows(AB,fillout),arma::join_rows(fillout,C));
+	arma::Mat<double> AB;
+	arma::Mat<double> C;
+	AB << a << b << b << arma::endr
+	<< b << a << b << arma::endr
+	<< b << b << a << arma::endr;
+
+	C  << c << 0 << 0 << arma::endr
+	<< 0 << c << 0 << arma::endr
+	<< 0 << 0 << c << arma::endr;
+
+	arma::Mat<double> fillout = arma::zeros(3,3);
+	arma::Mat<double> D; 
+	D = arma::join_cols(arma::join_rows(AB,fillout),arma::join_rows(fillout,C));
+
+	return D;
+}
+
+arma::Mat<double> Solver::findRotation(TetrahedMesh *mesh,unsigned int theInd) {
+
+	vector<arma::Mat<double>> vDisPos;
+	vector<arma::Mat<double>> vPos;
+	arma::Mat<double> X, P;
+	vDisPos = mesh->getVertexPosition(0);
+	
+
+	
+            arma::Col<double> p0(3);
+            arma::Col<double> p1(3);
+            arma::Col<double> p2(3);
+			arma::Col<double> p3(3);
+
+			arma::Col<double> x0(3);
+            arma::Col<double> x1(3);
+            arma::Col<double> x2(3);
+			arma::Col<double> x3(3);
+
+            p0(0) = vDisPos[0][0];
+            p0(1) = vDisPos[0][1];
+            p0(2) = vDisPos[0][2];
+
+            p1(0) = vDisPos[1][0];
+            p1(1) = vDisPos[1][1];
+            p1(2) = vDisPos[1][2];
+
+            p2(0) = vDisPos[2][0];
+            p2(1) = vDisPos[2][1];
+            p2(2) = vDisPos[2][2];
+
+            p3(0) = vDisPos[3][0];
+            p3(1) = vDisPos[3][1];
+            p3(2) = vDisPos[3][2];
+
+			
+			x0 = trans(this->mOriginalPos->at(vDisPos[0][3]).getPosition());
+			x1 = trans(this->mOriginalPos->at(vDisPos[1][3]).getPosition());
+			x2 = trans(this->mOriginalPos->at(vDisPos[2][3]).getPosition());
+			x3 = trans(this->mOriginalPos->at(vDisPos[3][3]).getPosition());
+			arma::Row<double> pad = arma::ones(1,4);
+			P = join_rows(join_rows((p1-p0),(p2-p0)), (p3-p0));
+			X = join_rows(join_rows((x1-x0),(x2-x0)), (x3-x0));
+			
+			arma::Mat<double> R = calculateRotation(X, P);
+			arma::Mat<double> Z = arma::zeros(3,3);
+
+			arma::Mat<double> col1 = join_rows(join_rows(join_rows(R, Z), Z), Z);
+			arma::Mat<double> col2 = join_rows(join_rows(join_rows(Z, R), Z), Z);
+			arma::Mat<double> col3 = join_rows(join_rows(join_rows(Z, Z), R), Z);
+			arma::Mat<double> col4 = join_rows(join_rows(join_rows(Z, Z), Z), R);
+
+			arma::Mat<double> Re = join_cols(join_cols(join_cols(col1, col2), col3), col4);
+			
+			//cout << endl << Re << endl;
+			return Re;
+			
+}
+
+
+arma::Mat<double> Solver::calculateRotation(arma::Mat<double> X, arma::Mat<double> P) {
+
+	arma::Mat<double> R, A;
+	A = P * inv(X);
+	
+	arma::Mat<double> a0 = A.col(0);
+	arma::Mat<double> a1= A.col(1);
+	arma::Mat<double> a2 = A.col(2);
+
+	arma::Mat<double> r0 = a0/arma::norm(a0,2);
+	arma::Mat<double> r1 = (a1-arma::dot(r0,a1))/arma::norm(a1-arma::dot(r0,a1),2);
+	arma::Mat<double> r2 = arma::cross(r0,r1);
+
+	R = join_rows(join_rows(r0,r1),r2);
+
+
+return R;
+}
+
+arma::Mat<double> Solver::calculateStress(TetrahedMesh *mesh,unsigned int theInd, float E,float NU, arma::Mat<double> R) {
+
+	vector<arma::Mat<double>> vDisPos;
+	vector<arma::Mat<double>> vPos;
+	arma::Mat<double> X, P;
+	vDisPos = mesh->getVertexPosition(0);
+	
+            arma::Col<double> p0(3);
+            arma::Col<double> p1(3);
+            arma::Col<double> p2(3);
+			arma::Col<double> p3(3);
+
+			arma::Col<double> x0(3);
+            arma::Col<double> x1(3);
+            arma::Col<double> x2(3);
+			arma::Col<double> x3(3);
+
+            p0(0) = vDisPos[0][0];
+            p0(1) = vDisPos[0][1];
+            p0(2) = vDisPos[0][2];
+
+            p1(0) = vDisPos[1][0];
+            p1(1) = vDisPos[1][1];
+            p1(2) = vDisPos[1][2];
+
+            p2(0) = vDisPos[2][0];
+            p2(1) = vDisPos[2][1];
+            p2(2) = vDisPos[2][2];
+
+            p3(0) = vDisPos[3][0];
+            p3(1) = vDisPos[3][1];
+            p3(2) = vDisPos[3][2];
+
+			x0 = trans(this->mOriginalPos->at(vDisPos[0][3]).getPosition());
+			x1 = trans(this->mOriginalPos->at(vDisPos[1][3]).getPosition());
+			x2 = trans(this->mOriginalPos->at(vDisPos[2][3]).getPosition());
+			x3 = trans(this->mOriginalPos->at(vDisPos[3][3]).getPosition());
+
+			X = join_cols(join_cols(join_cols(x0, x1), x2), x3);
+			P = join_cols(join_cols(join_cols(p0, p1), p2), p3);
+
+			arma::Mat<double> B = this->mBMatrices.at(theInd);
+			arma::Mat<double> D = this->calculateD(E,NU);
+
+			arma::Mat<double> stress = D*B*(trans(R)*P-X);
+
+			arma::Mat<double> stresstensor(3,3);
+			stresstensor(0,0) = stress(0);
+			stresstensor(1,1) = stress(1);
+			stresstensor(2,2) = stress(2);
+
+			stresstensor(0,1) = stress(3);
+			stresstensor(1,0) = stress(3);
+
+			stresstensor(1,2) = stress(4);
+			stresstensor(2,1) = stress(4);
+
+			stresstensor(0,2) = stress(5);
+			stresstensor(2,0) = stress(5);
 
 
 
-arma::Mat<double> K =  V*trans(B)*D*B;
+			return stresstensor;
 
-return K;
+}
+
+arma::Mat<double> Solver::calculateLargestEIG(arma::Mat<double> stresstensor){
+
+	arma::Col<double> eigval;
+	arma::Mat<double> eigvec;
+	arma::eig_sym(eigval,eigvec,stresstensor);
+	
+	double max = arma::max<double>(eigval);
+	
+	if (max > 10000.0)
+	{
+		arma::Col<UINT32> q2 = find(eigval ==  max,1,"first");
+		
+		
+		return eigvec.col(q2(0));
+	} 
+	else {
+	
+		arma::Mat<double> null(1,1);
+		null(0) =-1000.0;
+
+	return null;
+	}
+	
+}
+
+arma::Mat<double> Solver::crackIT(TetrahedMesh *mesh, unsigned int theInd, arma::Mat<double> stresstensor) {
+
+		arma::Mat<double> maxEig = calculateLargestEIG(stresstensor);
+
+		if (maxEig(0) != -1000.0){
+
+			mesh->crackStructure(theInd,maxEig);
+		
+		}
+
+		arma::Mat<double> butcrap;
+		return butcrap;
 }
