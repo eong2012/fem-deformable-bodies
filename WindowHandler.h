@@ -1,9 +1,9 @@
-#include "windows.h"
+
 #include "Shader/Shader.h"
 #include "mesh/VolumeGenerator.h"
-#include "Solver\Solver.h"
+#include "Solver/Solver.h"
 #include <GL/glew.h>
-#include <glut.h>
+#include <GL/glut.h>
 
 #include <iostream>
 
@@ -13,7 +13,7 @@
 
 #include "arcball.h"
 
-#include <AntTweakBar.h>
+#include "../AntTweakBar/include/AntTweakBar.h"
 
 using namespace std;
 
@@ -45,14 +45,14 @@ public:
     void mouseMoveEvent(int x, int y);
 
 	void MultiplyQuaternions(const float *q1, const float *q2, float *qout);
-	void WindowHandler::ConvertQuaternionToMatrix(const float *quat, float *mat);
+	void ConvertQuaternionToMatrix(const float *quat, float *mat);
 	void SetQuaternionFromAxisAngle(const float *axis, float angle, float *quat);
 	void keyHandler();
 	friend void TW_CALL normalCB(void *clientdata);
 	friend void TW_CALL edgeCB(void *clientdata);
 	friend void TW_CALL triangleCB(void *clientdata);
 
-	
+
 private:
 
     int windowWidth, windowHeight;
@@ -77,20 +77,20 @@ private:
     int buttonPressed;
 	arma::Mat<double> Fxt;
 
-	TwBar *bar; 
+	TwBar *bar;
 	float g_ForceDirection[3];
 
 	float g_Rotation[4];
-	
-	
-	
+
+
+
 	float g_RotateStart[4];
 
 	float g_Force;
 	int g_NormalMode;
 	int g_EdgeMode;
 	int g_TriangleMode;
-	
+
 
 	float g_Mass;
 	float g_Dampening;

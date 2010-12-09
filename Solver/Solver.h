@@ -1,4 +1,4 @@
-#include "armadillo"
+#include "../../usr/include/armadillo.h"
 #include "ConjugateGradient.h"
 #include "../mesh/TetrahedMesh.h"
 #include <vector>
@@ -14,7 +14,7 @@ public:
     void calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt);
 	void tetrahedronAssemble(arma::Mat<double> &K ,arma::Mat<double> k, int i, int j, int m, int n);
 	arma::Mat<double> calculateB(arma::Mat<double> x1,arma::Mat<double> x2, arma::Mat<double> x3, arma::Mat<double> x4);
-	arma::Mat<double> Solver::calculateD(float E,float NU);
+	arma::Mat<double> calculateD(float E,float NU);
 
 	arma::Mat<double> calculateRotation(arma::Mat<double> X, arma::Mat<double> X1);
 	arma::Mat<double> findRotation(TetrahedMesh *mesh,unsigned int theInd);
@@ -27,7 +27,7 @@ public:
 	void planeCollisionDetection(arma::Mat<double> X);
 	void planeCollisionHandler(unsigned int forceIndex);
 	void constructMe(TetrahedMesh *mesh);
-	
+
 	void setParameter(float mass, float fracture);
 
 
@@ -36,12 +36,12 @@ private:
 	ConjugateGradient *conjugateGradient;
     vector<arma::Mat<double> > mKMatrices;
 	vector<arma::Mat<double> > mBMatrices;
-	
+
 	arma::Mat<double> Vpre;
 	arma::Mat<double> Xpre;
 	arma::Mat<double> grav;
 	vector<arma::Mat<double> >  xOrgin;
-	
+
 	arma::Mat<double> normal;
 	int nrOfNodes;
 	arma::Mat<double> ForcePrev;
@@ -49,13 +49,13 @@ private:
 	arma::Mat<double> v;
 	arma::Mat<double> X;
 	arma::Mat<double> collisionForce;
-	
+
 	arma::Mat<double> K;
 	arma::Mat<double> C;
 	arma::Mat<double> M;
 
 	arma::Mat<double> stress;
-	
+
 	double dt;
 	double mass;
 	double density;

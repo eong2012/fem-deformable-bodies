@@ -1,4 +1,4 @@
-#include "armadillo"
+#include "../../usr/include/armadillo.h"
 
 class ConjugateGradient {
 public:
