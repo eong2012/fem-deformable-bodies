@@ -2,23 +2,155 @@
 
 int X;
 int Y;
+int g_InflictForce;
+int g_NextNode;
+
+
+//  Callback function called when the 'AutoRotate' variable value of the tweak bar has changed
+void TW_CALL SetForceInflictCB(const void *value, void *clientData)
+{
+    (void)clientData; // unused
+
+    g_InflictForce = *(const int *)(value); // copy value to g_AutoRotate
+   
+}
+
+
+//  Callback function called by the tweak bar to get the 'AutoRotate' value
+void TW_CALL GetForceInflictCB(void *value, void *clientData)
+{
+    (void)clientData; // unused
+    *(int *)(value) =  g_InflictForce; // copy g_AutoRotate to value
+}
+
+//  Callback function called when the 'AutoRotate' variable value of the tweak bar has changed
+void TW_CALL SetNextNodeCB(const void *value, void *clientData)
+{
+    (void)clientData; // unused
+
+    g_NextNode = *(const int *)(value); // copy value to g_AutoRotate
+   
+}
+
+//  Callback function called by the tweak bar to get the 'AutoRotate' value
+void TW_CALL GetNextNodeCB(void *value, void *clientData)
+{
+    (void)clientData; // unused
+    *(int *)(value) =  g_NextNode; // copy g_AutoRotate to value
+}
+
+void TW_CALL normalCB(void *clientdata)
+{ 
+	WindowHandler* test = static_cast<WindowHandler*>(clientdata);
+	test->volumeGenerator->changeNormalRenderMode();
+}
+
+void TW_CALL edgeCB(void *clientdata)
+{ 
+	WindowHandler* test = static_cast<WindowHandler*>(clientdata);
+	test->volumeGenerator->changeEdgeRenderMode();
+}
+
+void TW_CALL triangleCB(void *clientdata)
+{ 
+	WindowHandler* test = static_cast<WindowHandler*>(clientdata);
+	test->volumeGenerator->changeTriangleRenderMode();
+}
+
+void TW_CALL fractureCB(void *clientdata)
+{ 
+	Solver* test = static_cast<Solver*>(clientdata);
+	
+}
+
+
+
 
 WindowHandler::WindowHandler(void)
 {
 
-    windowWidth = 600;
-    windowHeight = 600;
+    windowWidth = 800;
+    windowHeight = 700;
     glutInitWindowSize(windowWidth, windowHeight);
     glutCreateWindow("");
 
+	bar = TwNewBar("TweakBar");
+	TwWindowSize(800, 700);
+	TwDefine(" TweakBar size='200 400' color='0 0 0' "); // change default tweak bar size and color
+
+	this->g_Rotation[0] =  0.0f;
+	this->g_Rotation[1] =  0.0f;
+	this->g_Rotation[2] =  0.0f;
+	this->g_Rotation[3] =  1.0f;
+
+	g_InflictForce = 0;
+	g_NormalMode = 0;
+	g_EdgeMode = 0;
+	g_TriangleMode = 0;
+
+	g_NextNode = 0;
+	g_Dampening = 0;
+	g_Mass = 10;
+	
+
+	this->g_RotateStart[0] = 0.0f;
+	this->g_RotateStart[1] = 0.0f;
+	this->g_RotateStart[2] = 0.0f;
+	this->g_RotateStart[3] = 1.0f;
+
+	this->g_ForceDirection[0] = 0.5f;
+	this->g_ForceDirection[1] = 0.5f;
+	this->g_ForceDirection[2] = 0.5f;
+	this->g_Force = 0.0f;
+	this->g_fractureThresh = 20000;
+
+
     //Set arcball
-    eye.setVec( 0.0f, 0.2f, 1.5f );
+    eye.setVec( 0.0f, 0.1f, 0.5f );
     center.setVec( 0.0f, 0.0f, 0.0f );
     up.setVec( 0.0f, 1.0f, 0.0f );
 
     SPHERE_RADIUS = 1.0f;
     PI = 3.141592654f;
     buttonPressed = -1;
+
+	// Add callback to toggle auto-rotate mode (callback functions are defined above).
+    TwAddVarCB(bar, "Inflict Force", TW_TYPE_BOOL32, SetForceInflictCB, GetForceInflictCB, NULL, 
+               " label='Inflict Force' key=space help='Toggle Force mode.' ");
+
+	// Add callback to toggle auto-rotate mode (callback functions are defined above).
+    TwAddVarCB(bar, "Next Node", TW_TYPE_BOOL32, SetNextNodeCB, GetNextNodeCB, NULL, 
+               " label='Next Node' key=space help='Toggle Next Node.' ");
+
+	   // Add 'g_Zoom' to 'bar': this is a modifable (RW) variable of type TW_TYPE_FLOAT. Its key shortcuts are [z] and [Z].
+    TwAddVarRW(bar, "Force", TW_TYPE_FLOAT, &this->g_Force, 
+               " min=0.00 max=1000; step=1.0 keyIncr=z keyDecr=Z help='Force applied on Node' ");
+
+	TwAddVarRW(bar, "Force Direction", TW_TYPE_DIR3F, &this->g_ForceDirection, 
+               " label='Force direction' open help='Change Force Direction' ");
+
+    // Add 'g_Rotation' to 'bar': this is a variable of type TW_TYPE_QUAT4F which defines the object's orientation
+    TwAddVarRW(bar, "ObjRotation", TW_TYPE_QUAT4F, &this->g_Rotation, 
+               " label='Object rotation' open help='Change the object orientation.' ");
+
+	
+
+	TwAddSeparator(bar, NULL, " group='MaterialSettings' ");
+	TwAddVarRW(bar, "Mass", TW_TYPE_FLOAT, &this->g_Mass, 
+               "group='MaterialSettings' min=0.00 max=1000;");
+	TwAddVarRW(bar, "Dampening", TW_TYPE_FLOAT, &this->g_Dampening, 
+               "group='MaterialSettings' min=0.00 max=1000;");
+	
+	TwAddSeparator(bar, NULL, " group='RenderSettings' ");
+	TwAddButton(bar, "Normal Mode", normalCB, this, " group='RenderSettings' ");
+	TwAddButton(bar, "Edge Mode", edgeCB, this, " group='RenderSettings' ");
+	TwAddButton(bar, "Triangle Mode", triangleCB, this, " group='RenderSettings' ");
+
+	TwAddSeparator(bar, NULL, " group='FractureSettings' ");
+	TwAddButton(bar, "Fracture", fractureCB, this->solver, " group='FractureSettings' ");
+	TwAddVarRW(bar, "Fracture limit", TW_TYPE_FLOAT, &this->g_fractureThresh, 
+               "group='FractureSettings' min=10000 max=40000;");
+
 
 }
 WindowHandler::~WindowHandler(void)
@@ -31,8 +163,9 @@ void WindowHandler::display()
     glClearColor(0.0, 0.0, 0.0, 1.0);
     //RenderFirstPass(); //Deformation Simulation
     RenderSecondPass(); //Render the actual graphics
-
+	TwDraw(); 
     glutSwapBuffers();
+	
 }
 //Function for the deformation simulation
 void WindowHandler::RenderFirstPass()
@@ -72,32 +205,25 @@ void WindowHandler::RenderFirstPass()
 //Function for the rendering to the screen
 void WindowHandler::RenderSecondPass()
 {
-
+  
+  float mat[4*4];
   glEnable(GL_CULL_FACE);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glMatrixMode(GL_MODELVIEW);
-  //
 
-  ///New --- Read the from the texture and store in an array
-  //glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
-  //glActiveTexture(GL_TEXTURE0);
-  //glBindTexture(GL_TEXTURE_2D, positionTexID);
-
-  //GLfloat *textureData = new GLfloat[4*nrOfVertices];
-
-  //glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
-  //glReadPixels(0, 0, textureSize, textureSize,GL_RGBA, GL_FLOAT, &textureData[0]);
-
-  //glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-  ///---
-
-
-
-  //cout << temp << endl;
-
+  keyHandler();
+  this->solver->setParameter(this->g_Mass, this->g_fractureThresh);
 
   glPushMatrix();
-  arcball_rotate();
+ 
+  //arma::Mat<double> temp3; 
+//  temp3 = temp*temp2;
+
+ 
+  ConvertQuaternionToMatrix(g_Rotation, mat);
+  
+  
+  glMultMatrixf(mat);
   solver->calcNewPosition(volumeGenerator->getTetrahedMesh(), this->Fxt);
   this->Fxt = arma::zeros(this->Fxt.n_rows,this->Fxt.n_cols);
 
@@ -176,6 +302,63 @@ void WindowHandler::init()
 
 }
 
+// Routine to set a quaternion from a rotation axis and angle
+// ( input axis = float[3] angle = float  output: quat = float[4] )
+void WindowHandler::SetQuaternionFromAxisAngle(const float *axis, float angle, float *quat)
+{
+    float sina2, norm;
+    sina2 = (float)sin(0.5f * angle);
+    norm = (float)sqrt(axis[0]*axis[0] + axis[1]*axis[1] + axis[2]*axis[2]);
+    quat[0] = sina2 * axis[0] / norm;
+    quat[1] = sina2 * axis[1] / norm;
+    quat[2] = sina2 * axis[2] / norm;
+    quat[3] = (float)cos(0.5f * angle);
+
+}
+
+
+// Routine to convert a quaternion to a 4x4 matrix
+// ( input: quat = float[4]  output: mat = float[4*4] )
+void WindowHandler::ConvertQuaternionToMatrix(const float *quat, float *mat)
+{
+    float yy2 = 2.0f * quat[1] * quat[1];
+    float xy2 = 2.0f * quat[0] * quat[1];
+    float xz2 = 2.0f * quat[0] * quat[2];
+    float yz2 = 2.0f * quat[1] * quat[2];
+    float zz2 = 2.0f * quat[2] * quat[2];
+    float wz2 = 2.0f * quat[3] * quat[2];
+    float wy2 = 2.0f * quat[3] * quat[1];
+    float wx2 = 2.0f * quat[3] * quat[0];
+    float xx2 = 2.0f * quat[0] * quat[0];
+    mat[0*4+0] = - yy2 - zz2 + 1.0f;
+    mat[0*4+1] = xy2 + wz2;
+    mat[0*4+2] = xz2 - wy2;
+    mat[0*4+3] = 0;
+    mat[1*4+0] = xy2 - wz2;
+    mat[1*4+1] = - xx2 - zz2 + 1.0f;
+    mat[1*4+2] = yz2 + wx2;
+    mat[1*4+3] = 0;
+    mat[2*4+0] = xz2 + wy2;
+    mat[2*4+1] = yz2 - wx2;
+    mat[2*4+2] = - xx2 - yy2 + 1.0f;
+    mat[2*4+3] = 0;
+    mat[3*4+0] = mat[3*4+1] = mat[3*4+2] = 0;
+    mat[3*4+3] = 1;
+}
+
+
+// Routine to multiply 2 quaternions (ie, compose rotations)
+// ( input q1 = float[4] q2 = float[4]  output: qout = float[4] )
+void WindowHandler::MultiplyQuaternions(const float *q1, const float *q2, float *qout)
+{
+    float qr[4];
+	qr[0] = q1[3]*q2[0] + q1[0]*q2[3] + q1[1]*q2[2] - q1[2]*q2[1];
+	qr[1] = q1[3]*q2[1] + q1[1]*q2[3] + q1[2]*q2[0] - q1[0]*q2[2];
+	qr[2] = q1[3]*q2[2] + q1[2]*q2[3] + q1[0]*q2[1] - q1[1]*q2[0];
+	qr[3]  = q1[3]*q2[3] - (q1[0]*q2[0] + q1[1]*q2[1] + q1[2]*q2[2]);
+    qout[0] = qr[0]; qout[1] = qr[1]; qout[2] = qr[2]; qout[3] = qr[3];
+}
+
 void WindowHandler::reshape(int w, int h)
 {
     windowHeight=h;
@@ -235,9 +418,14 @@ void WindowHandler::mouseMoveEvent(int x, int y)
 	}
 }
 
+void WindowHandler::processNormalKeys(unsigned char,int,int) {
 
-void WindowHandler::processNormalKeys(unsigned char key, int x, int y) {
 
+}
+
+void WindowHandler::keyHandler() {
+
+	/*
 	if(key == 110) {
 
 		volumeGenerator->changeNormalRenderMode();
@@ -257,33 +445,28 @@ void WindowHandler::processNormalKeys(unsigned char key, int x, int y) {
 
 		volumeGenerator->changeTriangleRenderMode();
 	}
-    double force = 400.1000;
-	if (key == 102)
+	*/
+
+	if (g_NextNode == 1) {
+	
+	this->volumeGenerator->getTetrahedMesh()->pickNextNode();
+	g_NextNode = 0;
+	}
+    
+	if (g_InflictForce == 1)
 	{
 		unsigned int cNode = this->volumeGenerator->getTetrahedMesh()->getCurrentNode();
-		this->Fxt(cNode*3) =  force;
-		this->Fxt(cNode*3+1) = force;
-		this->Fxt(cNode*3+2) = force;
-		
-
+		this->Fxt(cNode*3) = g_ForceDirection[0]*this->g_Force;
+		this->Fxt(cNode*3+1) = g_ForceDirection[1]*this->g_Force;
+		this->Fxt(cNode*3+2) = g_ForceDirection[2]*this->g_Force;
 	}
 
-
-	if (key == 103)
-	{
-
-		unsigned int cNode = this->volumeGenerator->getTetrahedMesh()->getCurrentNode();
-		this->Fxt(cNode*3) = -force;
-		this->Fxt(cNode*3+1) = -force;
-		this->Fxt(cNode*3+2) = -force;
-		
-
-	}
-
+	/*
 	if (key == 112)
 	{
 	this->volumeGenerator->getTetrahedMesh()->pickNextNode();
 	}
+	*/
 
 
 }
@@ -305,14 +488,14 @@ void WindowHandler::drawQuad()
 
 void WindowHandler::drawForceArrow() {
 
-	glColor3f(1.0,1.0,1.0);
+	glColor3f(0.6,0.0,0.0);
 	arma::Mat<double> temp = this->volumeGenerator->getTetrahedMesh()->pickNode();
-	glBegin(GL_LINES);
-	glVertex3f(temp(0), temp(1), temp(2));
-	glVertex3f(50.0, 50.0, 50.0);
-	glEnd();
+
+	glPushMatrix();
+	glTranslatef(temp(0), temp(1), temp(2));
+	glutSolidSphere(0.002,40,40);
+	glPopMatrix();
+
+
 
 }
-
-
-
