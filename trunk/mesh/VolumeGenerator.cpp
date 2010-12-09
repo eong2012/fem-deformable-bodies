@@ -13,8 +13,8 @@ VolumeGenerator::VolumeGenerator() {
 void VolumeGenerator::generateVolume() {
 
 	arma::Mat<double> vertex1,vertex2,vertex3,vertex4, vertex5, vertex6, vertex7, vertex8;
-
-    /*vector<arma::Mat<double> > tempVertices;
+	/*
+    vector<arma::Mat<double> > tempVertices;
     vector<unsigned int> indices;
 	
 	tempVertices = meshReader->readVertices("Snake.node");
@@ -32,7 +32,7 @@ void VolumeGenerator::generateVolume() {
 
         createTetra(vertex1,vertex2, vertex3, vertex4);
     }
-	*/
+	
 
 //    createTetra(vertex1,vertex2, vertex3, vertex4);
 //
@@ -42,7 +42,7 @@ void VolumeGenerator::generateVolume() {
 //	vertex8 = vertices.at(indices.at(2));
 //	vertex4 = vertices.at(indices.at(3));
 
-
+/**/
    vertex1 <<  0.5f <<  0.5f <<  0.5f;
    vertex2 << -0.5f <<  0.5f << -0.5f;
    vertex3 <<  0.5f << -0.5f << -0.5f;
@@ -61,7 +61,7 @@ void VolumeGenerator::generateVolume() {
     createTetra(vertex2,vertex3, vertex4, vertex7); //Tetra 5
     createTetra(vertex1,vertex2, vertex5, vertex3);
 	createTetra(vertex1,vertex3, vertex4, vertex8);
-
+	
 }
 
 

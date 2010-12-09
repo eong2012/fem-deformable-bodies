@@ -13,9 +13,12 @@ public:
     void setNormal(arma::Mat<double> n);
     void setEdgeInd(unsigned int e);
 	void setOppositeFaceInd(int f);
+	unsigned int getTetrahedInd();
+	void setTetrahedInd(unsigned int tind);
     arma::Mat<double> getNormal();
     unsigned int getEdgeInd();
 	int getOppositeFaceInd();
+	unsigned int tetraIndex;
 
 
 private:
