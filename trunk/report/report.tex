@@ -68,19 +68,19 @@ In coherency with strain, three dimensional stress also varies in the direction 
 \sigma_{xx} & \sigma_{xy} & \sigma_{xz} \\
 \sigma_{xy} & \sigma_{yy} & \sigma_{yz} \\
 \sigma_{xz} & \sigma_{yz} & \sigma_{zz} \\
- \end{array} \right] 
+ \end{array} \right]
 \end{eqnarray}
-Where $\sigma \cdot n = \frac{dF_{n}}{dA}$ gives the stress measuring in direction $n$. 
+Where $\sigma \cdot n = \frac{dF_{n}}{dA}$ gives the stress measuring in direction $n$.
 
 \subsubsection{Redefine Hook's Law}
 Assuming an linear relationship between stress and strain Hooke's law can be redefined as equation \ref{sex}.
 
 \begin{equation}\label{sex}
     \sigma = E \cdot \epsilon
-\end{equation}  
- 
- $E$ is the connection between stress and strain and depends on properties of the material. For simplicity only isotropic materials is considered, isotropic meaning that the material properties are independent of directions. Material such as plastics or different kinds of alloys are examples of isotropic materials where wood is an example of an anisotropic material which is weaker along rather than across the grains. 
- 
+\end{equation}
+
+ $E$ is the connection between stress and strain and depends on properties of the material. For simplicity only isotropic materials is considered, isotropic meaning that the material properties are independent of directions. Material such as plastics or different kinds of alloys are examples of isotropic materials where wood is an example of an anisotropic material which is weaker along rather than across the grains.
+
 Both stress and strain is represented with symmetrical 3x3 tensors. Symmetrical 3x3 matrices only depend on 6 variables hence
 $\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be defined as 6x6 matrix which for isotropic materials only depends on two elastic constants, Young's modulus $E$ and the Poisson's ratio $\nu$. Young's modulus is the ratio of stress or elasticity and Poisson's ratio describes to which amount volume is conserved. Using these notations Hook's law now can be written as equation \ref{sju} assuming the use of isotropic materials.
 
@@ -100,7 +100,7 @@ $\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be define
 0 & 0 & 0 & 1-2\nu & 0 & 0\\
 0 & 0 & 0 & 0 & 1-2\nu & 0\\
 0 & 0 & 0 & 0 & 0 & 1-2\nu\\
- \end{array} \right] 
+ \end{array} \right]
 \left[ \begin{array}{c}
 \epsilon_{xx} \\
 \epsilon_{xx} \\
@@ -114,11 +114,11 @@ $\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be define
 
 
 \subsection{Discretization using Finite element method}
-The finite element method (FEM)[2] is a physical accurate approach for calculating material stress and can be applied for finding a numerical solution to a continuum problem. The method is applicable to a wide range of physical and engineering problems such as mechanical, structural and thermal analysis.
+The finite element method (FEM) is a physical accurate approach for calculating material stress and can be applied for finding a numerical solution to a continuum problem. The method is applicable to a wide range of physical and engineering problems such as mechanical, structural and thermal analysis.
 
 The volume of the deformable object is divided into a finite number of elements where the dynamics of each element is described by a PDE (Partial Differential Equation) in terms of stress affecting the strain of the finite element. All elements is assembled into a system of equations describing the behavior of the entire deformable object.
 
-$k_{e}$ in \ref{tre} is called the stiffness matrix which describes Hooke's law in term of a matrix interconnecting all vertices spanning a finite element. If a force is inflicted on a single point this relationship gives the interconnecting displacement for all points. Since the goal is to calculate the deformation of an entire object a local solution is not enough. For the purpose of a global solution all local stiffness matrices $k_{e}$ is assembled into global stiffness matrix $K$. The assembling process is not trivial and need to be composed in way so that a force affecting one elements deflect the others through the body. How to compose the global stiffness matrix from different types of finite elements is illustrated in [5].
+$K_{e}$ is called the stiffness matrix which describes Hooke's law in term of a matrix interconnecting all vertices spanning a finite element. If a force is inflicted on a single point this relationship gives the interconnecting displacement for all points. Since the goal is to calculate the deformation of an entire object a local solution is not enough. For the purpose of a global solution all local stiffness matrices $K_{e}$ is assembled into global stiffness matrix $K$. The assembling process is not trivial and need to be composed in way so that a force affecting one elements deflect the others through the body. How to compose the global stiffness matrix from different types of finite elements etc.
 
  Since a large part of the dynamics in the global stiffness matrix $K$ is overlapping $K$ tends to be sparse. The dimensionality of $K$ is $3 \cdot n x 3 \cdot n$ where 3 is the degrees of freedom and n is the number of nodes inside the entire object.
 \subsection{}
