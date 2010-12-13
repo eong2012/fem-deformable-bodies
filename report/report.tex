@@ -1,7 +1,5 @@
 \documentclass[10pt,a4paper]{article}
-\usepackage[utf8x]{inputenc}
 \usepackage[english]{babel}
-\usepackage{ucs}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -21,7 +19,108 @@
 Real time physics: \cite{rt_phys}.
 \section{Method}
 
-\subsection{}
+\subsection{Physical body Mechanics}
+The elasticity of a material is often expressed with Hook's law approximated as a linear combination of stress and strain\ref{ett}.
+
+\begin{equation}\label{ett}
+    \frac{F_{n}}{A} = E \frac{\triangle l}{l}
+\end{equation}
+External forces acting on a surface gets transmitted through the material causing inner forces a quantity described as stress. This stress acting on a body gives rise to strain an measurement of deformation defined as the relatively elongation or compression of the material.
+
+In one dimension the stress $\sigma$ is a scalar describing the force $ F_{n}$ acting perpendicular to the surface cross-sectional area $A$.
+This force causes deformation or strain defined as the difference in length of the material perpendicular to the surface $\triangle A$. Stress and strain is related through Young's modulus $E$ which states the stiffness of the material.
+
+\subsubsection{Stress and Strain in three dimensions}
+In three dimensions the stress and strain is different depending on the direction of measurement. A point can be strained in one direction and compressed in another thus stress and strain cant be expressed with a single scalar.
+
+A displacement field $\mathbf{u}$ is described as the difference of each points in its initial and deformable state. Hence a point can be strained differently in all direction $\mathbf{u}$ is a vector field described in \ref{tva}.
+
+
+\begin{eqnarray}\label{tva}
+    \mathbf{u}(x, y, z) = \left[ \begin{array}{c}
+u(x, y, z) \\
+v(x, y, z) \\
+w(x, y, z) \end{array} \right]
+\end{eqnarray}
+
+The point $x$ new position can be evaluated through the displacement field $p=x+\mathbf{u(x)}$
+where $p+dp = x+dx + \mathbf{u(x+dx)} => dp = dx + \mathbf{u(x+dx)}-\mathbf{u(x)} = dx +\nabla \mathbf{u(x)}dx$. Where $\nabla \mathbf{u(x)}$ is the gradient of the displacement field $u$. The strain tensor is a 3x3 matrix and can be derived from the spatial derivatives of the displacement field as illustrated in equation \ref{tre}
+
+\begin{equation}\label{tre}
+    \epsilon = \bigtriangledown u + \bigtriangledown u^{T} + \bigtriangledown u^{T} \bigtriangledown u
+\end{equation}
+
+This tensor is called Green’s strain tensor and is symmetric and nonlinear. The tensor has the important property of behaving linear for small deformations
+and by removing the nonlinear term, Cauchy’s strain tensor is formed. The tensor is illustrated in equation 4 where $\epsilon_{xx}, \epsilon_{yy}, \epsilon_{zz}$ is represents normal strain and $\epsilon_{xy}, \epsilon_{xy}, \epsilon_{xz}$  shear strain.
+
+\begin{eqnarray}\
+\epsilon =  \left[ \begin{array}{cccc}
+\epsilon_{xx} & \epsilon_{xy} & \epsilon_{xz} \\
+\epsilon_{xy} & \epsilon_{yy} & \epsilon_{yz} \\
+\epsilon_{xz} & \epsilon_{yz} & \epsilon_{zz} \\
+ \end{array} \right]
+\end{eqnarray}
+
+In coherency with strain, three dimensional stress also varies in the direction of measurement. As a result, stress is represented as a 3x3 tensor as shown in equation \ref{fem}.
+
+\begin{eqnarray}\label{fem}
+\sigma =  \left[ \begin{array}{cccc}
+\sigma_{xx} & \sigma_{xy} & \sigma_{xz} \\
+\sigma_{xy} & \sigma_{yy} & \sigma_{yz} \\
+\sigma_{xz} & \sigma_{yz} & \sigma_{zz} \\
+ \end{array} \right] 
+\end{eqnarray}
+Where $\sigma \cdot n = \frac{dF_{n}}{dA}$ gives the stress measuring in direction $n$. 
+
+\subsubsection{Redefine Hook's Law}
+Assuming an linear relationship between stress and strain Hooke's law can be redefined as equation \ref{sex}.
+
+\begin{equation}\label{sex}
+    \sigma = E \cdot \epsilon
+\end{equation}  
+ 
+ $E$ is the connection between stress and strain and depends on properties of the material. For simplicity only isotropic materials is considered, isotropic meaning that the material properties are independent of directions. Material such as plastics or different kinds of alloys are examples of isotropic materials where wood is an example of an anisotropic material which is weaker along rather than across the grains. 
+ 
+Both stress and strain is represented with symmetrical 3x3 tensors. Symmetrical 3x3 matrices only depend on 6 variables hence
+$\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be defined as 6x6 matrix which for isotropic materials only depends on two elastic constants, Young's modulus $E$ and the Poisson's ratio $\nu$. Young's modulus is the ratio of stress or elasticity and Poisson's ratio describes to which amount volume is conserved. Using these notations Hook's law now can be written as equation \ref{sju} assuming the use of isotropic materials.
+
+\begin{eqnarray}\label{sju}
+\left[ \begin{array}{c}
+\epsilon_{xx} \\
+\epsilon_{xx} \\
+\epsilon_{xx} \\
+\epsilon_{xx} \\
+\epsilon_{xx} \\
+\epsilon_{xx} \\
+\end{array} \right] = \frac{E}{(1+\nu)(1-2\nu)}
+\left[ \begin{array}{cccccc}
+1-\nu & \nu & \nu & 0 & 0 & 0\\
+\nu & 1-\nu & \nu & 0 & 0 & 0\\
+\nu & \nu & 1-\nu & 0 & 0 & 0\\
+0 & 0 & 0 & 1-2\nu & 0 & 0\\
+0 & 0 & 0 & 0 & 1-2\nu & 0\\
+0 & 0 & 0 & 0 & 0 & 1-2\nu\\
+ \end{array} \right] 
+\left[ \begin{array}{c}
+\epsilon_{xx} \\
+\epsilon_{xx} \\
+\epsilon_{xx} \\
+\epsilon_{xx} \\
+\epsilon_{xx} \\
+\epsilon_{xx} \\
+\end{array} \right]
+\end{eqnarray}
+
+
+
+\subsection{Discretization using Finite element method}
+The finite element method (FEM)[2] is a physical accurate approach for calculating material stress and can be applied for finding a numerical solution to a continuum problem. The method is applicable to a wide range of physical and engineering problems such as mechanical, structural and thermal analysis.
+
+The volume of the deformable object is divided into a finite number of elements where the dynamics of each element is described by a PDE (Partial Differential Equation) in terms of stress affecting the strain of the finite element. All elements is assembled into a system of equations describing the behavior of the entire deformable object.
+
+$k_{e}$ in \ref{tre} is called the stiffness matrix which describes Hooke's law in term of a matrix interconnecting all vertices spanning a finite element. If a force is inflicted on a single point this relationship gives the interconnecting displacement for all points. Since the goal is to calculate the deformation of an entire object a local solution is not enough. For the purpose of a global solution all local stiffness matrices $k_{e}$ is assembled into global stiffness matrix $K$. The assembling process is not trivial and need to be composed in way so that a force affecting one elements deflect the others through the body. How to compose the global stiffness matrix from different types of finite elements is illustrated in [5].
+
+ Since a large part of the dynamics in the global stiffness matrix $K$ is overlapping $K$ tends to be sparse. The dimensionality of $K$ is $3 \cdot n x 3 \cdot n$ where 3 is the degrees of freedom and n is the number of nodes inside the entire object.
 \subsection{}
 \subsection{}
 
@@ -56,7 +155,7 @@ Reading vertex positions and tetra vertex indices, createTetra, recursion until 
 
 
 \pagebreak
-\addcontentsline{toc}{section}{References} 
+\addcontentsline{toc}{section}{References}
 \bibliographystyle{vancouver}
 \bibliography{refs}
-\end{document}
+\end{document} 
