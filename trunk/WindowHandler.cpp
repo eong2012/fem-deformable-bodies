@@ -4,7 +4,25 @@ int X;
 int Y;
 int g_InflictForce;
 int g_NextNode;
+int g_AllowFracture;
 
+
+//  Callback function called when the 'AutoRotate' variable value of the tweak bar has changed
+void TW_CALL SetFractureModeCB(const void *value, void *clientData)
+{
+    (void)clientData; // unused
+
+    g_AllowFracture = *(const int *)(value); // copy value to g_AutoRotate
+
+}
+
+
+//  Callback function called by the tweak bar to get the 'AutoRotate' value
+void TW_CALL GetFractureModeCB(void *value, void *clientData)
+{
+    (void)clientData; // unused
+    *(int *)(value) =  g_AllowFracture; // copy g_AutoRotate to value
+}
 
 //  Callback function called when the 'AutoRotate' variable value of the tweak bar has changed
 void TW_CALL SetForceInflictCB(const void *value, void *clientData)
@@ -12,7 +30,7 @@ void TW_CALL SetForceInflictCB(const void *value, void *clientData)
     (void)clientData; // unused
 
     g_InflictForce = *(const int *)(value); // copy value to g_AutoRotate
-   
+
 }
 
 
@@ -29,7 +47,7 @@ void TW_CALL SetNextNodeCB(const void *value, void *clientData)
     (void)clientData; // unused
 
     g_NextNode = *(const int *)(value); // copy value to g_AutoRotate
-   
+
 }
 
 //  Callback function called by the tweak bar to get the 'AutoRotate' value
@@ -40,28 +58,23 @@ void TW_CALL GetNextNodeCB(void *value, void *clientData)
 }
 
 void TW_CALL normalCB(void *clientdata)
-{ 
+{
 	WindowHandler* test = static_cast<WindowHandler*>(clientdata);
 	test->volumeGenerator->changeNormalRenderMode();
 }
 
 void TW_CALL edgeCB(void *clientdata)
-{ 
+{
 	WindowHandler* test = static_cast<WindowHandler*>(clientdata);
 	test->volumeGenerator->changeEdgeRenderMode();
 }
 
 void TW_CALL triangleCB(void *clientdata)
-{ 
+{
 	WindowHandler* test = static_cast<WindowHandler*>(clientdata);
 	test->volumeGenerator->changeTriangleRenderMode();
 }
 
-void TW_CALL fractureCB(void *clientdata)
-{ 
-	Solver* test = static_cast<Solver*>(clientdata);
-	
-}
 
 
 
@@ -91,7 +104,9 @@ WindowHandler::WindowHandler(void)
 	g_NextNode = 0;
 	g_Dampening = 0;
 	g_Mass = 10;
-	
+	g_E = 23000;
+	g_vn = 0.3;
+
 
 	this->g_RotateStart[0] = 0.0f;
 	this->g_RotateStart[1] = 0.0f;
@@ -103,6 +118,8 @@ WindowHandler::WindowHandler(void)
 	this->g_ForceDirection[2] = 0.5f;
 	this->g_Force = 0.0f;
 	this->g_fractureThresh = 20000;
+	this->g_alpha = 10;
+	this->g_beta = 0.2;
 
 
     //Set arcball
@@ -114,41 +131,50 @@ WindowHandler::WindowHandler(void)
     PI = 3.141592654f;
     buttonPressed = -1;
 
+
+
 	// Add callback to toggle auto-rotate mode (callback functions are defined above).
-    TwAddVarCB(bar, "Inflict Force", TW_TYPE_BOOL32, SetForceInflictCB, GetForceInflictCB, NULL, 
+    TwAddVarCB(bar, "Inflict Force", TW_TYPE_BOOL32, SetForceInflictCB, GetForceInflictCB, NULL,
                " label='Inflict Force' key=space help='Toggle Force mode.' ");
 
 	// Add callback to toggle auto-rotate mode (callback functions are defined above).
-    TwAddVarCB(bar, "Next Node", TW_TYPE_BOOL32, SetNextNodeCB, GetNextNodeCB, NULL, 
+    TwAddVarCB(bar, "Next Node", TW_TYPE_BOOL32, SetNextNodeCB, GetNextNodeCB, NULL,
                " label='Next Node' key=space help='Toggle Next Node.' ");
 
 	   // Add 'g_Zoom' to 'bar': this is a modifable (RW) variable of type TW_TYPE_FLOAT. Its key shortcuts are [z] and [Z].
-    TwAddVarRW(bar, "Force", TW_TYPE_FLOAT, &this->g_Force, 
-               " min=0.00 max=1000; step=1.0 keyIncr=z keyDecr=Z help='Force applied on Node' ");
+    TwAddVarRW(bar, "Force", TW_TYPE_FLOAT, &this->g_Force,
+               " min=0.00 max=1000 ; step=1.0 keyIncr=z keyDecr=Z help='Force applied on Node' ");
 
-	TwAddVarRW(bar, "Force Direction", TW_TYPE_DIR3F, &this->g_ForceDirection, 
+	TwAddVarRW(bar, "Force Direction", TW_TYPE_DIR3F, &this->g_ForceDirection,
                " label='Force direction' open help='Change Force Direction' ");
 
     // Add 'g_Rotation' to 'bar': this is a variable of type TW_TYPE_QUAT4F which defines the object's orientation
-    TwAddVarRW(bar, "ObjRotation", TW_TYPE_QUAT4F, &this->g_Rotation, 
+    TwAddVarRW(bar, "ObjRotation", TW_TYPE_QUAT4F, &this->g_Rotation,
                " label='Object rotation' open help='Change the object orientation.' ");
 
-	
-
 	TwAddSeparator(bar, NULL, " group='MaterialSettings' ");
-	TwAddVarRW(bar, "Mass", TW_TYPE_FLOAT, &this->g_Mass, 
+	TwAddVarRW(bar, "Mass", TW_TYPE_FLOAT, &this->g_Mass,
                "group='MaterialSettings' min=0.00 max=1000;");
-	TwAddVarRW(bar, "Dampening", TW_TYPE_FLOAT, &this->g_Dampening, 
-               "group='MaterialSettings' min=0.00 max=1000;");
-	
+	TwAddVarRW(bar, "Alpha", TW_TYPE_FLOAT, &this->g_alpha,
+               "group='MaterialSettings' min=-100.00 max=100 step=0.1;");
+	TwAddVarRW(bar, "Beta ", TW_TYPE_FLOAT, &this->g_beta,
+               "group='MaterialSettings' min=0.00 max=100 step = 0.01;");
+	TwAddVarRW(bar, "Young's modulus ", TW_TYPE_FLOAT, &this->g_E,
+               "group='MaterialSettings' min=1000 max=10000000000 step = 1000;");
+	TwAddVarRW(bar, "Possion ratio ", TW_TYPE_FLOAT, &this->g_vn,
+               "group='MaterialSettings' min=0.0 max=0.49 step = 0.01;");
+
 	TwAddSeparator(bar, NULL, " group='RenderSettings' ");
 	TwAddButton(bar, "Normal Mode", normalCB, this, " group='RenderSettings' ");
 	TwAddButton(bar, "Edge Mode", edgeCB, this, " group='RenderSettings' ");
 	TwAddButton(bar, "Triangle Mode", triangleCB, this, " group='RenderSettings' ");
 
 	TwAddSeparator(bar, NULL, " group='FractureSettings' ");
-	TwAddButton(bar, "Fracture", fractureCB, this->solver, " group='FractureSettings' ");
-	TwAddVarRW(bar, "Fracture limit", TW_TYPE_FLOAT, &this->g_fractureThresh, 
+		// Add callback to toggle auto-rotate mode (callback functions are defined above).
+    TwAddVarCB(bar, "Fracture Mode", TW_TYPE_BOOL32, SetFractureModeCB, GetFractureModeCB, NULL,
+               " label='Inflict Force' key=space help='Toggle Force mode.' ");
+
+	TwAddVarRW(bar, "Fracture limit", TW_TYPE_FLOAT, &this->g_fractureThresh,
                "group='FractureSettings' min=10000 max=40000;");
 
 
@@ -163,9 +189,9 @@ void WindowHandler::display()
     glClearColor(0.0, 0.0, 0.0, 1.0);
     //RenderFirstPass(); //Deformation Simulation
     RenderSecondPass(); //Render the actual graphics
-	TwDraw(); 
+	TwDraw();
     glutSwapBuffers();
-	
+
 }
 //Function for the deformation simulation
 void WindowHandler::RenderFirstPass()
@@ -205,25 +231,26 @@ void WindowHandler::RenderFirstPass()
 //Function for the rendering to the screen
 void WindowHandler::RenderSecondPass()
 {
-  
+
   float mat[4*4];
   glEnable(GL_CULL_FACE);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glMatrixMode(GL_MODELVIEW);
 
   keyHandler();
-  this->solver->setParameter(this->g_Mass, this->g_fractureThresh);
+  this->solver->setParameter(this->g_Mass, this->g_fractureThresh, g_AllowFracture, g_alpha, g_beta, g_E, g_vn);
 
   glPushMatrix();
- 
-  //arma::Mat<double> temp3; 
+
+  //arma::Mat<double> temp3;
 //  temp3 = temp*temp2;
 
- 
+
   ConvertQuaternionToMatrix(g_Rotation, mat);
-  
-  
+
+
   glMultMatrixf(mat);
+
   solver->calcNewPosition(volumeGenerator->getTetrahedMesh(), this->Fxt);
   this->Fxt = arma::zeros(this->Fxt.n_rows,this->Fxt.n_cols);
 
@@ -448,11 +475,11 @@ void WindowHandler::keyHandler() {
 	*/
 
 	if (g_NextNode == 1) {
-	
+
 	this->volumeGenerator->getTetrahedMesh()->pickNextNode();
 	g_NextNode = 0;
 	}
-    
+
 	if (g_InflictForce == 1)
 	{
 		unsigned int cNode = this->volumeGenerator->getTetrahedMesh()->getCurrentNode();
