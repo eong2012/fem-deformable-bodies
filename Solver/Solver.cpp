@@ -12,6 +12,7 @@ Solver::Solver(int nrOfNodes){
 	localVpre = arma::zeros(this->nrOfNodes*3,1);
 	stress = arma::zeros(12,1);
 	allowFracture = false;
+	this->chk =false;
 
 	grav = arma::zeros(this->nrOfNodes*3,1);
 	unsigned int i = 0;
@@ -33,19 +34,23 @@ Solver::Solver(int nrOfNodes){
 	ForcePrev = arma::zeros(this->nrOfNodes*3,1);
 
 	this->vn = 0.33;
-    this->E = 23000.300000;
+    this->E = 2300000.300000;
 
 
 
 
 }
 
-void Solver::setParameter(float mass, float fracture) {
+void Solver::setParameter(float mass, float fracture, int g_AllowFracture, float alpha, float beta, float E, float vn) {
 
 	this->mass = mass;
-	this->alpha = 10;
-    this->beta = 0.2;
+	this->alpha = alpha;
+    this->beta = beta;
 	this->FractureThresh = fracture;
+	this->allowFracture = g_AllowFracture;
+	this->E = E;
+	this->vn = vn;
+
 
 }
 
@@ -108,6 +113,12 @@ void Solver::constructKe(TetrahedMesh *mesh){
 		K.shed_row(0);
 
 
+}
+
+void Solver::clearLists() {
+
+	delete mOriginalPos;
+	mKMatrices.clear();
 }
 
 void Solver::constructMe(TetrahedMesh *mesh){
@@ -196,15 +207,17 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 	for(int i = 0; i<nrOfTetraheds;i++){
 
 		vPositions = mesh->getVertexPosition(i);
-		arma::Mat<double> Ke = this->mKMatrices.at(i);
+		arma::Mat<double> Ke = constructKeReal(mesh, i);
 		arma::Mat<double> Re = arma::zeros<arma::mat>(12,12);
 		Re = findRotation(mesh,i);
 
 		this->tetrahedronAssemble(this->K,Re*Ke*trans(Re),vPositions[0][3]+1,vPositions[1][3]+1,vPositions[2][3]+1, vPositions[3][3]+1);
 		this->tetrahedronAssemble(Kf0,Re*Ke,vPositions[0][3]+1,vPositions[1][3]+1,vPositions[2][3]+1, vPositions[3][3]+1);
-		if (allowFracture == true) {
+
+		if (allowFracture == 1) {
 		arma::Mat<double> stresstensor = calculateStress(mesh,i, this->E,this->vn, Re);
 		crackIT(mesh, i, stresstensor);
+
 		}
 
 	}
@@ -637,7 +650,7 @@ arma::Mat<double> Solver::findRotation(TetrahedMesh *mesh,unsigned int theInd) {
 	vector<arma::Mat<double> > vDisPos;
 	vector<arma::Mat<double> > vPos;
 	arma::Mat<double> X, P;
-	vDisPos = mesh->getVertexPosition(0);
+	vDisPos = mesh->getVertexPosition(theInd);
 
 
 
@@ -716,7 +729,8 @@ arma::Mat<double> Solver::calculateStress(TetrahedMesh *mesh,unsigned int theInd
 	vector<arma::Mat<double> > vDisPos;
 	vector<arma::Mat<double> > vPos;
 	arma::Mat<double> X, P;
-	vDisPos = mesh->getVertexPosition(0);
+	vDisPos = mesh->getVertexPosition(theInd);
+
 
             arma::Col<double> p0(3);
             arma::Col<double> p1(3);
@@ -783,12 +797,11 @@ arma::Mat<double> Solver::calculateLargestEIG(arma::Mat<double> stresstensor){
 	arma::Mat<double> eigvec;
 	arma::eig_sym(eigval,eigvec,stresstensor);
 
-	double max;
-	max = arma::max(eigval);
+	double max = arma::max(eigval);
 
-	if (max > 10000.0)
+	if (max > this->FractureThresh && chk == false)
 	{
-		arma::Col<unsigned int > q2 = find(eigval ==  max,1,"first");
+		arma::Col<UINT32> q2 = find(eigval ==  max,1,"first");
 
 
 		return eigvec.col(q2(0));
@@ -815,4 +828,29 @@ arma::Mat<double> Solver::crackIT(TetrahedMesh *mesh, unsigned int theInd, arma:
 
 		arma::Mat<double> butcrap;
 		return butcrap;
+}
+
+arma::Mat<double> Solver::constructKeReal(TetrahedMesh *mesh, unsigned int ind) {
+
+	vector<arma::Mat<double> > vDisPos;
+	vector<arma::Mat<double> > vPos;
+	arma::Mat<double> X, P;
+	vDisPos = mesh->getVertexPosition(ind);
+
+            arma::Col<double> p0(3);
+            arma::Col<double> p1(3);
+            arma::Col<double> p2(3);
+			arma::Col<double> p3(3);
+
+			arma::Col<double> x0(3);
+            arma::Col<double> x1(3);
+            arma::Col<double> x2(3);
+			arma::Col<double> x3(3);
+
+			x0 = trans(this->mOriginalPos->at(vDisPos[0][3]).getPosition());
+			x1 = trans(this->mOriginalPos->at(vDisPos[1][3]).getPosition());
+			x2 = trans(this->mOriginalPos->at(vDisPos[2][3]).getPosition());
+			x3 = trans(this->mOriginalPos->at(vDisPos[3][3]).getPosition());
+			arma::Mat<double > Ke = TetrahedronElementStiffness(E,vn, x0, x1, x2, x3);
+			return Ke;
 }
