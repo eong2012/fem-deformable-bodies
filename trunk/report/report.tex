@@ -114,9 +114,10 @@ $\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be define
 
 
 \subsection{Discretization using Finite element method}
-The finite element method (FEM) is a physical accurate approach for calculating material stress and can be applied for finding a numerical solution to a continuum problem. The method is applicable to a wide range of physical and engineering problems such as mechanical, structural and thermal analysis.
+The finite element method (FEM) is a well known numerical method for approximating a solution to a continues problem. The whole domain is sampled into a set of finite elements and as elements volume converges to zero FEM becomes an highly accurate approach for approximating a analytical solution. FEM has been around for decades and is applicable to a wide range of physical and engineering problems such as mechanical, structural and thermal analysis.
 
-The volume of the deformable object is divided into a finite number of elements where the dynamics of each element is described by a PDE (Partial Differential Equation) in terms of stress affecting the strain of the finite element. All elements is assembled into a system of equations describing the behavior of the entire deformable object.
+\subsubsection{Local dynamics}
+The volume of the deformable object is divided into a finite number of tetrahedrons where the dynamics of each element is described by a PDE (Partial Differential Equation) in terms of stress affecting the strain of the finite element. All elements is assembled into a system of equations describing the behavior of the entire deformable object.
 
 $K_{e}$ is called the stiffness matrix which describes Hooke's law in term of a matrix interconnecting all vertices spanning a finite element. If a force is inflicted on a single point this relationship gives the interconnecting displacement for all points. Since the goal is to calculate the deformation of an entire object a local solution is not enough. For the purpose of a global solution all local stiffness matrices $K_{e}$ is assembled into global stiffness matrix $K$. The assembling process is not trivial and need to be composed in way so that a force affecting one elements deflect the others through the body. How to compose the global stiffness matrix from different types of finite elements etc.
 
