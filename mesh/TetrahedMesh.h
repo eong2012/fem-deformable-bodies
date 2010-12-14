@@ -1,7 +1,7 @@
 
 #define GLUT_DISABLE_ATEXIT_HACK
 #define GLEW_STATIC
-
+#include <Windows.h>
 #include <GL/glew.h>
 #include <GL/glut.h>
 
@@ -9,7 +9,7 @@
 #include "Face.h"
 #include "Vertex.h"
 #include "HalfEdge.h"
-#include "../../usr/include/armadillo.h"
+#include "armadillo"
 
 
 #include <vector>
@@ -39,14 +39,16 @@ public:
 	vector<unsigned int> getAdjecentTetraheds(unsigned int ind, arma::Mat<double> v);
 	void getAdjecent(unsigned int currentind, unsigned int baseind, vector<unsigned int> *tetraIndices, arma::Mat<double> v, int count);
 	arma::Mat<double> tetCenterOfMass(unsigned int tInd);
-	arma::Mat<double> determineLocationOfCrack(unsigned int tInd, vector<unsigned int> adjecentList, arma::Mat<double> v, arma::Mat<double> eigVec);
-	void deconnect(vector<unsigned int> adjecentList, arma::Mat<double> v);
+	arma::Mat<double> determineLocationOfCrack(unsigned int tInd, vector<unsigned int> adjecentList, arma::Mat<double> v, arma::Mat<double> eigVec, unsigned int vIndex);
+	void deconnect(vector<unsigned int> adjecentList, arma::Mat<double> v, unsigned int vIndex);
 
     void Render(int mode);
 	void RenderNormals(int mode);
 	void RenderEdges(int mode);
 
 	vector< arma::Mat<double> > getVertexPosition(unsigned int tetraIndex);
+
+
 	int getNrOfNodes() {return mVertices->size();}
 	int getNrOfTetrahedra();
 
