@@ -1,4 +1,4 @@
-#include "../../usr/include/armadillo.h"
+#include "armadillo"
 #include "ConjugateGradient.h"
 #include "../mesh/TetrahedMesh.h"
 #include <vector>
@@ -11,6 +11,7 @@ public:
     ~Solver();
 
     void constructKe(TetrahedMesh *mesh);
+	arma::Mat<double> constructKeReal(TetrahedMesh *mesh, unsigned int ind);
     void calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt);
 	void tetrahedronAssemble(arma::Mat<double> &K ,arma::Mat<double> k, int i, int j, int m, int n);
 	arma::Mat<double> calculateB(arma::Mat<double> x1,arma::Mat<double> x2, arma::Mat<double> x3, arma::Mat<double> x4);
@@ -28,7 +29,8 @@ public:
 	void planeCollisionHandler(unsigned int forceIndex);
 	void constructMe(TetrahedMesh *mesh);
 
-	void setParameter(float mass, float fracture);
+	void setParameter(float mass, float fracture, int g_AllowFracture, float alpha, float beta, float E, float vn);
+	void clearLists();
 
 
 private:
@@ -64,10 +66,11 @@ private:
 	double alpha, beta;
 	double vn;
 
-	bool allowFracture;
+	int allowFracture;
 	double FractureThresh;
 
 	vector<Vertex>* mOriginalPos;
 	arma::Mat<double> localVpre;
+	bool chk;
 
 };
