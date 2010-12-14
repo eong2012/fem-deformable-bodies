@@ -251,7 +251,7 @@ void TetrahedMesh::Render(int mode)
   for (int i = 0; i < numTriangles; i++){
 
     Face & face = mFaces->at(i);
-
+    face.setNormal(FaceNormal(i,mFaces, mHalfEdges, mVertices));
     HalfEdge* edge = &mHalfEdges->at(face.getEdgeInd());
 
     Vertex & v1 = mVertices->at(edge->getVertexInd());
@@ -331,7 +331,7 @@ void TetrahedMesh::RenderNormals(int mode) {
 
 	arma::Mat<double> vCenter, normal;
 	normal = face.getNormal();
-	float scale= 100;
+	float scale= 80;
 	vCenter = (v1.getPosition()+v2.getPosition()+v3.getPosition())/3.0;
 
 		if (mode == 0) {
@@ -763,7 +763,7 @@ void TetrahedMesh::crackStructure(unsigned int ind, arma::Mat<double> eigVec) {
 
 	vector<unsigned int> adjecentList = getAdjecentTetraheds(ind, v);
 	if (adjecentList.size() > 0) {
-	determineLocationOfCrack(ind,adjecentList,v,eigVec);
+	determineLocationOfCrack(ind,adjecentList,v,eigVec,vIndex);
 	}
 
 
@@ -873,7 +873,7 @@ arma::Mat<double> TetrahedMesh::tetCenterOfMass(unsigned int tInd) {
 }
 
 
-arma::Mat<double> TetrahedMesh::determineLocationOfCrack(unsigned int tInd, vector<unsigned int> adjecentList, arma::Mat<double> v, arma::Mat<double> eigVec) {
+arma::Mat<double> TetrahedMesh::determineLocationOfCrack(unsigned int tInd, vector<unsigned int> adjecentList, arma::Mat<double> v, arma::Mat<double> eigVec,unsigned int vIndex) {
 
 	double D = arma::dot(trans(v),eigVec);
 	vector<unsigned int> Xpos;
@@ -894,14 +894,14 @@ arma::Mat<double> TetrahedMesh::determineLocationOfCrack(unsigned int tInd, vect
 		}
 	}
 
-	deconnect(Xpos, v);
-	deconnect(Xneg, v);
+	//deconnect(Xpos, v);
+	deconnect(Xneg, v, vIndex);
 
 	arma::Mat<double> mm;
 	return mm;
 }
 
-void TetrahedMesh::deconnect(vector<unsigned int> adjecentList, arma::Mat<double> v) {
+void TetrahedMesh::deconnect(vector<unsigned int> adjecentList, arma::Mat<double> v, unsigned int vIndex) {
 	unsigned int vInd;
 	Vertex temp;
 	temp.setPosition(v);
@@ -937,6 +937,7 @@ void TetrahedMesh::deconnect(vector<unsigned int> adjecentList, arma::Mat<double
 					//mFaces->at(faceIndices[i]).setOppositeFaceInd(-1);
 					edge->setVertexInd(vInd);
 
+
 					break;
 				}
 
@@ -945,8 +946,9 @@ void TetrahedMesh::deconnect(vector<unsigned int> adjecentList, arma::Mat<double
 				Vertex & v3 = mVertices->at(edge->getVertexInd());
 
 					if(vecEquals(v3.getPosition(),v)) {
-						//mFaces->at(faceIndices[i]).setOppositeFaceInd(-1);
+
 					edge->setVertexInd(vInd);
+
 
 					break;
 				}
