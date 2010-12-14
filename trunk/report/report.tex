@@ -130,11 +130,25 @@ $K_{e}$ is called the stiffness matrix which describes Hooke's law in term of a 
 
 
 \subsection{Tetrahedron mesh}
-\subsubsection{Data structure}
+When using the FEM in a volume application, such as ours, a mesh of tetrahedral objects is used. This mesh need to be generated and stored in a suitable data structure.
+
 \subsubsection{Volume generation}
-Reading vertex positions and tetra vertex indices, createTetra, recursion until positive volume
+The finite volume elements can be generated in several ways. To create a tetrahedral mesh from a triangle mesh different triangulation methods can be applied. In our application we have not focused on this problem, but instead used already created tetrahedral objects. These are defined as two lists, one containing all vertex points in the tetrahedrons and one containing a list of which vertices that belong to each tetrahedron. We have defined the positions and vertex indices of a cube consisting of five tetrahedrons,  and also tested our application using some of the meshes created by M\"uller-Fischer \cite{meshes}.
+
+
+\subsubsection{Data structure}
+In order to access the data in efficient way it must be stored in a suitable data structure. We have implemented a data structure consisting of the classes \texttt{Vertex}, \texttt{Face}, \texttt{HalfEdge}, \texttt{Tetrahed} and \texttt{TetrahedMesh}. This structure was inspired by the Compact Half-Face data structure introduced by Lage et al. \cite{halfface}, which has features that makes it possible to optimize for things such as execution speed and memory consumption. We have, however, decided to implement only the parts of the data structure that we have found to be necessary for our application. We have also made some simplifications and changes, where we have favored ease of use with our methods over speed and memory consumption. 
+
+\subsubsection{Primitives}
+The primitives of a tetrahedral mesh are used to store vertex positions and keeping track of information such as adjacency and face normals. The \texttt{Vertex} class contains functions for setting and retrieving vertex positions. A \texttt{Vertex} also belongs to a \texttt{HalfEdge}, and the corresponding \texttt{HalfEdge} is stored for each \texttt{Vertex}. The \texttt{HalfEdge} class contains functionality for traversing the data structure by keeping the indices of its \texttt{next}, \texttt{prev} and \texttt{pair} \texttt{HalfEdge}. Its functionality is similar to the Half Edge data structure for triangular meshes described by Botsch et al. \cite{Botsch}. Each \texttt{HalfEdge} has a \texttt{Face} related to it, and keeps the corresponding index. The \texttt{Face} class also keeps track of which \texttt{Face} belong to which \texttt{HalfEdge}. A \texttt{Face} also has a normal, that can be set and retrieved. It also keeps the indices of its opposite \texttt{Face}. A tetrahedron is represented by the \texttt{Tetrahed} class, which keeps the indices of a \texttt{Vertex}, a \texttt{HalfEdge} and four \texttt{Faces}.
+
+\subsubsection{The \texttt{TetrahedMesh} class}
+The \texttt{TetrahedMesh} class contains functions for creating, changing and rendering a tetrahedral mesh. 
 
 \subsection{The \texttt{Solver} class}
+\subsubsection{}
+\subsubsection{}
+\subsubsection{}
 \subsection{Conjugate gradient solver}
 
 \subsection{Graphical user interface}
