@@ -10,6 +10,13 @@ VolumeGenerator::VolumeGenerator() {
 	triangleMode = 2;
 }
 
+VolumeGenerator::~VolumeGenerator() {
+
+delete tetrahedMesh;
+delete meshReader;
+
+}
+
 void VolumeGenerator::generateVolume() {
 
 	arma::Mat<double> vertex1,vertex2,vertex3,vertex4, vertex5, vertex6, vertex7, vertex8;

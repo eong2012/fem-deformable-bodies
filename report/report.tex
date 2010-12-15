@@ -116,8 +116,12 @@ $\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be define
 \subsection{Discretization using Finite element method}
 The finite element method (FEM) is a well known numerical method for approximating a solution to a continues problem. The whole domain is sampled into a set of finite elements and as elements volume converges to zero FEM becomes an highly accurate approach for approximating a analytical solution. FEM has been around for decades and is applicable to a wide range of physical and engineering problems such as mechanical, structural and thermal analysis.
 
-\subsubsection{Local dynamics}
-The volume of the deformable object is divided into a finite number of tetrahedrons where the dynamics of each element is described by a PDE (Partial Differential Equation) in terms of stress affecting the strain of the finite element. All elements is assembled into a system of equations describing the behavior of the entire deformable object.
+\subsubsection{Local dynamics of an element}
+The volume of the deformable object is divided into a finite number of linear tetrahedral elements. A tetrahedron is an three dimensional object which has four nodes each having three degrees of freedom. In order to use the contrinueem  
+
+Tetrah tetrahedrons where the dynamics of each element is described by a PDE (Partial Differential Equation) in terms of stress affecting the strain of the finite element.
+
+All elements is assembled into a system of equations describing the behavior of the entire deformable object.
 
 $K_{e}$ is called the stiffness matrix which describes Hooke's law in term of a matrix interconnecting all vertices spanning a finite element. If a force is inflicted on a single point this relationship gives the interconnecting displacement for all points. Since the goal is to calculate the deformation of an entire object a local solution is not enough. For the purpose of a global solution all local stiffness matrices $K_{e}$ is assembled into global stiffness matrix $K$. The assembling process is not trivial and need to be composed in way so that a force affecting one elements deflect the others through the body. How to compose the global stiffness matrix from different types of finite elements etc.
 
@@ -137,13 +141,13 @@ The finite volume elements can be generated in several ways. To create a tetrahe
 
 
 \subsubsection{Data structure}
-In order to access the data in efficient way it must be stored in a suitable data structure. We have implemented a data structure consisting of the classes \texttt{Vertex}, \texttt{Face}, \texttt{HalfEdge}, \texttt{Tetrahed} and \texttt{TetrahedMesh}. This structure was inspired by the Compact Half-Face data structure introduced by Lage et al. \cite{halfface}, which has features that makes it possible to optimize for things such as execution speed and memory consumption. We have, however, decided to implement only the parts of the data structure that we have found to be necessary for our application. We have also made some simplifications and changes, where we have favored ease of use with our methods over speed and memory consumption. 
+In order to access the data in efficient way it must be stored in a suitable data structure. We have implemented a data structure consisting of the classes \texttt{Vertex}, \texttt{Face}, \texttt{HalfEdge}, \texttt{Tetrahed} and \texttt{TetrahedMesh}. This structure was inspired by the Compact Half-Face data structure introduced by Lage et al. \cite{halfface}, which has features that makes it possible to optimize for things such as execution speed and memory consumption. We have, however, decided to implement only the parts of the data structure that we have found to be necessary for our application. We have also made some simplifications and changes, where we have favored ease of use with our methods over speed and memory consumption.
 
 \subsubsection{Primitives}
 The primitives of a tetrahedral mesh are used to store vertex positions and keeping track of information such as adjacency and face normals. The \texttt{Vertex} class contains functions for setting and retrieving vertex positions. A \texttt{Vertex} also belongs to a \texttt{HalfEdge}, and the corresponding \texttt{HalfEdge} is stored for each \texttt{Vertex}. The \texttt{HalfEdge} class contains functionality for traversing the data structure by keeping the indices of its \texttt{next}, \texttt{prev} and \texttt{pair} \texttt{HalfEdge}. Its functionality is similar to the Half Edge data structure for triangular meshes described by Botsch et al. \cite{Botsch}. Each \texttt{HalfEdge} has a \texttt{Face} related to it, and keeps the corresponding index. The \texttt{Face} class also keeps track of which \texttt{Face} belong to which \texttt{HalfEdge}. A \texttt{Face} also has a normal, that can be set and retrieved. It also keeps the indices of its opposite \texttt{Face}. A tetrahedron is represented by the \texttt{Tetrahed} class, which keeps the indices of a \texttt{Vertex}, a \texttt{HalfEdge} and four \texttt{Faces}.
 
 \subsubsection{The \texttt{TetrahedMesh} class}
-The \texttt{TetrahedMesh} class contains functions for creating, changing and rendering a tetrahedral mesh. 
+The \texttt{TetrahedMesh} class contains functions for creating, changing and rendering a tetrahedral mesh.
 
 \subsection{The \texttt{Solver} class}
 \subsubsection{}

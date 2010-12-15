@@ -13,8 +13,16 @@ TetrahedMesh::TetrahedMesh()
 	srand(time(0));
 
 
+
 }
-TetrahedMesh::~TetrahedMesh(){}
+TetrahedMesh::~TetrahedMesh(){
+
+    delete mTetraheds;
+    delete mHalfEdges;
+    delete mFaces;
+    delete mVertices;
+    delete mVertexIndexOrder;
+}
 
 void TetrahedMesh::AddTetrahedron(vector<arma::Mat<double> > vertices ) {
 
@@ -718,6 +726,51 @@ void TetrahedMesh::pickNextNode() {
 
 }
 
+void TetrahedMesh::pickNextFourNode() {
+
+pickedNodes.clear();
+
+vector<unsigned int > list;
+unsigned int currentNode = 0;
+arma::Mat<double> temp;
+arma::Mat<double> temp2;
+temp = mVertices->at(0).getPosition();
+
+    for(int i = 0; i<mVertices->size();i++){
+
+        temp2 = mVertices->at(i).getPosition();
+        if(temp(0) > temp2(0)){
+
+        currentNode = i;
+
+        temp = mVertices->at(i).getPosition();
+
+        }
+
+    }
+
+    pickedNodes.push_back(currentNode);
+
+    arma::Mat<double> temp3;
+    arma::Mat<double> temp4 = mVertices->at(currentNode).getPosition();
+    for(int i = 0; i<mVertices->size();i++){
+
+        temp3 = mVertices->at(i).getPosition();
+        if (temp3(0) == temp4(0) && vecEquals(temp3, temp4) == false) {
+
+             pickedNodes.push_back(i);
+             if (pickedNodes.size() > 3) {
+
+                break;
+             }
+
+        }
+
+    }
+
+
+}
+
 unsigned int TetrahedMesh::getCurrentNode() {
 
 
@@ -958,3 +1011,5 @@ void TetrahedMesh::deconnect(vector<unsigned int> adjecentList, arma::Mat<double
 			}
 	}
 }
+
+
