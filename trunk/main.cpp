@@ -1,6 +1,6 @@
 #include "WindowHandler.h"
 #include "AntTweakBar.h"
-#include "../usr/include/armadillo.h"
+#include "armadillo"
 
 using namespace std;
 

@@ -801,7 +801,7 @@ arma::Mat<double> Solver::calculateLargestEIG(arma::Mat<double> stresstensor){
 
 	if (max > this->FractureThresh && chk == false)
 	{
-		arma::Col<UINT32> q2 = find(eigval ==  max,1,"first");
+		arma::Col<unsigned int> q2 = find(eigval ==  max,1,"first");
 
 
 		return eigvec.col(q2(0));
