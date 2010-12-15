@@ -18,6 +18,21 @@
 \pagebreak
 
 \section{Introduction}
+In the real world all materials are deformable in some extent. Even something
+as solid as a diamond can be deformed using the right amount of force. How to
+represent the physical properties of an object varies upon the application. It is
+common to use a rigid body model for simulating a solid object although other
+methods is needed to capture the inner dynamics of an object.
+The finite element method has a long history and where mainly originated
+from the need of solving complex structural analysis problems in civil engineering.
+It has successfully been used for stress analysis and this approach is
+applicable for simulating how a object deformers during stress.
+There is however simpler methods for simulating deformable objects for
+example a mass-spring system. A mass-spring system defines the object as a
+set of particles interconnected by springs. The behavior of the system depends
+on how each spring is connected and the number of springs holding the object
+together. The implementation is kind of straight-forward although [1] points
+out some drawbacks using this method for deforming 3D object.
 
 Real time physics: \cite{rt_phys}.
 \section{Method}
@@ -87,7 +102,7 @@ Assuming an linear relationship between stress and strain Hooke's law can be red
 Both stress and strain is represented with symmetrical 3x3 tensors. Symmetrical 3x3 matrices only depend on 6 variables hence
 $\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be defined as 6x6 matrix which for isotropic materials only depends on two elastic constants, Young's modulus $E$ and the Poisson's ratio $\nu$. Young's modulus is the ratio of stress or elasticity and Poisson's ratio describes to which amount volume is conserved. Using these notations Hook's law now can be written as equation \ref{sju} assuming the use of isotropic materials.
 
-\begin{eqnarray}\label{sju}
+\begin{eqnarray}\label{eqn:ststhooks}
 \left[ \begin{array}{c}
 \epsilon_{xx} \\
 \epsilon_{xx} \\
@@ -135,7 +150,7 @@ The displacement field $u(x,y,z)$ is continues and must be discretisized in orde
     \mathbf{u} \approx N(x,y,z) \hat{u}
 \end{equation}
 
-To obtain the strain tensor $\epsilon$ the approximated displacement field is multiplied by L which essential consist of differential operators of $u$.
+To obtain the strain tensor $\epsilon$ the approximated displacement field is multiplied by L which essential consist of differential operators used to get the partial differential of $u$.
 
 \begin{equation}\label{tio}
     \epsilon = LN \hat{u} = B_ {e} \hat{u}
@@ -143,24 +158,25 @@ To obtain the strain tensor $\epsilon$ the approximated displacement field is mu
 
 $B_ {e}$ is called the strain matrix which is constant and can be precomputed for all elements.
 
-As a result of the strain matrix the entire stiffness of the tetrahedron element can be expressed as a stiffness matrix $K_{e}$
+As a result of the strain matrix $B_{e}$ the entire stiffness of the tetrahedron element can be expressed as the stiffness matrix $K_{e}$ connecting all degrees of freedom of a tetrahedron. The element stiffness matrix is calculated in equation \ref{eqn:stiffnessmatrix} where $V_{e}$ is the volume of the element and $E$ is the material properties defined in \ref{eqn:ststhooks}.
 
-\begin{equation}\label{elva}
+\begin{equation}\label{eqn:stiffnessmatrix}
     K_{e} = V_{e} B_ {e}^{T}EB_ {e}^{T}
 \end{equation}
 
+The element stiffness matrix describes the relationship between all degrees of freedom of a tetrahedron an relates through Hook's law as equation  
 
+\begin{equation}\label{eqn:stiffnessmatrix}
+    f_{e} = K_ {e}\hat{u}
+\end{equation}
 
-
-Tetrah tetrahedrons where the dynamics of each element is described by a PDE (Partial Differential Equation) in terms of stress affecting the strain of the finite element.
-
-All elements is assembled into a system of equations describing the behavior of the entire deformable object.
-
-$K_{e}$ is called the stiffness matrix which describes Hooke's law in term of a matrix interconnecting all vertices spanning a finite element. If a force is inflicted on a single point this relationship gives the interconnecting displacement for all points. Since the goal is to calculate the deformation of an entire object a local solution is not enough. For the purpose of a global solution all local stiffness matrices $K_{e}$ is assembled into global stiffness matrix $K$. The assembling process is not trivial and need to be composed in way so that a force affecting one elements deflect the others through the body. How to compose the global stiffness matrix from different types of finite elements etc.
-
- Since a large part of the dynamics in the global stiffness matrix $K$ is overlapping $K$ tends to be sparse. The dimensionality of $K$ is $3 \cdot n x 3 \cdot n$ where 3 is the degrees of freedom and n is the number of nodes inside the entire object.
+If a node displacement occurs this relationship gives the interconnecting forces accumulated for all node spanning the finite element.
 
 \subsubsection{Global stiffness of a tetrahedron mesh}
+For the purpose of a global solution all local stiffness matrices $K_{e}$ is assembled into global stiffness matrix $K$. The assembling process is not trivial and need to be composed in way so that a force affecting one elements deflect the others through the body. How to compose the global stiffness matrix from different types of finite elements etc.
+
+ Since a large part of the dynamics in the global stiffness matrix $K$ is overlapping $K$ tends to be sparse. The dimensionality of $K$ is $3 \cdot n x 3 \cdot n$ where 3 is the degrees of freedom and n is the number of nodes inside the entire object.
+ 
 \subsection{}
 \subsection{}
 
