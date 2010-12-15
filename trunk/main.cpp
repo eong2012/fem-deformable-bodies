@@ -1,6 +1,6 @@
 #include "WindowHandler.h"
 #include "AntTweakBar.h"
-#include "armadillo"
+#include "armadillo.h"
 
 using namespace std;
 
@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
     glutSpecialFunc((GLUTspecialfun)TwEventSpecialGLUT);
     // - Send 'glutGetModifers' function pointer to AntTweakBar;
     //   required because the GLUT key event functions do not report key modifiers states.
-    TwGLUTModifiersFunc(glutGetModifiers);
+//    TwGLUTModifiersFunc(glutGetModifiers);
 
 
 
