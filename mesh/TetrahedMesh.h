@@ -1,7 +1,6 @@
 
 #define GLUT_DISABLE_ATEXIT_HACK
 #define GLEW_STATIC
-#include <Windows.h>
 #include <GL/glew.h>
 #include <GL/glut.h>
 

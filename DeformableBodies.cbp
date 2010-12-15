@@ -19,6 +19,7 @@
 					<Add library="GLEW" />
 					<Add library="glut" />
 					<Add library="GLU" />
+					<Add library="armadillo" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -35,17 +36,20 @@
 					<Add library="GLU" />
 					<Add library="glut" />
 					<Add library="GLEW" />
+					<Add library="armadillo" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add directory="/usr/include/armadillo_bits" />
 		</Compiler>
 		<Linker>
 			<Add library="GL" />
 			<Add library="GLU" />
 			<Add library="GLEW" />
 			<Add library="glut" />
+			<Add library="armadillo" />
 		</Linker>
 		<Unit filename="Shader/Shader.cpp" />
 		<Unit filename="Shader/Shader.h" />

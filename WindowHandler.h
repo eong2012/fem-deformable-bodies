@@ -13,7 +13,7 @@
 
 #include "arcball.h"
 
-#include "../AntTweakBar/include/AntTweakBar.h"
+#include "AntTweakBar.h"
 
 using namespace std;
 
@@ -92,7 +92,7 @@ private:
 	int g_TriangleMode;
 
 
-	float g_Mass;
+	float g_Mass, g_E, g_vn, g_alpha, g_beta;
 	float g_Dampening;
 
 	float g_fractureThresh;

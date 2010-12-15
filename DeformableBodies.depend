@@ -1337,3 +1337,117 @@
 	<string>
 	<string>
 
+1292320240 source:/home/elisabeth/Skola/tsbk03/fem-deformable-bodies/Shader/Shader.cpp
+	"Shader.h"
+	<iostream>
+
+1292320240 /home/elisabeth/Skola/tsbk03/fem-deformable-bodies/Shader/Shader.h
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<GL/glew.h>
+	<GL/glut.h>
+
+1292325085 source:/home/elisabeth/Skola/tsbk03/fem-deformable-bodies/Solver/ConjugateGradient.cpp
+	"ConjugateGradient.h"
+
+1292325160 /home/elisabeth/Skola/tsbk03/fem-deformable-bodies/Solver/ConjugateGradient.h
+	"armadillo"
+
+1292401104 source:/home/elisabeth/Skola/tsbk03/fem-deformable-bodies/Solver/Solver.cpp
+	"Solver.h"
+
+1292325085 /home/elisabeth/Skola/tsbk03/fem-deformable-bodies/Solver/Solver.h
+	"armadillo"
+	"ConjugateGradient.h"
+	"../mesh/TetrahedMesh.h"
+	<vector>
+
+1292325191 /home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/TetrahedMesh.h
+	<GL/glew.h>
+	<GL/glut.h>
+	"Tetrahed.h"
+	"Face.h"
+	"Vertex.h"
+	"HalfEdge.h"
+	"armadillo"
+	<vector>
+	<set>
+
+1292325085 /home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/Tetrahed.h
+	<vector>
+
+1292325085 /home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/Face.h
+	"armadillo"
+
+1292325085 /home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/Vertex.h
+	"armadillo"
+
+1292325085 /home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/HalfEdge.h
+
+1292325084 source:/home/elisabeth/Skola/tsbk03/fem-deformable-bodies/WindowHandler.cpp
+	"WindowHandler.h"
+
+1292401192 /home/elisabeth/Skola/tsbk03/fem-deformable-bodies/WindowHandler.h
+	"Shader/Shader.h"
+	"mesh/VolumeGenerator.h"
+	"Solver/Solver.h"
+	<GL/glew.h>
+	<GL/glut.h>
+	<iostream>
+	<stdlib.h>
+	<stdio.h>
+	"arcball.h"
+	"AntTweakBar.h"
+
+1292325085 /home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/VolumeGenerator.h
+	"TetrahedMesh.h"
+	"MeshReader.h"
+	<string>
+
+1292325085 /home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/MeshReader.h
+	<iostream>
+	<fstream>
+	<string>
+	<vector>
+	"Vertex.h"
+	"armadillo"
+
+1291381094 /home/elisabeth/Skola/tsbk03/fem-deformable-bodies/arcball.h
+	<cmath>
+
+1291381094 source:/home/elisabeth/Skola/tsbk03/fem-deformable-bodies/arcball.cpp
+	"arcball.h"
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1292320322 source:/home/elisabeth/Skola/tsbk03/fem-deformable-bodies/main.cpp
+	"WindowHandler.h"
+	"AntTweakBar.h"
+	"armadillo"
+
+1292325085 source:/home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/Face.cpp
+	"Face.h"
+
+1292325085 source:/home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/HalfEdge.cpp
+	"HalfEdge.h"
+
+1292325085 source:/home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/MeshReader.cpp
+	"MeshReader.h"
+
+1292325085 source:/home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/Tetrahed.cpp
+	"Tetrahed.h"
+
+1292325085 source:/home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/TetrahedMesh.cpp
+	"TetrahedMesh.h"
+	<ctime>
+	<cstdlib>
+
+1292325085 source:/home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/Vertex.cpp
+	"Vertex.h"
+
+1292325085 source:/home/elisabeth/Skola/tsbk03/fem-deformable-bodies/mesh/VolumeGenerator.cpp
+	"VolumeGenerator.h"
+
