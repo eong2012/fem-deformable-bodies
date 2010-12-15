@@ -4,7 +4,9 @@ int X;
 int Y;
 int g_InflictForce;
 int g_NextNode;
+int g_NextFourNode;
 int g_AllowFracture;
+int g_Gravity;
 
 
 //  Callback function called when the 'AutoRotate' variable value of the tweak bar has changed
@@ -35,6 +37,22 @@ void TW_CALL SetForceInflictCB(const void *value, void *clientData)
 
 
 //  Callback function called by the tweak bar to get the 'AutoRotate' value
+void TW_CALL GetGravityCB(void *value, void *clientData)
+{
+    (void)clientData; // unused
+    *(int *)(value) =  g_Gravity; // copy g_AutoRotate to value
+}
+
+void TW_CALL SetGravityCB(const void *value, void *clientData)
+{
+    (void)clientData; // unused
+
+    g_Gravity = *(const int *)(value); // copy value to g_AutoRotate
+
+}
+
+
+//  Callback function called by the tweak bar to get the 'AutoRotate' value
 void TW_CALL GetForceInflictCB(void *value, void *clientData)
 {
     (void)clientData; // unused
@@ -55,6 +73,21 @@ void TW_CALL GetNextNodeCB(void *value, void *clientData)
 {
     (void)clientData; // unused
     *(int *)(value) =  g_NextNode; // copy g_AutoRotate to value
+}
+
+void TW_CALL SetNextFourNodeCB(const void *value, void *clientData)
+{
+    (void)clientData; // unused
+
+     g_NextFourNode = *(const int *)(value); // copy value to g_AutoRotate
+
+}
+
+//  Callback function called by the tweak bar to get the 'AutoRotate' value
+void TW_CALL GetNextFourNodeCB(void *value, void *clientData)
+{
+    (void)clientData; // unused
+    *(int *)(value) =  g_NextFourNode; // copy g_AutoRotate to value
 }
 
 void TW_CALL normalCB(void *clientdata)
@@ -137,16 +170,24 @@ WindowHandler::WindowHandler(void)
     TwAddVarCB(bar, "Inflict Force", TW_TYPE_BOOL32, SetForceInflictCB, GetForceInflictCB, NULL,
                " label='Inflict Force' key=space help='Toggle Force mode.' ");
 
-	// Add callback to toggle auto-rotate mode (callback functions are defined above).
-    TwAddVarCB(bar, "Next Node", TW_TYPE_BOOL32, SetNextNodeCB, GetNextNodeCB, NULL,
-               " label='Next Node' key=space help='Toggle Next Node.' ");
-
 	   // Add 'g_Zoom' to 'bar': this is a modifable (RW) variable of type TW_TYPE_FLOAT. Its key shortcuts are [z] and [Z].
     TwAddVarRW(bar, "Force", TW_TYPE_FLOAT, &this->g_Force,
                " min=0.00 max=1000 ; step=1.0 keyIncr=z keyDecr=Z help='Force applied on Node' ");
 
 	TwAddVarRW(bar, "Force Direction", TW_TYPE_DIR3F, &this->g_ForceDirection,
                " label='Force direction' open help='Change Force Direction' ");
+
+               	// Add callback to toggle auto-rotate mode (callback functions are defined above).
+    TwAddVarCB(bar, "Next Node", TW_TYPE_BOOL32, SetNextNodeCB, GetNextNodeCB, NULL,
+               " label='Next Node' key=space help='Toggle Next Node.' ");
+
+
+    TwAddVarCB(bar, "Gravity", TW_TYPE_BOOL32, SetGravityCB, GetGravityCB, NULL,
+               " label='Gravity' key=space help='Toggle Force mode.' ");
+
+               // Add callback to toggle auto-rotate mode (callback functions are defined above).
+    TwAddVarCB(bar, "Next Four Nodes", TW_TYPE_BOOL32, SetNextFourNodeCB, GetNextFourNodeCB, NULL,
+               " label='Attach' key=space help='Toggle Next Node.' ");
 
     // Add 'g_Rotation' to 'bar': this is a variable of type TW_TYPE_QUAT4F which defines the object's orientation
     TwAddVarRW(bar, "ObjRotation", TW_TYPE_QUAT4F, &this->g_Rotation,
@@ -473,6 +514,17 @@ void WindowHandler::keyHandler() {
 		volumeGenerator->changeTriangleRenderMode();
 	}
 	*/
+	if (g_NextFourNode == 1) {
+
+	this->volumeGenerator->getTetrahedMesh()->pickNextFourNode();
+    g_NextFourNode = 0;
+	}
+
+	if (g_NextFourNode == 0) {
+
+	//this->volumeGenerator->getTetrahedMesh()->pickedNodes.clear();
+
+	}
 
 	if (g_NextNode == 1) {
 
@@ -487,6 +539,34 @@ void WindowHandler::keyHandler() {
 		this->Fxt(cNode*3+1) = g_ForceDirection[1]*this->g_Force;
 		this->Fxt(cNode*3+2) = g_ForceDirection[2]*this->g_Force;
 	}
+
+		if (g_Gravity == 1)
+	{
+		vector<unsigned int> templist = this->volumeGenerator->getTetrahedMesh()->pickedNodes;
+		unsigned int n1,n2,n3,n4;
+		if (templist.size() > 3) {
+
+		n1 = templist.at(0);
+        n2 = templist.at(1);
+        n3 = templist.at(2);
+        n4 = templist.at(3);
+        } else {
+
+        n1 = -1;
+        n2 = -1;
+        n3 = -1;
+        n4 = -1;
+        }
+
+            for(int j = 0; j < volumeGenerator->getTetrahedMesh()->getNrOfNodes(); j++ ) {
+
+                if (j != n1 && j != n2 && j != n3 && j != n4){
+                this->Fxt(j*3+1) = -9.82;
+                }
+            }
+
+        }
+
 
 	/*
 	if (key == 112)
@@ -515,14 +595,27 @@ void WindowHandler::drawQuad()
 
 void WindowHandler::drawForceArrow() {
 
-	glColor3f(0.6,0.0,0.0);
-	arma::Mat<double> temp = this->volumeGenerator->getTetrahedMesh()->pickNode();
 
+	arma::Mat<double> curNode = this->volumeGenerator->getTetrahedMesh()->pickNode();
+    glColor3f(0.0,0.0,0.6);
 	glPushMatrix();
-	glTranslatef(temp(0), temp(1), temp(2));
+	glTranslatef(curNode(0), curNode(1), curNode(2));
 	glutSolidSphere(0.002,40,40);
 	glPopMatrix();
 
+	vector<unsigned int> templist = this->volumeGenerator->getTetrahedMesh()->pickedNodes;
 
+    glColor3f(0.6,0.0,0.0);
+
+    for(int i = 0; i < templist.size();i++){
+
+        unsigned int currentVertex = templist.at(i);
+
+        arma::Mat<double> temp = this->volumeGenerator->getTetrahedMesh()->mVertices->at(currentVertex).getPosition();
+        glPushMatrix();
+        glTranslatef(temp(0), temp(1), temp(2));
+        glutSolidSphere(0.002,40,40);
+        glPopMatrix();
+    }
 
 }

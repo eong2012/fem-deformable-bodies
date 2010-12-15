@@ -12,7 +12,7 @@ Solver::Solver(int nrOfNodes){
 	localVpre = arma::zeros(this->nrOfNodes*3,1);
 	stress = arma::zeros(12,1);
 	allowFracture = false;
-	this->chk =false;
+	this->chk = false;
 
 	grav = arma::zeros(this->nrOfNodes*3,1);
 	unsigned int i = 0;
@@ -41,6 +41,12 @@ Solver::Solver(int nrOfNodes){
 
 }
 
+Solver::~Solver() {
+
+    delete conjugateGradient;
+    delete mOriginalPos;
+}
+
 void Solver::setParameter(float mass, float fracture, int g_AllowFracture, float alpha, float beta, float E, float vn) {
 
 	this->mass = mass;
@@ -54,10 +60,7 @@ void Solver::setParameter(float mass, float fracture, int g_AllowFracture, float
 
 }
 
-Solver::~Solver(){
 
-
-}
 
 
 void Solver::constructKe(TetrahedMesh *mesh){
@@ -248,13 +251,27 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 
 	outerforce = Fxt+grav+collisionForce;
 
+    vector<unsigned int> staticNodes = mesh->pickedNodes;
+
 
 	innerforce =  this->K*this->X-Kf0*xLocal;
+
+
 
     v = arma::zeros(3*this->nrOfNodes,1);
 	conjugateGradient->solve(this->M+this->C*dt+dt*dt*(this->K),&v,(this->M*Vpre*1.0 - dt*(-outerforce+innerforce)));
 	Vpre = v;
 
+     if (staticNodes.size() > 0) {
+
+      for (int k = 0; k < staticNodes.size(); k++) {
+
+        v(3*staticNodes.at(k)) = 0.0;
+        v(3*staticNodes.at(k)+1) = 0.0;
+        v(3*staticNodes.at(k)+2) = 0.0;
+      }
+
+    }
 
 
 	arma::Mat<double> x = this->X+dt*v;
@@ -801,7 +818,7 @@ arma::Mat<double> Solver::calculateLargestEIG(arma::Mat<double> stresstensor){
 
 	if (max > this->FractureThresh && chk == false)
 	{
-		arma::Col<unsigned int> q2 = find(eigval ==  max,1,"first");
+		arma::Col<UINT32> q2 = find(eigval ==  max,1,"first");
 
 
 		return eigvec.col(q2(0));

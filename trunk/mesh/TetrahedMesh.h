@@ -1,6 +1,7 @@
 
 #define GLUT_DISABLE_ATEXIT_HACK
 #define GLEW_STATIC
+#include <Windows.h>
 #include <GL/glew.h>
 #include <GL/glut.h>
 
@@ -62,6 +63,8 @@ public:
 
 	arma::Mat<double> pickNode();
 	void pickNextNode();
+	void pickNextFourNode();
+
 	unsigned int getCurrentNode();
 
 	//temp debug thing
@@ -69,6 +72,10 @@ public:
 	vector<Vertex> *mVertices;
 	vector<unsigned int> *mVertexIndexOrder;
 	vector<Vertex> mMaterialCoords;
+	void listDelete();
+
+	vector<unsigned int> pickedNodes;
+
 
 private:
 

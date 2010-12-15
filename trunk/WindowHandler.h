@@ -1,4 +1,4 @@
-
+#include "windows.h"
 #include "Shader/Shader.h"
 #include "mesh/VolumeGenerator.h"
 #include "Solver/Solver.h"
@@ -13,7 +13,7 @@
 
 #include "arcball.h"
 
-#include "AntTweakBar.h"
+#include <AntTweakBar.h>
 
 using namespace std;
 
@@ -92,8 +92,12 @@ private:
 	int g_TriangleMode;
 
 
-	float g_Mass, g_E, g_vn, g_alpha, g_beta;
+	float g_Mass;
 	float g_Dampening;
+	float g_alpha;
+	float g_beta;
+	float g_E;
+	float g_vn;
 
 	float g_fractureThresh;
 
