@@ -1,4 +1,4 @@
-
+#include "windows.h"
 #define GLUT_DISABLE_ATEXIT_HACK
 #define GLEW_STATIC
 #ifndef SHADER_H

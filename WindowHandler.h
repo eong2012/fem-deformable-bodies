@@ -52,6 +52,8 @@ public:
 	friend void TW_CALL edgeCB(void *clientdata);
 	friend void TW_CALL triangleCB(void *clientdata);
 
+    void showFPS();
+
 
 private:
 
@@ -59,13 +61,13 @@ private:
 
 	Solver* solver;
     VolumeGenerator *volumeGenerator;
+
     //Stuff for the second pass
     Shader *lightShader;
+    GLuint velocityTexID; //Add necessary textures
 
-    //Stuff for the first pass
-    GLuint positionTexID; //Add necessary textures
-    GLuint fbo;
-    Shader *deformationShader;
+
+
     int textureSize;
     int nrOfVertices;
     //Arcball stuff
@@ -100,6 +102,11 @@ private:
 	float g_vn;
 
 	float g_fractureThresh;
+
+	//fps parameters
+    float t0;
+    int frames;
+    char titlestring[200];
 
 };
 #endif

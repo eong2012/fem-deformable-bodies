@@ -12,13 +12,10 @@ class Tetrahed {
         unsigned int getEdgeInd();
         vector<unsigned int> getFaceInd();
 
-
-
         void setFaceInd1(unsigned int f);
 		void setFaceInd2(unsigned int f);
 		void setFaceInd3(unsigned int f);
 		void setFaceInd4(unsigned int f);
-
 
     private:
 
