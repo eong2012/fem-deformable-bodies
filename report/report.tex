@@ -2,6 +2,7 @@
 \usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{epsfig}
 \usepackage{amssymb}
 \author{Elisabeth Lindquist, Fredrik Lundell, Johan Peterson}
 \title{\textsc{Deformation of tetrahedral meshes using the Finite Element Method}\\\begin{small}\textsc{Tsbk03 - Advanced game programming}\end{small}}
@@ -137,7 +138,11 @@ $K_{e}$ is called the stiffness matrix which describes Hooke's law in term of a 
 When using the FEM in a volume application, such as ours, a mesh of tetrahedral objects is used. This mesh need to be generated and stored in a suitable data structure.
 
 \subsubsection{Volume generation}
-The finite volume elements can be generated in several ways. To create a tetrahedral mesh from a triangle mesh different triangulation methods can be applied. In our application we have not focused on this problem, but instead used already created tetrahedral objects. These are defined as two lists, one containing all vertex points in the tetrahedrons and one containing a list of which vertices that belong to each tetrahedron. We have defined the positions and vertex indices of a cube consisting of five tetrahedrons,  and also tested our application using some of the meshes created by M\"uller-Fischer \cite{meshes}.
+The finite volume elements can be generated in several ways. To create a tetrahedral mesh from a triangle mesh different triangulation methods can be applied. Snice this problem is not the main focus of the project already created tetrahedral objects are used. These are defined as two lists, one containing all vertex points in the tetrahedrons and one containing a list of which vertices that belong to each tetrahedron. 
+
+The vertex positions are read from the file and temporarily stored. For each tetrahedron in the tetrahedron list the corresponding vertex indices are found, the positions read and a tetrahedron object is created using these position. The vertices must be placed in an order that results in a tetrahedron with a positive volume. The function for creating a tetrahedron calculates the volume and if it is negative it makes a recursive call with the vertices in a different order.
+
+We have defined the positions and vertex indices of a cube consisting of five tetrahedrons, and also tested our application using some of the meshes created by M\"uller-Fischer \cite{meshes}. 
 
 
 \subsubsection{Data structure}
@@ -145,6 +150,24 @@ In order to access the data in efficient way it must be stored in a suitable dat
 
 \subsubsection{Primitives}
 The primitives of a tetrahedral mesh are used to store vertex positions and keeping track of information such as adjacency and face normals. The \texttt{Vertex} class contains functions for setting and retrieving vertex positions. A \texttt{Vertex} also belongs to a \texttt{HalfEdge}, and the corresponding \texttt{HalfEdge} is stored for each \texttt{Vertex}. The \texttt{HalfEdge} class contains functionality for traversing the data structure by keeping the indices of its \texttt{next}, \texttt{prev} and \texttt{pair} \texttt{HalfEdge}. Its functionality is similar to the Half Edge data structure for triangular meshes described by Botsch et al. \cite{Botsch}. Each \texttt{HalfEdge} has a \texttt{Face} related to it, and keeps the corresponding index. The \texttt{Face} class also keeps track of which \texttt{Face} belong to which \texttt{HalfEdge}. A \texttt{Face} also has a normal, that can be set and retrieved. It also keeps the indices of its opposite \texttt{Face}. A tetrahedron is represented by the \texttt{Tetrahed} class, which keeps the indices of a \texttt{Vertex}, a \texttt{HalfEdge} and four \texttt{Faces}.
+
+
+\begin{figure}[htbp]
+\label{fig:tetraedge}
+\begin{center}
+\includegraphics[scale=1]{figures/tetra_edge.eps} 
+\caption{The Half Edges of a face.}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\label{fig:tetraface}
+\begin{center}
+\includegraphics[scale=1]{figures/tetra_face.eps} 
+\caption{The faces of a tetrahedron.}
+\end{center}
+\end{figure}
+
 
 \subsubsection{The \texttt{TetrahedMesh} class}
 The \texttt{TetrahedMesh} class contains functions for creating, changing and rendering a tetrahedral mesh.
