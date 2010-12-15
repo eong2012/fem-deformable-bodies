@@ -2,8 +2,10 @@
 \usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{graphics}
 \usepackage{epsfig}
 \usepackage{amssymb}
+\usepackage{graphicx}
 \author{Elisabeth Lindquist, Fredrik Lundell, Johan Peterson}
 \title{\textsc{Deformation of tetrahedral meshes using the Finite Element Method}\\\begin{small}\textsc{Tsbk03 - Advanced game programming}\end{small}}
 \begin{document}
@@ -117,8 +119,38 @@ $\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be define
 \subsection{Discretization using Finite element method}
 The finite element method (FEM) is a well known numerical method for approximating a solution to a continues problem. The whole domain is sampled into a set of finite elements and as elements volume converges to zero FEM becomes an highly accurate approach for approximating a analytical solution. FEM has been around for decades and is applicable to a wide range of physical and engineering problems such as mechanical, structural and thermal analysis.
 
-\subsubsection{Local dynamics of an element}
-The volume of the deformable object is divided into a finite number of linear tetrahedral elements. A tetrahedron is an three dimensional object which has four nodes each having three degrees of freedom. In order to use the contrinueem  
+\subsubsection{Local stiffness of a tetrahedron element}
+The volume of the deformable object is divided into a finite number of linear tetrahedral elements. A tetrahedron is an three dimensional object which has four nodes each having three degrees of freedom.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.3\columnwidth]{figures/tetra_coord.png}
+\caption{}
+\label{fig:4}
+\end{figure}
+
+The displacement field $u(x,y,z)$ is continues and must be discretisized in order to use the finite element approach. In equation \ref{nio} the displacement field $u(x,y,z)$ is obtained by using $N(x,y,z)$ which is a 12x3 matrix containing the shape functions used to interpolate displacement values inside the tetrahedron. The shape matrix is multiplied with the displacement vector $\hat{u}$ as in \ref{nio}, $\hat{u}$ is a 12x1 vector containing the displacement x,y,z at each node of the tetrahedron. This multiplication gives a approximated displacement field $u(x,y,z)$ which is constant for the whole tetrahedron.
+
+\begin{equation}\label{nio}
+    \mathbf{u} \approx N(x,y,z) \hat{u}
+\end{equation}
+
+To obtain the strain tensor $\epsilon$ the approximated displacement field is multiplied by L which essential consist of differential operators of $u$.
+
+\begin{equation}\label{tio}
+    \epsilon = LN \hat{u} = B_ {e} \hat{u}
+\end{equation}
+
+$B_ {e}$ is called the strain matrix which is constant and can be precomputed for all elements.
+
+As a result of the strain matrix the entire stiffness of the tetrahedron element can be expressed as a stiffness matrix $K_{e}$
+
+\begin{equation}\label{elva}
+    K_{e} = V_{e} B_ {e}^{T}EB_ {e}^{T}
+\end{equation}
+
+
+
 
 Tetrah tetrahedrons where the dynamics of each element is described by a PDE (Partial Differential Equation) in terms of stress affecting the strain of the finite element.
 
@@ -127,6 +159,8 @@ All elements is assembled into a system of equations describing the behavior of 
 $K_{e}$ is called the stiffness matrix which describes Hooke's law in term of a matrix interconnecting all vertices spanning a finite element. If a force is inflicted on a single point this relationship gives the interconnecting displacement for all points. Since the goal is to calculate the deformation of an entire object a local solution is not enough. For the purpose of a global solution all local stiffness matrices $K_{e}$ is assembled into global stiffness matrix $K$. The assembling process is not trivial and need to be composed in way so that a force affecting one elements deflect the others through the body. How to compose the global stiffness matrix from different types of finite elements etc.
 
  Since a large part of the dynamics in the global stiffness matrix $K$ is overlapping $K$ tends to be sparse. The dimensionality of $K$ is $3 \cdot n x 3 \cdot n$ where 3 is the degrees of freedom and n is the number of nodes inside the entire object.
+
+\subsubsection{Global stiffness of a tetrahedron mesh}
 \subsection{}
 \subsection{}
 
@@ -138,11 +172,11 @@ $K_{e}$ is called the stiffness matrix which describes Hooke's law in term of a 
 When using the FEM in a volume application, such as ours, a mesh of tetrahedral objects is used. This mesh need to be generated and stored in a suitable data structure.
 
 \subsubsection{Volume generation}
-The finite volume elements can be generated in several ways. To create a tetrahedral mesh from a triangle mesh different triangulation methods can be applied. Snice this problem is not the main focus of the project already created tetrahedral objects are used. These are defined as two lists, one containing all vertex points in the tetrahedrons and one containing a list of which vertices that belong to each tetrahedron. 
+The finite volume elements can be generated in several ways. To create a tetrahedral mesh from a triangle mesh different triangulation methods can be applied. Snice this problem is not the main focus of the project already created tetrahedral objects are used. These are defined as two lists, one containing all vertex points in the tetrahedrons and one containing a list of which vertices that belong to each tetrahedron.
 
 The vertex positions are read from the file and temporarily stored. For each tetrahedron in the tetrahedron list the corresponding vertex indices are found, the positions read and a tetrahedron object is created using these position. The vertices must be placed in an order that results in a tetrahedron with a positive volume. The function for creating a tetrahedron calculates the volume and if it is negative it makes a recursive call with the vertices in a different order.
 
-We have defined the positions and vertex indices of a cube consisting of five tetrahedrons, and also tested our application using some of the meshes created by M\"uller-Fischer \cite{meshes}. 
+We have defined the positions and vertex indices of a cube consisting of five tetrahedrons, and also tested our application using some of the meshes created by M\"uller-Fischer \cite{meshes}.
 
 
 \subsubsection{Data structure}
@@ -155,7 +189,7 @@ The primitives of a tetrahedral mesh are used to store vertex positions and keep
 \begin{figure}[htbp]
 \label{fig:tetraedge}
 \begin{center}
-\includegraphics[scale=1]{figures/tetra_edge.eps} 
+\includegraphics[scale=1]{figures/tetra_edge}
 \caption{The Half Edges of a face.}
 \end{center}
 \end{figure}
@@ -163,7 +197,7 @@ The primitives of a tetrahedral mesh are used to store vertex positions and keep
 \begin{figure}[htbp]
 \label{fig:tetraface}
 \begin{center}
-\includegraphics[scale=1]{figures/tetra_face.eps} 
+\includegraphics[scale=1]{figures/tetra_face}
 \caption{The faces of a tetrahedron.}
 \end{center}
 \end{figure}
