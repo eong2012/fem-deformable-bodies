@@ -1,17 +1,19 @@
 \documentclass{beamer}
 \usepackage{amsmath}
 \usepackage[swedish]{babel}
+\usepackage[utf8x]{inputenc}
 \usepackage{amssymb}
 \title{Deformerbara kroppar med finita elementmetoden}
 \author{Johan Peterson\\Fredrik Lundell\\Elisabeth Lindquist}
 
-
 \begin{document}
 
+%Titelsida
 \begin{frame}
 \maketitle
 \end{frame}
 
+%Agenda
 \begin{frame}
 \frametitle{Agenda}
 \begin{itemize}
@@ -19,16 +21,95 @@
 \item Mekanik
 \item Diskretisering
 \item Systemets dynamik
+\item Integrering
+\item Rendering
+\item Förbättring av modellen
 \end{itemize}
 
 \end{frame}
 
-
+%Introduktion
+\section{Introduktion}
 \begin{frame}
 \frametitle{Introduktion}
+\end{frame}
 
+%Mekanik
+\section{Mekanik}
+\begin{frame}
+\frametitle{Mekanik}
+\end{frame}
+
+%Diskretisering
+\section{Diskretisering}
+\begin{frame}
+\frametitle{Diskretisering}
+\end{frame}
+
+
+%Systemets dynamik
+\section{Systemets dynamik}
+\begin{frame}
+\frametitle{Systemets dynamik}
+\begin{equation}
+\mathbf{M\ddot{x}} + \mathbf{C\dot{x}} + \mathbf{K'x} + \mathbf{f}_0' = \mathbf{f}_{ext}
+\end{equation}
+
+\begin{center}
+\begin{tabular}{c l}
+$\mathbf{M}$ & Massmatris \\
+$\mathbf{C}$ & Dämpningsmatris \\
+$\mathbf{K}$ & Styvhetsmatris\\
+$\mathbf{f}$ & Krafter som verkar på systemet \\
+\end{tabular}
+\end{center}
+\end{frame}
+
+%Integrering
+\section{Integrering}
+\begin{frame}
+\frametitle{Integrering}
+\begin{block}{Explicit integrering}
+\begin{itemize}
+\item Intuitiv implementering
+\item Stabilitetsproblem, ackumulering av fel
+\end{itemize}
+\end{block}
+
+\begin{block}{Implicit integrering}
+\begin{itemize}
+\item Ovillkorligt stabil
+\item Kräver invertering av stor matris
+\end{itemize}
+\end{block}
 
 \end{frame}
+
+\begin{frame}
+\frametitle{Integrering}
+\end{frame}
+
+\begin{frame}
+\frametitle{Integrering}
+\end{frame}
+
+%Rendering
+\section{Rendering}
+\begin{frame}
+\frametitle{Rendering}
+\begin{block}{Tetrahedermesh}
+
+\end{block}
+\end{frame}
+
+%Förbättringar
+\section{Förbättring av modellen}
+\begin{frame}
+\frametitle{Förbättring av modellen}
+\end{frame}
+
+
+
 
 
 
