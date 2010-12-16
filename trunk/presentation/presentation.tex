@@ -3,6 +3,8 @@
 \usepackage[swedish]{babel}
 \usepackage[utf8x]{inputenc}
 \usepackage{amssymb}
+\usepackage{epsfig}
+\usepackage{graphicx}
 \title{Deformerbara kroppar med finita elementmetoden}
 \author{Johan Peterson\\Fredrik Lundell\\Elisabeth Lindquist}
 
@@ -18,8 +20,8 @@
 \frametitle{Agenda}
 \begin{itemize}
 \item Introduktion
-\item Mekanik
-\item Diskretisering
+\item Hållfasthet
+\item Finita elementmetoden
 \item Systemets dynamik
 \item Integrering
 \item Rendering
@@ -32,18 +34,156 @@
 \section{Introduktion}
 \begin{frame}
 \frametitle{Introduktion}
+\begin{block}{Allt går att deformera, egentligen}
+\begin{figure}
+\includegraphics[scale=0.05]{photo_movieMatrix-quoteSpoon.png} 
+\end{figure}
+\begin{tiny}
+(...fast det är mer en fråga om fysiska krafter)
+\end{tiny}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Introduktion}
+\begin{block}{Varför simulera deformation?}
+\begin{itemize}
+\item Den virtuella världen upplevs lätt som statisk
+\item Även andra viktiga tillämpningar
+\end{itemize}
+\begin{figure}
+\includegraphics[scale=0.3]{Skoda_Krocktest_27207.png} 
+\end{figure}
+\end{block}
 \end{frame}
 
 %Mekanik
 \section{Mekanik}
 \begin{frame}
-\frametitle{Mekanik}
+\frametitle{Hållfasthet}
+\begin{block}{Normalspänning och töjning}
+\begin{figure}
+\includegraphics[scale=0.5]{a88-muller.png}
+\end{figure}
+\begin{itemize}
+\item Hookes lag:
+\end{itemize}
+\begin{equation}
+\frac{F_n}{A} = E \frac{\Delta l}{l}
+\end{equation}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Hållfasthet}
+\begin{block}{Utökning till tre dimensioner}
+\begin{itemize}
+\item I tre dimensioner beror normalspänning och töjning på mätrikting
+\item Skalärrepresentation inte längre tillräckligt, vi använder tensor istället
+\item Töjningstensorn kan ställas upp som:
+	\begin{equation}
+		\epsilon = \nabla \mathbf{u} + \nabla \mathbf{u}^T + \nabla \mathbf{u}^T \nabla \mathbf{u}
+	\end{equation}
+\item Hookes lag kan då omdefinieras som:	
+	\begin{equation}
+		\sigma = E \cdot \epsilon
+	\end{equation}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Hållfasthet}
+\begin{block}{Isotropa och anisotropa material}
+\begin{itemize}
+\item E är kopplingen mellan normalspänning och töjning och definierar materialets egenskaper
+\item Isotropa material har samma egenskaper i alla riktningar, till skillnad från anisotropa material som exempelvis trä
+\item E för isotropa material kan ställas upp som:
+\begin{tiny}
+
+\begin{eqnarray}\label{eqn:ststhooks}
+\left[ \begin{array}{c}
+\sigma_{xx} \\
+\sigma_{yy} \\
+\sigma_{zz} \\
+\sigma_{xy} \\
+\sigma_{yz} \\
+\sigma_{xz} \\
+\end{array} \right] = \frac{E}{(1+\nu)(1-2\nu)}
+\left[ \begin{array}{cccccc}
+1-\nu & \nu & \nu & 0 & 0 & 0\\
+\nu & 1-\nu & \nu & 0 & 0 & 0\\
+\nu & \nu & 1-\nu & 0 & 0 & 0\\
+0 & 0 & 0 & 1-2\nu & 0 & 0\\
+0 & 0 & 0 & 0 & 1-2\nu & 0\\
+0 & 0 & 0 & 0 & 0 & 1-2\nu\\
+ \end{array} \right]
+\left[ \begin{array}{c}
+\epsilon_{xx} \\
+\epsilon_{yy} \\
+\epsilon_{zz} \\
+\epsilon_{xy} \\
+\epsilon_{yz} \\
+\epsilon_{xz} \\
+\end{array} \right]
+\end{eqnarray}
+
+\end{tiny}
+\end{itemize}
+\end{block}
 \end{frame}
 
 %Diskretisering
 \section{Diskretisering}
 \begin{frame}
-\frametitle{Diskretisering}
+\frametitle{Finita elementmetoden}
+\begin{block}{Diskretisering}
+\begin{itemize}
+\item Välkänd numerisk metod för att approximera lösningen av kontinuerliga problem
+\item Vi representerar våra finita element som tetrahedrar
+\item Fyra noder per tetraheder, tre frihetsgrader per nod
+\end{itemize}
+\begin{figure}
+\includegraphics[scale=0.5]{hest.png}
+\end{figure}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Finita elementmetoden}
+\begin{block}{Diskretisering}
+\begin{itemize}
+\item Tetrahederstrukturen ger oss en förflyttning per nod
+\item Approximationen av det kontinuerliga vektorfältet $\mathbf{u}$ fås som:
+	\begin{equation}
+		\mathbf{u} \approx N(x,y,z) \hat{u}
+	\end{equation}
+\item För att utifrån $\hat{u}$ finna töjningstensorn $\epsilon$ använder vi deriveringsoperatorn $L$
+	\begin{equation}\label{tio}
+    	\epsilon = LN \hat{u} = B_ {e} \hat{u}
+	\end{equation}	
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Finita elementmetoden}
+\begin{block}{Styvhetsmatrisen}
+\begin{itemize}
+\item Utifrån töjningsmatrisen $B_e$ bildar vi den elementvisa styvhetsmatrisen $K_e$:
+	\begin{equation}\label{eqn:stiffnessmatrix}
+    	K_{e} = V_{e} B_ {e}^{T}EB_ {e}^{T}
+	\end{equation}
+\item Eftersom varje nod har tre frihetsgrader blir $K_e$ en 12x12-matris som beskriver kopplingarna mellan tetrahederns fyra noder
+\item Via Hookes lag får vi kraften per nod som:
+	\begin{equation}\label{eqn:stiffnessmatrix}
+    	f_{e} = K_ {e}\hat{u}
+	\end{equation}
+\item För hela systemet bygger vi en global styvhetsmatris, $K$, som beskriver nodernas kopplingar till varandra
+\item Eftersom alla noder inte är kopplade till alla blir matrisen $K$ gles
+\end{itemize}
+
+\end{block}
 \end{frame}
 
 
@@ -51,9 +191,31 @@
 \section{Systemets dynamik}
 \begin{frame}
 \frametitle{Systemets dynamik}
-\begin{equation}
-\mathbf{M\ddot{x}} + \mathbf{C\dot{x}} + \mathbf{K'x} + \mathbf{f}_0' = \mathbf{f}_{ext}
-\end{equation}
+\begin{block}{Kraftekvationen}
+\begin{itemize}
+\item Kraften verkar på en volym, och vi får därmed använda densiteten istället för massan i Newtons andra lag
+\item Den totala kraften, $\rho \ddot{x}$, är summan av den inre och den yttre kraften, $f_{ext}$
+	\begin{equation}
+		\rho \ddot{x} = \mathbf{f}_{ext} + \mathbf{f}_{in}
+	\end{equation}
+\item Den inre kraften fås i det analytiska fallet av divergensen av normalspänningsfältet:
+	\begin{equation}
+		\mathbf{f}_{in} = \nabla \cdot \sigma 
+	\end{equation}	
+		
+\end{itemize}	
+\end{block}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Systemets dynamik}
+\begin{itemize}
+\item Vi ersätter densiteten med en massmatris, $M$, och lägger till dämpning, $C$:
+	\begin{equation}
+		\mathbf{M\ddot{x}} + \mathbf{C\dot{x}} + \mathbf{K(x - x_0)}  = \mathbf{f}_{ext}
+	\end{equation}
+
 
 \begin{center}
 \begin{tabular}{c l}
@@ -63,6 +225,12 @@ $\mathbf{K}$ & Styvhetsmatris\\
 $\mathbf{f}$ & Krafter som verkar på systemet \\
 \end{tabular}
 \end{center}
+\item Vi använder proportionell dämpning, och bildar dämpningsmatrisen $\mathbf{C}$: 
+	\begin{equation}
+		\mathbf{C} = \alpha \mathbf{M} + \beta \mathbf{K}
+	\end{equation}
+
+\end{itemize}
 \end{frame}
 
 %Integrering
@@ -87,10 +255,31 @@ $\mathbf{f}$ & Krafter som verkar på systemet \\
 
 \begin{frame}
 \frametitle{Integrering}
+\begin{block}{Lösning med implicit Eulerintegrering}
+\begin{itemize}
+\item Vi vill lösa:
+	\begin{equation}
+		(\mathbf{M} + \Delta t  \mathbf{C} + \Delta t^2 \mathbf{K})v^{t+1} = \mathbf{M} v - \Delta t (\mathbf{K}(x - x_0) + f_{ext})
+	\end{equation}
+för $v^{t+1}$
+\item Detta är ett linjärt system på formen $Ax = b$
+\item Matrisen $\mathbf{K}$ har dimensionen 3n x 3n, där n är antalet noder \begin{tiny}(alltså ganska stor)\end{tiny}, men är lyckligtvis gles.
+\item Vi kan använda konjugatgradientmetoden för att approximera en lösning
+\item Den resulterande hastigheten används för att uppdatera nodernas position
+\end{itemize}
+\end{block}
 \end{frame}
 
 \begin{frame}
 \frametitle{Integrering}
+\begin{block}{Konjugatgradientmetoden}
+\begin{itemize}
+\item Iterativ numerisk metod
+\item Matrisen $\mathbf{A}$ gles och symmetrisk
+\item Lämplig för vår applikation
+\item Vi använder en existerande implementation
+\end{itemize}
+\end{block}
 \end{frame}
 
 %Rendering
@@ -98,14 +287,27 @@ $\mathbf{f}$ & Krafter som verkar på systemet \\
 \begin{frame}
 \frametitle{Rendering}
 \begin{block}{Tetrahedermesh}
+\begin{itemize}
+\item Datastruktur bestående av \texttt{Vertex}, \texttt{HalfEdge}, \texttt{Face} och \texttt{Tetrahed}
+\item Metoder för traversering av strukturen och åtkomst av olika typer av data
+\item En \texttt{Vertex} har en position, som uppdateras med den framräknade hastigheten
+\item Vi kan läsa in olika objekt, i form av en lista med vertexpositioner och en som beskriver vilka vertexar som tillhör vilken tetraheder
 
+\end{itemize}
 \end{block}
 \end{frame}
 
 %Förbättringar
 \section{Förbättring av modellen}
 \begin{frame}
-\frametitle{Förbättring av modellen}
+\frametitle{Rotationsstyvhet}
+
+\end{frame}
+
+\section{Förbättring av modellen}
+\begin{frame}
+\frametitle{Brott}
+
 \end{frame}
 
 
