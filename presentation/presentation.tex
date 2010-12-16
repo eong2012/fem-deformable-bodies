@@ -1,7 +1,7 @@
 \documentclass{beamer}
 \usepackage{amsmath}
 \usepackage[swedish]{babel}
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{amssymb}
 \usepackage{epsfig}
 \usepackage{graphicx}
@@ -36,7 +36,7 @@
 \frametitle{Introduktion}
 \begin{block}{Allt går att deformera, egentligen}
 \begin{figure}
-\includegraphics[scale=0.05]{photo_movieMatrix-quoteSpoon.png} 
+\includegraphics[scale=0.05]{photo_movieMatrix-quoteSpoon.png}
 \end{figure}
 \begin{tiny}
 (...fast det är mer en fråga om fysiska krafter)
@@ -52,7 +52,7 @@
 \item Även andra viktiga tillämpningar
 \end{itemize}
 \begin{figure}
-\includegraphics[scale=0.3]{Skoda_Krocktest_27207.png} 
+\includegraphics[scale=0.3]{Skoda_Krocktest_27207.png}
 \end{figure}
 \end{block}
 \end{frame}
@@ -200,7 +200,7 @@
 	\end{equation}
 \item Den inre kraften fås i det analytiska fallet av divergensen av normalspänningsfältet:
 	\begin{equation}
-		\mathbf{f}_{in} = \nabla \cdot \sigma 
+		\mathbf{f}_{in} = \nabla \cdot \sigma
 	\end{equation}	
 		
 \end{itemize}	
@@ -225,7 +225,7 @@ $\mathbf{K}$ & Styvhetsmatris\\
 $\mathbf{f}$ & Krafter som verkar på systemet \\
 \end{tabular}
 \end{center}
-\item Vi använder proportionell dämpning, och bildar dämpningsmatrisen $\mathbf{C}$: 
+\item Vi använder proportionell dämpning, och bildar dämpningsmatrisen $\mathbf{C}$:
 	\begin{equation}
 		\mathbf{C} = \alpha \mathbf{M} + \beta \mathbf{K}
 	\end{equation}
@@ -299,15 +299,79 @@ för $v^{t+1}$
 
 %Förbättringar
 \section{Förbättring av modellen}
-\begin{frame}
-\frametitle{Rotationsstyvhet}
 
+
+\begin{frame}
+\frametitle{Rotations kompensering}
+
+\begin{itemize}
+\item Cauchy linjära töjnings tensor är ej rotations invariant vilket gör att styvhets matrisen $K_{e}$ inte gäller då tetraheden roterats från sitt viloläge 
+
+\item Artifakter i form av växande volym
+
+\item Problemet löses genom att extrahera rotationen för varje element mellan viloläget och det deformerade tillståndet
+
+\item $A$ beskriver mappningen mellan de båda tillstånden exklusive translation
+
+\begin{equation}\label{eqn:stiffnessmatrix}
+    A = [x_{1}-x_{0}, x_{2}-x_{0}, x_{3}-x_{0}][p_{1}-p_{0}, p_{2}-p_{0}, p_{3}-p_{0}]^{-1}
+\end{equation}
+
+\item Gram-smiths metod används för att extrahera rotationen ur $A$
+\end{itemize}
+\end{frame}
+
+\section{Förbättring av modellen}
+
+
+\begin{frame}
+\frametitle{Rotations kompensering}
+\begin{block}{Interna kraften per element}
+\begin{itemize}
+\item Den interna kraften rotations kompenseras och beräknas som: 
+\end{itemize}
+\begin{equation}\label{eqn:stiffnessmatrix}
+    f_{warped} = R_{e}K_{e}(pR_{e}^{-1}-x)
+\end{equation}
+\begin{figure}
+\includegraphics[scale=0.5]{warpedstiffness.png}
+\end{figure}
+\end{block}
 \end{frame}
 
 \section{Förbättring av modellen}
 \begin{frame}
-\frametitle{Brott}
+\frametitle{Frakturer}
+\begin{itemize}
+\item Ett material som utsätts för stress kan spricka 
 
+\item Stress tensorn per tetrahed beräknas enligt:
+\begin{equation}\label{eqn:stiffnessmatrix}
+    \sigma = EB_{e}\hat{u}
+\end{equation}
+
+\item Egenvärdesanalys på $\sigma$
+
+\item Välj ut största positiva egenvärdet med motsvarande egenvektor
+
+\end{itemize}
+\end{frame}
+
+\section{Förbättring av modellen}
+\begin{frame}
+\frametitle{Frakturer}
+\begin{itemize}
+\item Välj en slumpmässig nod i vald tetrahed och spänn upp ett plan genom punkten med egenvektorn som normal
+
+\item Välj ut alla grann tetraheder till noden och kolla om deras masscentrum ligger på planets positiva eller negativa sida
+
+\item Skapa spricka genom frikoppla tetrahederna till två noder enligt bilden
+
+\begin{figure}
+\includegraphics[scale=0.5]{fracture.png}
+\end{figure}
+
+\end{itemize}
 \end{frame}
 
 
@@ -318,4 +382,4 @@ för $v^{t+1}$
 
 
 
-\end{document}
+\end{document} 
