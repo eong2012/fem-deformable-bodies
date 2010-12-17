@@ -1,0 +1,25 @@
+%GlobalSystemDynamics
+As presented in M\"uller et al. [1] an elastic object can be simulated by applying Newton's second law of motion $\mathbf{f} = m\ddot{\mathbf{x}}$ on the volymetric elements. Since these elements are infinitesmal and has no mass defined the equation of motion is divided by the volume of the element. Which means that the mass turns to density and the forces turn to body forces. By taking the internal forces into consideration the dynamics that governs the system are described by the following partial differential equation  
+
+\begin{equation}\label{eqn:contPDE}
+    \rho \ddot{\bf x} ={\mathbf f}_{ext} + {\mathbf f}_{in}
+\end{equation}
+
+Where $\rho$ is the density, ${\mathbf f}_{in}$ are the inner forces caused by stress and ${\mathbf f}_{ext}$ are the external forces. This equation is currently on analytical form and to be able to solve it for an object containing finite elements it can be discretized as
+
+\begin{equation}\label{eqn:discPDE}
+\mathbf{M\ddot{x}} + \mathbf{K(x- x_0)} =  \mathbf{f}_{ext}
+\end{equation}
+
+However, when working on highly dynamic system where forces are being exerted on solids a damping matrix $\mathbf{C}$ needs to be taken into consideration as described by [fem]. So the system equation can be rewritten as
+
+\begin{equation}\label{eqn:fullDiscPDE}
+\mathbf{M\ddot{x}} + \mathbf{C\dot{x}} + \mathbf{K(x-x_0)} =  \mathbf{f}_{ext}
+\end{equation}
+
+$\mathbf{M}$ is the mass matrix which is calculated by using nodal quadrature [hans] and $\mathbf{C}$ can be approximated as
+\begin{equation}\label{eqn:BuildC}
+\mathbf{\mathbf{C}} = \alpha \mathbf{M} + \beta \mathbf{K}
+\end{equation}
+
+It is important to note that $\alpha$ and $\beta$ can be found experimentally for different materials.
