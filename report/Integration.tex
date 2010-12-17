@@ -4,7 +4,7 @@ Now that the dynamics of the system are defined we want to be able to integrate 
 Since the dynamic system was described in the previous section, the equation of motion \ref{eqn:fullDiscPDE} can now be applied to the Implicit Euler form as follows [mullerShort]
 
 \begin{equation}\label{eqn:impEuler}
-		(\mathbf{M} + \Delta t  \mathbf{C} + \Delta t^2 \mathbf{K})v^{t+1} = \mathbf{M} v - \Delta t (\mathbf{K}(x - x_0) + f_{ext})
+		(\mathbf{M} + \Delta t  \mathbf{C} + \Delta t^2 \mathbf{K})v^{t+1} = \mathbf{M} v - \Delta t (\mathbf{K}(\mathbf{x} - \mathbf{x}_0) +\mathbf{f}_{ext})
 \end{equation}
 
 Where the velocity for the next time step $v^{t+1}$ is what needs to be solved. It can be noticed that equation \ref{eqn:impEuler} is in the form of the discrete Poisson equation $\mathbf{Ax=b}$ which means that the inverse of $\mathbf{A}$ has to be computed. Since this is a rather computationally heavy procedure for especially large matrices, it can be a good idea to consider the use of an algorithm that approximates the result of the velocity, like for example the Conjugate Gradient method.
