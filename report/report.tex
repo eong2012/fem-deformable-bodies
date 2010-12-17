@@ -48,7 +48,7 @@ External forces acting on a surface gets transmitted through the material causin
 In one dimension the stress $\sigma$ is a scalar describing the force $ F_{n}$ acting perpendicular to the surface cross-sectional area $A$.
 This force causes deformation or strain defined as the difference in length of the material perpendicular to the surface $\triangle A$. Stress and strain is related through Young's modulus $E$ which states the stiffness of the material.
 
-\subsubsection{Stress and Strain in three dimensions}
+\subsection{Stress and Strain in three dimensions}\label{stressnstrain}
 In three dimensions the stress and strain is different depending on the direction of measurement. A point can be strained in one direction and compressed in another thus stress and strain cant be expressed with a single scalar.
 
 A displacement field $\mathbf{u}$ is described as the difference of each points in its initial and deformable state. Hence a point can be strained differently in all direction $\mathbf{u}$ is a vector field described in \ref{tva}.
@@ -90,7 +90,7 @@ In coherency with strain, three dimensional stress also varies in the direction 
 \end{eqnarray}
 Where $\sigma \cdot n = \frac{dF_{n}}{dA}$ gives the stress measuring in direction $n$.
 
-\subsubsection{Redefine Hook's Law}
+\subsection{Redefine Hook's Law}
 Assuming an linear relationship between stress and strain Hooke's law can be redefined as equation \ref{sex}.
 
 \begin{equation}\label{sex}
@@ -134,7 +134,7 @@ $\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be define
 \subsection{Discretization using Finite element method}
 The finite element method (FEM) is a well known numerical method for approximating a solution to a continues problem. The whole domain is sampled into a set of finite elements and as elements volume converges to zero FEM becomes an highly accurate approach for approximating a analytical solution. FEM has been around for decades and is applicable to a wide range of physical and engineering problems such as mechanical, structural and thermal analysis.
 
-\subsubsection{Local stiffness of a tetrahedron element}
+\subsubsection{Local stiffness of a tetrahedron element}\label{sec:localstiffness}
 The volume of the deformable object is divided into a finite number of linear tetrahedral elements. A tetrahedron is an three dimensional object which has four nodes each having three degrees of freedom.
 
 \begin{figure}[h]
@@ -158,13 +158,15 @@ To obtain the strain tensor $\epsilon$ the approximated displacement field is mu
 
 $B_ {e}$ is called the strain matrix which is constant and can be precomputed for all elements.
 
-As a result of the strain matrix $B_{e}$ the entire stiffness of the tetrahedron element can be expressed as the stiffness matrix $K_{e}$ connecting all degrees of freedom of a tetrahedron. The element stiffness matrix is calculated in equation \ref{eqn:stiffnessmatrix} where $V_{e}$ is the volume of the element and $E$ is the material properties defined in \ref{eqn:ststhooks}.
+As a result of the strain matrix $B_{e}$ the entire stiffness of the tetrahedron element can be expressed as the stiffness matrix $K_{e}$ connecting all degrees of freedom of a tetrahedron. The stiffness matrix contains information about stress and strain and can analytically be seen as the measures the magnitude of a stress field.
+
+The element stiffness matrix is calculated in equation \ref{eqn:stiffnessmatrix} where $V_{e}$ is the volume of the element and $E$ is the material properties defined in \ref{eqn:ststhooks}.
 
 \begin{equation}\label{eqn:stiffnessmatrix}
     K_{e} = V_{e} B_ {e}^{T}EB_ {e}^{T}
 \end{equation}
 
-The element stiffness matrix describes the relationship between all degrees of freedom of a tetrahedron an relates through Hook's law as equation  
+The element stiffness matrix describes the relationship between all degrees of freedom of a tetrahedron an relates through Hook's law as equation
 
 \begin{equation}\label{eqn:stiffnessmatrix}
     f_{e} = K_ {e}\hat{u}
@@ -176,8 +178,24 @@ If a node displacement occurs this relationship gives the interconnecting forces
 For the purpose of a global solution all local stiffness matrices $K_{e}$ is assembled into global stiffness matrix $K$. The assembling process is not trivial and need to be composed in way so that a force affecting one elements deflect the others through the body. How to compose the global stiffness matrix from different types of finite elements etc.
 
  Since a large part of the dynamics in the global stiffness matrix $K$ is overlapping $K$ tends to be sparse. The dimensionality of $K$ is $3 \cdot n x 3 \cdot n$ where 3 is the degrees of freedom and n is the number of nodes inside the entire object.
- 
-\subsection{}
+
+\subsection{Warped stiffness}
+As described in section \ref{stressnstrain} Cauchy’s strain tensor is only valid for small deformations. This is a problem since only large deformations results in visual interesting effects. In section \ref{eqn:stiffnessmatrix} stiffness matrix is obtained from $V_{e}$, $B_{e}$ and $E$ which is all constant depending on the initial state of the tetrahedron. Due to large deformations during simulation time this stiffness matrix will become unvalued. M\"uller (referens) proposed a solution to this problem called Stiffness Warping. This method compensates the error by rotating the deformed tetrahedron back into its original coordinate frame. The rotation is found by forming the matrix A which is the non translation part of the mapping between the two tetrahedrons shown in equation.
+
+\begin{equation}\label{eqn:stiffnessmatrix}
+    A = [x_{1}-x_{0}, x_{2}-x_{0}, x_{3}-x_{0}][p_{1}-p_{0}, p_{2}-p_{0}, p_{3}-p_{0}]^{-1}
+\end{equation}
+
+A Gram-Schmidt method is used to extract the rotation matrix $R$  $A$  
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.5\columnwidth]{figures/warpedstiffness.png}
+\caption{}
+\label{fig:4}
+\end{figure}
+
+
 \subsection{}
 
 
@@ -241,7 +259,7 @@ The \texttt{TetrahedMesh} class contains functions for creating, changing and re
 \section{Discussion}
 \subsection{Improvements and further work}
 \subsubsection{Solution on the GPU}
-
+\include{gpu}
 
 \subsubsection{Collision detection}
 
