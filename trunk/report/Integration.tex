@@ -7,4 +7,6 @@ Since the dynamic system was described in the previous section, the equation of 
 		(\mathbf{M} + \Delta t  \mathbf{C} + \Delta t^2 \mathbf{K})v^{t+1} = \mathbf{M} v - \Delta t (\mathbf{K}(x - x_0) + f_{ext})
 \end{equation}
 
-Where the velocity for the next time step $v^{t+1}$ is what needs to be solved. It can be noticed that equation \ref{eqn:impEuler} is on the form of the discrete Poisson equation $\mathbf{Ax=b}$ which means that the inverse of $\mathbf{A}$ has to be computed. Since this is a rather computationally heavy procedure for large matrices, it can instead be a good idea to consider the use of an algorithm that approximates the result of th
+Where the velocity for the next time step $v^{t+1}$ is what needs to be solved. It can be noticed that equation \ref{eqn:impEuler} is in the form of the discrete Poisson equation $\mathbf{Ax=b}$ which means that the inverse of $\mathbf{A}$ has to be computed. Since this is a rather computationally heavy procedure for especially large matrices, it can be a good idea to consider the use of an algorithm that approximates the result of the velocity, like for example the Conjugate Gradient method.
+
+The Conjugate Gradient method is an iterative numerical algorithm that requires the matrix $\mathbf{A}$ in the discrete Poisson equation to be both sparse and symmetrical. Basically what it does is that it takes the equation as input and solves $\mathbf{x}$, thus making it very applicable for this kind of problem.
