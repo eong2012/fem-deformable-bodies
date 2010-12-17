@@ -179,6 +179,11 @@ For the purpose of a global solution all local stiffness matrices $K_{e}$ is ass
 
  Since a large part of the dynamics in the global stiffness matrix $K$ is overlapping $K$ tends to be sparse. The dimensionality of $K$ is $3 \cdot n x 3 \cdot n$ where 3 is the degrees of freedom and n is the number of nodes inside the entire object.
 
+\subsubsection{Global system dynamics}
+\include{GlobalSystemDynamics}
+
+\subsubsection{Integration}
+\include{Integration}
 \subsection{Warped stiffness}
 As described in section \ref{stressnstrain} Cauchy’s strain tensor is only valid for small deformations. This is a problem since only large deformations results in visual interesting effects. In section \ref{eqn:stiffnessmatrix} stiffness matrix is obtained from $V_{e}$, $B_{e}$ and $E$ which is all constant depending on the initial state of the tetrahedron. Due to large deformations during simulation time this stiffness matrix will become unvalued. M\"uller (referens) proposed a solution to this problem called Stiffness Warping. This method compensates the error by rotating the deformed tetrahedron back into its original coordinate frame. The rotation is found by forming the matrix A which is the non translation part of the mapping between the two tetrahedrons shown in equation.
 
