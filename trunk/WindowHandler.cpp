@@ -108,6 +108,10 @@ void TW_CALL triangleCB(void *clientdata)
 	test->volumeGenerator->changeTriangleRenderMode();
 }
 
+
+
+
+
 WindowHandler::WindowHandler(void)
 {
 
@@ -118,7 +122,7 @@ WindowHandler::WindowHandler(void)
 
 	bar = TwNewBar("TweakBar");
 	TwWindowSize(800, 700);
-	TwDefine(" TweakBar size='200 400' color='0 0 0' "); // change default tweak bar size and color
+	TwDefine(" TweakBar size='230 600' color='0 0 0' "); // change default tweak bar size and color
 
 	this->g_Rotation[0] =  0.0f;
 	this->g_Rotation[1] =  0.0f;
@@ -132,8 +136,8 @@ WindowHandler::WindowHandler(void)
 
 	g_NextNode = 0;
 	g_Dampening = 0;
-	g_Mass = 10;
-	g_E = 23000;
+	g_Mass = 23;
+	g_E = 2300000;
 	g_vn = 0.3;
 
 
@@ -148,7 +152,7 @@ WindowHandler::WindowHandler(void)
 	this->g_Force = 0.0f;
 	this->g_fractureThresh = 20000;
 	this->g_alpha = 10;
-	this->g_beta = 0.2;
+	this->g_beta = 0.06;
 
 
     //Set arcball
@@ -168,7 +172,7 @@ WindowHandler::WindowHandler(void)
 
 	   // Add 'g_Zoom' to 'bar': this is a modifable (RW) variable of type TW_TYPE_FLOAT. Its key shortcuts are [z] and [Z].
     TwAddVarRW(bar, "Force", TW_TYPE_FLOAT, &this->g_Force,
-               " min=0.00 max=1000 ; step=1.0 keyIncr=z keyDecr=Z help='Force applied on Node' ");
+               " min=0.00 max=4000 ; step=1.0 keyIncr=z keyDecr=Z help='Force applied on Node' ");
 
 	TwAddVarRW(bar, "Force Direction", TW_TYPE_DIR3F, &this->g_ForceDirection,
                " label='Force direction' open help='Change Force Direction' ");
@@ -191,13 +195,13 @@ WindowHandler::WindowHandler(void)
 
 	TwAddSeparator(bar, NULL, " group='MaterialSettings' ");
 	TwAddVarRW(bar, "Mass", TW_TYPE_FLOAT, &this->g_Mass,
-               "group='MaterialSettings' min=0.00 max=1000;");
+               "group='MaterialSettings' min=0.1 max=4000;");
 	TwAddVarRW(bar, "Alpha", TW_TYPE_FLOAT, &this->g_alpha,
                "group='MaterialSettings' min=-100.00 max=100 step=0.1;");
 	TwAddVarRW(bar, "Beta ", TW_TYPE_FLOAT, &this->g_beta,
-               "group='MaterialSettings' min=0.00 max=100 step = 0.01;");
+               "group='MaterialSettings' min=0.00 max=100 step = 0.001;");
 	TwAddVarRW(bar, "Young's modulus ", TW_TYPE_FLOAT, &this->g_E,
-               "group='MaterialSettings' min=1000 max=10000000000 step = 1000;");
+               "group='MaterialSettings' min=1000 max=30000000000 step = 1000;");
 	TwAddVarRW(bar, "Possion ratio ", TW_TYPE_FLOAT, &this->g_vn,
                "group='MaterialSettings' min=0.0 max=0.49 step = 0.01;");
 
@@ -230,7 +234,41 @@ void WindowHandler::display()
     glutSwapBuffers();
 
 }
+//Function for the deformation simulation
+void WindowHandler::RenderFirstPass()
+{
+   	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+        glLoadIdentity();
+        glViewport(0, 0, textureSize, textureSize);
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+            glLoadIdentity();
+            gluOrtho2D(0.0, textureSize, 0.0, textureSize);
+            glEnable(GL_TEXTURE_2D);
 
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
+            GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0_EXT,GL_COLOR_ATTACHMENT1_EXT};
+            glDrawBuffers(2, drawBuffers);
+
+            deformationShader->use();
+            deformationShader->sendUniformTexture("positionTex",0);
+
+            //Quad for the shader to use
+            drawQuad();
+            deformationShader->disable();
+
+            glDisable(GL_TEXTURE_2D);
+            glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
+        glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+	glViewport(0, 0, windowWidth,windowHeight);
+	glFlush();
+
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+
+}
 //Function for the rendering to the screen
 void WindowHandler::RenderSecondPass()
 {
@@ -245,20 +283,23 @@ void WindowHandler::RenderSecondPass()
 
   glPushMatrix();
 
+  //arma::Mat<double> temp3;
+//  temp3 = temp*temp2;
+
+
   ConvertQuaternionToMatrix(g_Rotation, mat);
+
 
   glMultMatrixf(mat);
 
   solver->calcNewPosition(volumeGenerator->getTetrahedMesh(), this->Fxt);
   this->Fxt = arma::zeros(this->Fxt.n_rows,this->Fxt.n_cols);
 
-  //Refresh the velocity texture (probably not the optimal way)
-  setupTextures();
-
   lightShader->use();
-  lightShader->sendUniformTexture("velocityTex",0);
   volumeGenerator->render();
   lightShader->disable();
+
+  //
 
   this->drawForceArrow();
   glPopMatrix();
@@ -267,24 +308,36 @@ void WindowHandler::RenderSecondPass()
 
 void WindowHandler::setupTextures()
 {
+    ///Example, if we need the position of the vertices
+    //Get the position data for each vertex
+	/*GLfloat *positionData = volumeGenerator->getTetrahedMesh().GetVertexArray();
 
-	GLfloat *velocityData = solver->getVelocityArray();
 
-    textureSize = solver->getVelocityArraySize();
-    int width = (int)sqrt(textureSize);
-    int height = (int)sqrt(textureSize);
     //Create the position texture that will be sent to the shader for integration
-	glGenTextures(1, &velocityTexID);
+	glGenTextures(1, &positionTexID);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, velocityTexID);
+	glBindTexture(GL_TEXTURE_2D, positionTexID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width, height, 0, GL_RGBA, GL_FLOAT, &velocityData[0]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, textureSize, textureSize, 0, GL_RGBA, GL_FLOAT, &positionData[0]);
 
     //Done with the position data
-    delete [] velocityData;
+    delete [] positionData;
+
+    //generate a framebuffer object and bind the textures to it.
+	glGenFramebuffersEXT(1, &fbo);
+  	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
+
+	glBindTexture(GL_TEXTURE_2D, positionTexID);
+    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, positionTexID, 0);
+    ///END EXAMPLE
+
+	if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) != GL_FRAMEBUFFER_COMPLETE_EXT)
+	printf("ERROR - Incomplete FrameBuffer\n");
+
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);*/
 }
 
 void WindowHandler::init()
@@ -293,17 +346,24 @@ void WindowHandler::init()
     lightShader = new Shader();
     lightShader->load("Shader/vertexPhongShader.glsl","Shader/fragmentPhongShader.glsl");
 
-    volumeGenerator = new VolumeGenerator();
+    deformationShader = new Shader();
+    deformationShader->load("Shader/vertexDeformationShader.glsl","Shader/fragmentDeformationShader.glsl");
+
+	volumeGenerator = new VolumeGenerator();
 	volumeGenerator->generateVolume();
+
 
 	solver = new Solver(volumeGenerator->getTetrahedMesh()->getNrOfNodes());
 	Fxt = arma::zeros(volumeGenerator->getTetrahedMesh()->getNrOfNodes()*3,1);
 
+	//volumeGenerator->subdivide();
+
+	//For the deformation
+    textureSize = volumeGenerator->getTetrahedMesh()->GetVertexArraySize(); //a texture is optimal if 2^n large
+    //
 	this->nrOfVertices = textureSize*textureSize;
-
     //Setup textures used for the deformation shader
-	setupTextures();
-
+	//setupTextures();
 	solver->constructKe(volumeGenerator->getTetrahedMesh());
 	solver->constructMe(volumeGenerator->getTetrahedMesh());
 
