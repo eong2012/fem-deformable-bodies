@@ -32,8 +32,6 @@ public:
 	void setParameter(float mass, float fracture, int g_AllowFracture, float alpha, float beta, float E, float vn);
 	void clearLists();
 
-	float* getVelocityArray();
-    int getVelocityArraySize();
 
 private:
 
@@ -74,7 +72,5 @@ private:
 	vector<Vertex>* mOriginalPos;
 	arma::Mat<double> localVpre;
 	bool chk;
-
-	arma::Mat<double> f;
 
 };
