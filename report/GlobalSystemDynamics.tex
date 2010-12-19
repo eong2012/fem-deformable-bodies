@@ -1,5 +1,5 @@
 %GlobalSystemDynamics
-As presented in M\"uller et al. [1] an elastic object can be simulated by applying Newton's second law of motion $\mathbf{f} = m\ddot{\mathbf{x}}$ on the volymetric elements. Since these elements are infinitesmal and has no mass defined the equation of motion is divided by the volume of the element. Which means that the mass turns to density and the forces turn to body forces. By taking the internal forces into consideration the dynamics that governs the system are described by the following partial differential equation  
+As presented in M\"uller et al. \cite{rt_phys} an elastic object can be simulated by applying Newton's second law of motion $\mathbf{f} = m\ddot{\mathbf{x}}$ on the volymetric elements. Since these elements are infinitesmal and has no mass defined the equation of motion is divided by the volume of the element. Which means that the mass turns to density and the forces turn to body forces. By taking the internal forces into consideration the dynamics that governs the system are described by the following partial differential equation  
 
 \begin{equation}\label{eqn:contPDE}
     \rho \ddot{\bf x} ={\mathbf f}_{ext} + {\mathbf f}_{in}
@@ -17,7 +17,7 @@ However, when working on highly dynamic system where forces are being exerted on
 \mathbf{M\ddot{x}} + \mathbf{C\dot{x}} + \mathbf{K(x-x_0)} =  \mathbf{f}_{ext}
 \end{equation}
 
-$\mathbf{M}$ is the mass matrix which is calculated by using nodal quadrature [hans] and $\mathbf{C}$ can be approximated as
+$\mathbf{M}$ is the mass matrix which is calculated by using nodal quadrature \cite{hans} and $\mathbf{C}$ can be approximated as
 \begin{equation}\label{eqn:BuildC}
 \mathbf{\mathbf{C}} = \alpha \mathbf{M} + \beta \mathbf{K}
 \end{equation}

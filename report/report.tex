@@ -18,23 +18,15 @@
 \pagebreak
 
 \section{Introduction}
-In the real world all materials are deformable in some extent. Even something
-as solid as a diamond can be deformed using the right amount of force. How to
-represent the physical properties of an object varies upon the application. It is
-common to use a rigid body model for simulating a solid object although other
-methods is needed to capture the inner dynamics of an object.
-The finite element method has a long history and where mainly originated
-from the need of solving complex structural analysis problems in civil engineering.
-It has successfully been used for stress analysis and this approach is
-applicable for simulating how a object deformers during stress.
-There is however simpler methods for simulating deformable objects for
-example a mass-spring system. A mass-spring system defines the object as a
-set of particles interconnected by springs. The behavior of the system depends
-on how each spring is connected and the number of springs holding the object
-together. The implementation is kind of straight-forward although [1] points
-out some drawbacks using this method for deforming 3D object.
+In the real world all materials are deformable in some extent. Even something as solid as a diamond can be deformed using the right amount of force. How to represent the physical properties of an object varies upon the application. It is common to use a rigid body model for simulating a solid object although other methods is needed to capture the inner dynamics of an object. 
 
-Real time physics: \cite{rt_phys}.
+There are however simpler methods for simulating deformable objects, such as a mass-spring system. A mass-spring system defines the object as a set of particles interconnected by springs. The behavior of the system depends on how each spring is connected and the number of springs holding the object together. The implementation is straight-forward although there are drawbacks using this method for deforming three dimensional objects.
+
+Our implementation uses the finite element method to solve the problem of deforming three dimensional objects. The finite element method has a long history and where mainly originated from the need of solving complex structural analysis problems in civil engineering. It has successfully been used for stress analysis and this approach is applicable for simulating how a object deformers during stress. 
+
+\subsection{Structure of the report}
+This second section of the report first describes some of the terms used in physical body mechanics, and how they relate to deformation of objects. Simplifications to the problem, such as linearization, and the consequences of these are then explained. The third section of the report describes some aspects of the implementation. Results are shown in section four, and discussed in section five. 
+
 \section{Method}
 
 \subsection{Physical body Mechanics}
@@ -100,7 +92,7 @@ Assuming an linear relationship between stress and strain Hooke's law can be red
  $E$ is the connection between stress and strain and depends on properties of the material. For simplicity only isotropic materials is considered, isotropic meaning that the material properties are independent of directions. Material such as plastics or different kinds of alloys are examples of isotropic materials where wood is an example of an anisotropic material which is weaker along rather than across the grains.
 
 Both stress and strain is represented with symmetrical 3x3 tensors. Symmetrical 3x3 matrices only depend on 6 variables hence
-$\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be defined as 6x6 matrix which for isotropic materials only depends on two elastic constants, Young's modulus $E$ and the Poisson's ratio $\nu$. Young's modulus is the ratio of stress or elasticity and Poisson's ratio describes to which amount volume is conserved. Using these notations Hook's law now can be written as equation \ref{sju} assuming the use of isotropic materials.
+$\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be defined as 6x6 matrix which for isotropic materials only depends on two elastic constants, Young's modulus $E$ and the Poisson's ratio $\nu$. Young's modulus is the ratio of stress or elasticity and Poisson's ratio describes to which amount volume is conserved. Using these notations Hook's law now can be written as equation \ref{eqn:ststhooks} assuming the use of isotropic materials.
 
 \begin{eqnarray}\label{eqn:ststhooks}
 \left[ \begin{array}{c}
@@ -135,13 +127,13 @@ $\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be define
 The finite element method (FEM) is a well known numerical method for approximating a solution to a continues problem. The whole domain is sampled into a set of finite elements and as elements volume converges to zero FEM becomes an highly accurate approach for approximating a analytical solution. FEM has been around for decades and is applicable to a wide range of physical and engineering problems such as mechanical, structural and thermal analysis.
 
 \subsubsection{Local stiffness of a tetrahedron element}\label{sec:localstiffness}
-The volume of the deformable object is divided into a finite number of linear tetrahedral elements. A tetrahedron is an three dimensional object which has four nodes each having three degrees of freedom.
+The volume of the deformable object is divided into a finite number of linear tetrahedral elements. A tetrahedron is an three dimensional object which has four nodes each having three degrees of freedom, as shown in figure \ref{fig:tetracoord}.
 
-\begin{figure}[h]
+\begin{figure}[htpb]
 \centering
 \includegraphics[width=.3\columnwidth]{figures/tetra_coord.png}
-\caption{}
-\label{fig:4}
+\caption{A tetrahedral element with three degrees of freedom per node}
+\label{fig:tetracoord}
 \end{figure}
 
 The displacement field $u(x,y,z)$ is continues and must be discretisized in order to use the finite element approach. In equation \ref{nio} the displacement field $u(x,y,z)$ is obtained by using $N(x,y,z)$ which is a 12x3 matrix containing the shape functions used to interpolate displacement values inside the tetrahedron. The shape matrix is multiplied with the displacement vector $\hat{u}$ as in \ref{nio}, $\hat{u}$ is a 12x1 vector containing the displacement x,y,z at each node of the tetrahedron. This multiplication gives a approximated displacement field $u(x,y,z)$ which is constant for the whole tetrahedron.
@@ -168,7 +160,7 @@ The element stiffness matrix is calculated in equation \ref{eqn:stiffnessmatrix}
 
 The element stiffness matrix describes the relationship between all degrees of freedom of a tetrahedron an relates through Hook's law as equation
 
-\begin{equation}\label{eqn:stiffnessmatrix}
+\begin{equation}\label{eqn:force}
     f_{e} = K_ {e}\hat{u}
 \end{equation}
 
@@ -189,11 +181,12 @@ For the purpose of a global solution all local stiffness matrices $K_{e}$ is ass
 \input{WarpedStiffness}
 
 
-\subsection{}
+\subsection{Fracturing}
+\input{fracture}
 
 
 \section{Implementation}
-
+Our application consists of classes divided into three main groups: Representation and creation of tetrahedral meshes, solving the dynamic system and displaying the results. The implementation uses the OpenGL graphics library to render the graphics, and the armadillo linear algebra library for performing calculations on vectors and matrices.
 
 \subsection{Tetrahedron mesh}
 When using the FEM in a volume application, such as ours, a mesh of tetrahedral objects is used. This mesh need to be generated and stored in a suitable data structure.
@@ -210,7 +203,7 @@ We have defined the positions and vertex indices of a cube consisting of five te
 In order to access the data in efficient way it must be stored in a suitable data structure. We have implemented a data structure consisting of the classes \texttt{Vertex}, \texttt{Face}, \texttt{HalfEdge}, \texttt{Tetrahed} and \texttt{TetrahedMesh}. This structure was inspired by the Compact Half-Face data structure introduced by Lage et al. \cite{halfface}, which has features that makes it possible to optimize for things such as execution speed and memory consumption. We have, however, decided to implement only the parts of the data structure that we have found to be necessary for our application. We have also made some simplifications and changes, where we have favored ease of use with our methods over speed and memory consumption.
 
 \subsubsection{Primitives}
-The primitives of a tetrahedral mesh are used to store vertex positions and keeping track of information such as adjacency and face normals. The \texttt{Vertex} class contains functions for setting and retrieving vertex positions. A \texttt{Vertex} also belongs to a \texttt{HalfEdge}, and the corresponding \texttt{HalfEdge} is stored for each \texttt{Vertex}. The \texttt{HalfEdge} class contains functionality for traversing the data structure by keeping the indices of its \texttt{next}, \texttt{prev} and \texttt{pair} \texttt{HalfEdge}. Its functionality is similar to the Half Edge data structure for triangular meshes described by Botsch et al. \cite{Botsch}. Each \texttt{HalfEdge} has a \texttt{Face} related to it, and keeps the corresponding index. The \texttt{Face} class also keeps track of which \texttt{Face} belong to which \texttt{HalfEdge}. A \texttt{Face} also has a normal, that can be set and retrieved. It also keeps the indices of its opposite \texttt{Face}. A tetrahedron is represented by the \texttt{Tetrahed} class, which keeps the indices of a \texttt{Vertex}, a \texttt{HalfEdge} and four \texttt{Faces}.
+The primitives of a tetrahedral mesh are used to store vertex positions and keeping track of information such as adjacency and face normals. The \texttt{Vertex} class contains functions for setting and retrieving vertex positions. A \texttt{Vertex} also belongs to a \texttt{HalfEdge}, and the corresponding \texttt{HalfEdge} is stored for each \texttt{Vertex}. The \texttt{HalfEdge} class contains functionality for traversing the data structure by keeping the indices of its \texttt{next}, \texttt{prev} and \texttt{pair} \texttt{HalfEdge}. Its functionality is similar to the Half Edge data structure for triangular meshes described by Botsch et al. \cite{Botsch}. The structure is shown in figure \ref{fig:tetraedge}. Each \texttt{HalfEdge} has a \texttt{Face} related to it, and keeps the corresponding index. The \texttt{Face} class also keeps track of which \texttt{Face} belong to which \texttt{HalfEdge}. A \texttt{Face} also has a normal, that can be set and retrieved. It also keeps the indices of its opposite \texttt{Face}. This structure is shown in figure \ref{fig:tetraface}. A tetrahedron is represented by the \texttt{Tetrahed} class, which keeps the indices of a \texttt{Vertex}, a \texttt{HalfEdge} and four \texttt{Faces}.
 
 
 \begin{figure}[htbp]
@@ -234,12 +227,11 @@ The primitives of a tetrahedral mesh are used to store vertex positions and keep
 The \texttt{TetrahedMesh} class contains functions for creating, changing and rendering a tetrahedral mesh.
 
 \subsection{The \texttt{Solver} class}
-\include{solver}
+\input{solver}
 
 
 \subsection{Graphical user interface}
 
-\subsection{Rendering the result}
 
 
 \section{Results}
@@ -250,13 +242,13 @@ The \texttt{TetrahedMesh} class contains functions for creating, changing and re
 \section{Discussion}
 \subsection{Improvements and further work}
 \subsubsection{Solution on the GPU}
-\include{gpu}
+\input{gpu}
 
-\subsubsection{Collision detection}
+
 
 
 \pagebreak
 \addcontentsline{toc}{section}{References}
-\bibliographystyle{vancouver}
+\bibliographystyle{plain}
 \bibliography{refs}
 \end{document} 
