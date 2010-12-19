@@ -1,5 +1,5 @@
-\subsubsection{Main functionality}
-The \texttt{Solver} class contains the functionality for finding a solution to the dynamic system. The strain matrices are found for all elements, and are then used to construct the elementwise stiffness matrices. These are then assembled into a global stiffness matrix, which is used to calculate the displacements of all the nodes in the system.
-\subsubsection{Constructing the elementwise stiffness matrix}
+The \texttt{Solver} class contains the functionality for finding a solution to the dynamic system. The strain matrices are found for all elements, and are then used to construct the elementwise stiffness matrices. These are then assembled into a global stiffness matrix, which is used to calculate the displacements of all the nodes in the system. The class also contains the functions for computing the stress tensor $\sigma$, and its eigenvalues, that are used if the object is subject to fracturing. 
 \subsubsection{Assembling the global stiffness matrix}
+The global stiffness matrix is assembled using the method described by Kattan in \cite{matlab}. This function is originally written in MatLab, and has been converted to C++ in our implementation. 
 \subsubsection{Conjugate gradient solver}
+In order to solve the dynamic system using implicit Euler integration the iterative conjugate gradient method is used. Our implementation has been taken from the Sparselib++ matrix computation library, and has been adapted to use the armadillo datatypes of our application. 
