@@ -186,7 +186,7 @@ For the purpose of a global solution all local stiffness matrices $K_{e}$ is ass
 
 
 \section{Implementation}
-Our application consists of classes divided into three main groups: Representation and creation of tetrahedral meshes, solving the dynamic system and displaying the results. The implementation uses the OpenGL graphics library to render the graphics, and the armadillo linear algebra library for performing calculations on vectors and matrices.
+Our application consists of classes divided into three main groups: Representation and creation of tetrahedral meshes, solving the dynamic system and displaying the results. The implementation uses the OpenGL graphics library to render tshe graphics, and the armadillo linear algebra library for performing calculations on vectors and matrices. A graphical user interface is created using the AntTweakBar library.
 
 \subsection{Tetrahedron mesh}
 When using the FEM in a volume application, such as ours, a mesh of tetrahedral objects is used. This mesh need to be generated and stored in a suitable data structure.
@@ -224,14 +224,10 @@ The primitives of a tetrahedral mesh are used to store vertex positions and keep
 
 
 \subsubsection{The \texttt{TetrahedMesh} class}
-The \texttt{TetrahedMesh} class contains functions for creating, changing and rendering a tetrahedral mesh.
+The \texttt{TetrahedMesh} class contains functions for creating, changing and rendering a tetrahedral mesh. Tetrahedrons are added by creating their primitives, and storing indices of the primitives that make up a tetrahedron. Several modes for rendering are supported, such as the option of rendering normals, edges or faces. 
 
 \subsection{The \texttt{Solver} class}
 \input{solver}
-
-
-\subsection{Graphical user interface}
-
 
 
 \section{Results}
@@ -240,7 +236,9 @@ The \texttt{TetrahedMesh} class contains functions for creating, changing and re
 \subsection{Performance}
 
 \section{Discussion}
+We have created an application that handles deformation of objects with different shapes and material properties. 
 \subsection{Improvements and further work}
+Although our application is able to perform most of the things we initially had planned, there are of course several improvements that could be made outside the scope of this project. The model itself is simplified, since we use several linearizations. This is partly handled by the introduction of warped stiffness. A more intelligent data structure could be used in order to allow for larger meshes, and parallelization should be utilized in order to ensure real time performance with more complex meshes. 
 \subsubsection{Solution on the GPU}
 \input{gpu}
 
