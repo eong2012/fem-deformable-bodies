@@ -11,13 +11,13 @@ Where $\rho$ is the density, ${\mathbf f}_{in}$ are the inner forces caused by s
 \mathbf{M\ddot{x}} + \mathbf{K(x- x_0)} =  \mathbf{f}_{ext}
 \end{equation}
 
-However, when working on highly dynamic system where forces are being exerted on solids a damping matrix $\mathbf{C}$ needs to be taken into consideration as described by [fem]. So the system equation can be rewritten as
+However, when working on highly dynamic system where forces are being exerted on solids a damping matrix $\mathbf{C}$ needs to be taken into consideration as described by \cite{fem_liu}. So the system equation can be rewritten as
 
 \begin{equation}\label{eqn:fullDiscPDE}
 \mathbf{M\ddot{x}} + \mathbf{C\dot{x}} + \mathbf{K(x-x_0)} =  \mathbf{f}_{ext}
 \end{equation}
 
-$\mathbf{M}$ is the mass matrix which is calculated by using nodal quadrature \cite{hans} and $\mathbf{C}$ can be approximated as
+$\mathbf{M}$ is the mass matrix can be calculated by using nodal quadrature \cite{hans} which results in the off-diagonals becoming zero valued. As for the damping matrix $\mathbf{C}$ it can be approximated as
 \begin{equation}\label{eqn:BuildC}
 \mathbf{\mathbf{C}} = \alpha \mathbf{M} + \beta \mathbf{K}
 \end{equation}

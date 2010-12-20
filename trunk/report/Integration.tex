@@ -1,7 +1,7 @@
 %Integration
 Now that the dynamics of the system are defined we want to be able to integrate over the time domain to actually simulate the deformation. This can be done by either using explicit or implicit integration. Explicit integration has the upside of being easy to implement, however it suffers from being only conditionally stable and the errors accumulate. Implicit integration on the other hand can be slightly harder to work with but is instead unconditionally stable thus recommended for simulating this kind of system. 
 
-Since the dynamic system was described in the previous section, the equation of motion \ref{eqn:fullDiscPDE} can now be applied to the Implicit Euler form as follows [mullerShort]
+Since the dynamic system was described in the previous section, the equation of motion \ref{eqn:fullDiscPDE} can now be applied to the Implicit Euler form as follows \cite{muller_ivm}
 
 \begin{equation}\label{eqn:impEuler}
 		(\mathbf{M} + \Delta t  \mathbf{C} + \Delta t^2 \mathbf{K})v^{t+1} = \mathbf{M} v - \Delta t (\mathbf{K}(\mathbf{x} - \mathbf{x}_0) +\mathbf{f}_{ext})
