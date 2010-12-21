@@ -18,14 +18,14 @@
 \pagebreak
 
 \section{Introduction}
-In the real world all materials are deformable in some extent. Even something as solid as a diamond can be deformed using the right amount of force. How to represent the physical properties of an object varies upon the application. It is common to use a rigid body model for simulating a solid object although other methods is needed to capture the inner dynamics of an object. 
+In the real world all materials are deformable in some extent. Even something as solid as a diamond can be deformed using the right amount of force. How to represent the physical properties of an object varies upon the application. It is common to use a rigid body model for simulating a solid object although other methods is needed to capture the inner dynamics of an object.
 
 There are however simpler methods for simulating deformable objects, such as a mass-spring system. A mass-spring system defines the object as a set of particles interconnected by springs. The behavior of the system depends on how each spring is connected and the number of springs holding the object together. The implementation is straight-forward although there are drawbacks using this method for deforming three dimensional objects.
 
-Our implementation uses the finite element method to solve the problem of deforming three dimensional objects. The finite element method has a long history and where mainly originated from the need of solving complex structural analysis problems in civil engineering. It has successfully been used for stress analysis and this approach is applicable for simulating how a object deformers during stress. 
+Our implementation uses the finite element method to solve the problem of deforming three dimensional objects. The finite element method has a long history and where mainly originated from the need of solving complex structural analysis problems in civil engineering. It has successfully been used for stress analysis and this approach is applicable for simulating how a object deformers during stress.
 
 \subsection{Structure of the report}
-This second section of the report first describes some of the terms used in physical body mechanics, and how they relate to deformation of objects. Simplifications to the problem, such as linearization, and the consequences of these are then explained. The third section of the report describes some aspects of the implementation. Results are shown in section four, and discussed in section five. 
+This second section of the report first describes some of the terms used in physical body mechanics, and how they relate to deformation of objects. Simplifications to the problem, such as linearization, and the consequences of these are then explained. The third section of the report describes some aspects of the implementation. Results are shown in section four, and discussed in section five.
 
 \section{Method}
 
@@ -96,12 +96,12 @@ $\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be define
 
 \begin{eqnarray}\label{eqn:ststhooks}
 \left[ \begin{array}{c}
-\epsilon_{xx} \\
-\epsilon_{xx} \\
-\epsilon_{xx} \\
-\epsilon_{xx} \\
-\epsilon_{xx} \\
-\epsilon_{xx} \\
+\sigma_{xx} \\
+\sigma_{yy} \\
+\sigma_{zz} \\
+\sigma_{xy} \\
+\sigma_{yz} \\
+\sigma_{xz} \\
 \end{array} \right] = \frac{E}{(1+\nu)(1-2\nu)}
 \left[ \begin{array}{cccccc}
 1-\nu & \nu & \nu & 0 & 0 & 0\\
@@ -113,11 +113,11 @@ $\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be define
  \end{array} \right]
 \left[ \begin{array}{c}
 \epsilon_{xx} \\
-\epsilon_{xx} \\
-\epsilon_{xx} \\
-\epsilon_{xx} \\
-\epsilon_{xx} \\
-\epsilon_{xx} \\
+\epsilon_{yy} \\
+\epsilon_{zz} \\
+\epsilon_{xy} \\
+\epsilon_{yz} \\
+\epsilon_{xz} \\
 \end{array} \right]
 \end{eqnarray}
 
@@ -224,7 +224,7 @@ The primitives of a tetrahedral mesh are used to store vertex positions and keep
 
 
 \subsubsection{The \texttt{TetrahedMesh} class}
-The \texttt{TetrahedMesh} class contains functions for creating, changing and rendering a tetrahedral mesh. Tetrahedrons are added by creating their primitives, and storing indices of the primitives that make up a tetrahedron. Several modes for rendering are supported, such as the option of rendering normals, edges or faces. 
+The \texttt{TetrahedMesh} class contains functions for creating, changing and rendering a tetrahedral mesh. Tetrahedrons are added by creating their primitives, and storing indices of the primitives that make up a tetrahedron. Several modes for rendering are supported, such as the option of rendering normals, edges or faces.
 
 \subsection{The \texttt{Solver} class}
 \input{solver}
@@ -240,12 +240,26 @@ The \texttt{TetrahedMesh} class contains functions for creating, changing and re
 \label{fig:defSerie}
 \end{figure}
 
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\columnwidth]{figures/defSerie2.png}
+\caption{Deforming more elastic bar, a force is applied on a vertex.}
+\label{fig:defSerie}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\columnwidth]{figures/deffrac.png}
+\caption{Fracturing a bar, a force is applied on a vertex.}
+\label{fig:defSerie}
+\end{figure}
+
 \subsection{Performance}
 
 \section{Discussion}
-We have created an application that handles deformation of objects with different shapes and material properties. 
+We have created an application that handles deformation of objects with different shapes and material properties.
 \subsection{Improvements and further work}
-Although our application is able to perform most of the things we initially had planned, there are of course several improvements that could be made outside the scope of this project. The model itself is simplified, since we use several linearizations. This is partly handled by the introduction of warped stiffness. A more intelligent data structure could be used in order to allow for larger meshes, and parallelization should be utilized in order to ensure real time performance with more complex meshes. 
+Although our application is able to perform most of the things we initially had planned, there are of course several improvements that could be made outside the scope of this project. The model itself is simplified, since we use several linearizations. This is partly handled by the introduction of warped stiffness. A more intelligent data structure could be used in order to allow for larger meshes, and parallelization should be utilized in order to ensure real time performance with more complex meshes.
 \subsubsection{Solution on the GPU}
 \input{gpu}
 
