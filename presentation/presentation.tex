@@ -172,7 +172,7 @@
 \begin{itemize}
 \item Utifrån töjningsmatrisen $B_e$ bildar vi den elementvisa styvhetsmatrisen $K_e$:
 	\begin{equation}\label{eqn:stiffnessmatrix}
-    	K_{e} = V_{e} B_ {e}^{T}EB_ {e}^{T}
+    	K_{e} = V_{e} B_ {e}^{T}EB_ {e}
 	\end{equation}
 \item Eftersom varje nod har tre frihetsgrader blir $K_e$ en 12x12-matris som beskriver kopplingarna mellan tetrahederns fyra noder
 \item Via Hookes lag får vi kraften per nod som:
@@ -301,7 +301,7 @@ för $v^{t+1}$
 \frametitle{Rotations kompensering}
 
 \begin{itemize}
-\item Cauchy linjära töjnings tensor är ej rotations invariant vilket gör att styvhets matrisen $K_{e}$ inte gäller då tetraheden roterats från sitt viloläge 
+\item Cauchy linjära töjnings tensor är ej rotations invariant vilket gör att styvhets matrisen $K_{e}$ inte gäller då tetraheden roterats från sitt viloläge
 
 \item Artifakter i form av växande volym
 
@@ -324,7 +324,7 @@ för $v^{t+1}$
 \frametitle{Rotations kompensering}
 \begin{block}{Interna kraften per element}
 \begin{itemize}
-\item Den interna kraften rotations kompenseras och beräknas som: 
+\item Den interna kraften rotations kompenseras och beräknas som:
 \end{itemize}
 \begin{equation}\label{eqn:stiffnessmatrix}
     f_{warped} = R_{e}K_{e}(pR_{e}^{-1}-x)
@@ -339,7 +339,7 @@ för $v^{t+1}$
 \begin{frame}
 \frametitle{Frakturer}
 \begin{itemize}
-\item Ett material som utsätts för stress kan spricka 
+\item Ett material som utsätts för stress kan spricka
 
 \item Stress tensorn per tetrahed beräknas enligt:
 \begin{equation}\label{eqn:stiffnessmatrix}
