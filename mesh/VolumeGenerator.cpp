@@ -24,8 +24,8 @@ void VolumeGenerator::generateVolume() {
     vector<arma::Mat<double> > tempVertices;
     vector<unsigned int> indices;
 
-	tempVertices = meshReader->readVertices("cube.node");
-	indices = meshReader->readTetras("cube.ele");
+	tempVertices = meshReader->readVertices("bar.node");
+	indices = meshReader->readTetras("bar.ele");
     arma::Mat<double> temp1,temp2,temp3,temp4;
 
     cout << "Indexlist: " <<indices.size() << endl;
@@ -83,7 +83,7 @@ void VolumeGenerator::createTetra(arma::Mat<double> v1, arma::Mat<double> v2, ar
     if(V > 0){
         //Skapa tetras
         arma::Mat<double> t = arma::zeros(1,3);
-        float scale = 0.08;
+        float scale = 0.04;
 
         vertices.clear();
         vertices.push_back(v1*scale+t);
