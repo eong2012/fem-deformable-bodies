@@ -60,8 +60,8 @@ where $p+dp = x+dx + \mathbf{u(x+dx)} => dp = dx + \mathbf{u(x+dx)}-\mathbf{u(x)
     \epsilon = \bigtriangledown u + \bigtriangledown u^{T} + \bigtriangledown u^{T} \bigtriangledown u
 \end{equation}
 
-This tensor is called Green’s strain tensor and is symmetric and nonlinear. The tensor has the important property of behaving linear for small deformations
-and by removing the nonlinear term, Cauchy’s strain tensor is formed. The tensor is illustrated in equation 4 where $\epsilon_{xx}, \epsilon_{yy}, \epsilon_{zz}$ is represents normal strain and $\epsilon_{xy}, \epsilon_{xy}, \epsilon_{xz}$  shear strain.
+This tensor is called Green's strain tensor and is symmetric and nonlinear. The tensor has the important property of behaving linear for small deformations
+and by removing the nonlinear term, Cauchy's strain tensor is formed. The tensor is illustrated in equation 4 where $\epsilon_{xx}, \epsilon_{yy}, \epsilon_{zz}$ is represents normal strain and $\epsilon_{xy}, \epsilon_{xy}, \epsilon_{xz}$  shear strain.
 
 \begin{eqnarray}\
 \epsilon =  \left[ \begin{array}{cccc}
@@ -136,7 +136,7 @@ The volume of the deformable object is divided into a finite number of linear te
 \label{fig:tetracoord}
 \end{figure}
 
-The displacement field $u(x,y,z)$ is continues and must be discretisized in order to use the finite element approach. In equation \ref{nio} the displacement field $u(x,y,z)$ is obtained by using $N(x,y,z)$ which is a 12x3 matrix containing the shape functions used to interpolate displacement values inside the tetrahedron. The shape matrix is multiplied with the displacement vector $\hat{u}$ as in \ref{nio}, $\hat{u}$ is a 12x1 vector containing the displacement x,y,z at each node of the tetrahedron. This multiplication gives a approximated displacement field $u(x,y,z)$ which is constant for the whole tetrahedron.
+The displacement field $u(x,y,z)$ is continues and must be discretized in order to use the finite element approach. In equation \ref{nio} the displacement field $u(x,y,z)$ is obtained by using $N(x,y,z)$ which is a 12x3 matrix containing the shape functions used to interpolate displacement values inside the tetrahedron. The shape matrix is multiplied with the displacement vector $\hat{u}$ as in \ref{nio}, $\hat{u}$ is a 12x1 vector containing the displacement x,y,z at each node of the tetrahedron. This multiplication gives a approximated displacement field $u(x,y,z)$ which is constant for the whole tetrahedron.
 
 \begin{equation}\label{nio}
     \mathbf{u} \approx N(x,y,z) \hat{u}
@@ -186,13 +186,13 @@ For the purpose of a global solution all local stiffness matrices $K_{e}$ is ass
 
 
 \section{Implementation}
-Our application consists of classes divided into three main groups: Representation and creation of tetrahedral meshes, solving the dynamic system and displaying the results. The implementation uses the OpenGL graphics library to render tshe graphics, and the armadillo linear algebra library for performing calculations on vectors and matrices. A graphical user interface is created using the AntTweakBar library.
+Our application consists of classes divided into three main groups: Representation and creation of tetrahedral meshes, solving the dynamic system and displaying the results. The implementation uses the OpenGL graphics library to render the graphics, and the armadillo linear algebra library for performing calculations on vectors and matrices. A graphical user interface is created using the AntTweakBar library.
 
 \subsection{Tetrahedron mesh}
 When using the FEM in a volume application, such as ours, a mesh of tetrahedral objects is used. This mesh need to be generated and stored in a suitable data structure.
 
 \subsubsection{Volume generation}
-The finite volume elements can be generated in several ways. To create a tetrahedral mesh from a triangle mesh different triangulation methods can be applied. Snice this problem is not the main focus of the project already created tetrahedral objects are used. These are defined as two lists, one containing all vertex points in the tetrahedrons and one containing a list of which vertices that belong to each tetrahedron.
+The finite volume elements can be generated in several ways. To create a tetrahedral mesh from a triangle mesh different triangulation methods can be applied. Since this problem is not the main focus of the project already created tetrahedral objects are used. These are defined as two lists, one containing all vertex points in the tetrahedrons and one containing a list of which vertices that belong to each tetrahedron.
 
 The vertex positions are read from the file and temporarily stored. For each tetrahedron in the tetrahedron list the corresponding vertex indices are found, the positions read and a tetrahedron object is created using these position. The vertices must be placed in an order that results in a tetrahedron with a positive volume. The function for creating a tetrahedron calculates the volume and if it is negative it makes a recursive call with the vertices in a different order.
 
@@ -231,7 +231,9 @@ The \texttt{TetrahedMesh} class contains functions for creating, changing and re
 
 
 \section{Results}
+Our implementation is able to show dynamic deformations of tetrahedral mesh objects. Material settings and force properties can be changed during runtime using a graphical user interface.
 \subsection{Images}
+Some example output from our application using different settings can be seen in figures \ref{fig:defSerie} and \ref{fig:defSerie2}. In figure \ref{fig:defSerie3} a mesh with fracturing enabled is shown. 
 
 \begin{figure}[htpb]
 \centering
@@ -244,20 +246,20 @@ The \texttt{TetrahedMesh} class contains functions for creating, changing and re
 \centering
 \includegraphics[width=\columnwidth]{figures/defSerie2.png}
 \caption{Deforming more elastic bar, a force is applied on a vertex.}
-\label{fig:defSerie}
+\label{fig:defSerie2}
 \end{figure}
 
 \begin{figure}[htpb]
 \centering
 \includegraphics[width=\columnwidth]{figures/deffrac.png}
 \caption{Fracturing a bar, a force is applied on a vertex.}
-\label{fig:defSerie}
+\label{fig:defSerie3}
 \end{figure}
 
 \subsection{Performance}
 
 \section{Discussion}
-We have created an application that handles deformation of objects with different shapes and material properties.
+We have created an application that handles deformation of objects with different shapes and material properties. Although the application solves the problem we had initially stated there are several extensions and improvements that could be made.
 \subsection{Improvements and further work}
 Although our application is able to perform most of the things we initially had planned, there are of course several improvements that could be made outside the scope of this project. The model itself is simplified, since we use several linearizations. This is partly handled by the introduction of warped stiffness. A more intelligent data structure could be used in order to allow for larger meshes, and parallelization should be utilized in order to ensure real time performance with more complex meshes.
 \subsubsection{Solution on the GPU}
