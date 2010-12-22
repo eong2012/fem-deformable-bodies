@@ -30,7 +30,7 @@ This second section of the report first describes some of the terms used in phys
 \section{Method}
 
 \subsection{Physical body Mechanics}
-The elasticity of a material is often expressed with Hook's law approximated as a linear combination of stress and strain\ref{ett}.
+The elasticity of a material is by M\"uller in \cite{rt_phys} expressed with Hook's law, approximated as a linear combination of stress and strain shown in equation \ref{ett}.
 
 \begin{equation}\label{ett}
     \frac{F_{n}}{A} = E \frac{\triangle l}{l}
@@ -38,10 +38,10 @@ The elasticity of a material is often expressed with Hook's law approximated as 
 External forces acting on a surface gets transmitted through the material causing inner forces a quantity described as stress. This stress acting on a body gives rise to strain an measurement of deformation defined as the relatively elongation or compression of the material.
 
 In one dimension the stress $\sigma$ is a scalar describing the force $ F_{n}$ acting perpendicular to the surface cross-sectional area $A$.
-This force causes deformation or strain defined as the difference in length of the material perpendicular to the surface $\triangle A$. Stress and strain is related through Young's modulus $E$ which states the stiffness of the material.
+This force causes deformation or strain defined as the difference in length of the material perpendicular to the surface $A$. Stress and strain is related through Young's modulus $E$ which states the stiffness of the material.
 
 \subsection{Stress and Strain in three dimensions}\label{stressnstrain}
-In three dimensions the stress and strain is different depending on the direction of measurement. A point can be strained in one direction and compressed in another thus stress and strain cant be expressed with a single scalar.
+In three dimensions the stress and strain is different depending on the direction of measurement. A point can be strained in one direction and compressed in another thus stress and strain cant be expressed with a single scalar. M\"uller defines this dimension enlargement in \cite{rt_phys} and propose the use of tensor representation.
 
 A displacement field $\mathbf{u}$ is described as the difference of each points in its initial and deformable state. Hence a point can be strained differently in all direction $\mathbf{u}$ is a vector field described in \ref{tva}.
 
@@ -89,7 +89,7 @@ Assuming an linear relationship between stress and strain Hooke's law can be red
     \sigma = E \cdot \epsilon
 \end{equation}
 
- $E$ is the connection between stress and strain and depends on properties of the material. For simplicity only isotropic materials is considered, isotropic meaning that the material properties are independent of directions. Material such as plastics or different kinds of alloys are examples of isotropic materials where wood is an example of an anisotropic material which is weaker along rather than across the grains.
+ $E$ is the connection between stress and strain and is defined in \cite{fem_liu} where $E$ gives the properties of the material. For simplicity only isotropic materials is considered, isotropic meaning that the material properties are independent of directions. Material such as plastics or different kinds of alloys are examples of isotropic materials where wood is an example of an anisotropic material which is weaker along rather than across the grains.
 
 Both stress and strain is represented with symmetrical 3x3 tensors. Symmetrical 3x3 matrices only depend on 6 variables hence
 $\sigma$ and $\epsilon$ is vectors of dimensionality 6x1. $E$ can then be defined as 6x6 matrix which for isotropic materials only depends on two elastic constants, Young's modulus $E$ and the Poisson's ratio $\nu$. Young's modulus is the ratio of stress or elasticity and Poisson's ratio describes to which amount volume is conserved. Using these notations Hook's law now can be written as equation \ref{eqn:ststhooks} assuming the use of isotropic materials.
@@ -136,7 +136,7 @@ The volume of the deformable object is divided into a finite number of linear te
 \label{fig:tetracoord}
 \end{figure}
 
-The displacement field $u(x,y,z)$ is continues and must be discretized in order to use the finite element approach. In equation \ref{nio} the displacement field $u(x,y,z)$ is obtained by using $N(x,y,z)$ which is a 12x3 matrix containing the shape functions used to interpolate displacement values inside the tetrahedron. The shape matrix is multiplied with the displacement vector $\hat{u}$ as in \ref{nio}, $\hat{u}$ is a 12x1 vector containing the displacement x,y,z at each node of the tetrahedron. This multiplication gives a approximated displacement field $u(x,y,z)$ which is constant for the whole tetrahedron.
+The displacement field $u(x,y,z)$ is continues and must be discretized in order to use the finite element approach. M\"uller-Gross shows this in \cite{muller_ivm} and more information can be found in \cite{fem_liu}. In equation \ref{nio} the displacement field $u(x,y,z)$ is obtained by using $N(x,y,z)$ which is a 12x3 matrix containing the shape functions used to interpolate displacement values inside the tetrahedron. The shape matrix is multiplied with the displacement vector $\hat{u}$ as in \ref{nio}, $\hat{u}$ is a 12x1 vector containing the displacement x,y,z at each node of the tetrahedron. This multiplication gives a approximated displacement field $u(x,y,z)$ which is constant for the whole tetrahedron.
 
 \begin{equation}\label{nio}
     \mathbf{u} \approx N(x,y,z) \hat{u}
@@ -148,7 +148,7 @@ To obtain the strain tensor $\epsilon$ the approximated displacement field is mu
     \epsilon = LN \hat{u} = B_ {e} \hat{u}
 \end{equation}
 
-$B_ {e}$ is called the strain matrix which is constant and can be precomputed for all elements.
+How to do this is shown in \cite{fem_liu} where $B_ {e}$ is called the strain matrix which is constant and can be precomputed for all elements.
 
 As a result of the strain matrix $B_{e}$ the entire stiffness of the tetrahedron element can be expressed as the stiffness matrix $K_{e}$ connecting all degrees of freedom of a tetrahedron. The stiffness matrix contains information about stress and strain and can analytically be seen as the measures the magnitude of a stress field.
 
@@ -167,7 +167,7 @@ The element stiffness matrix describes the relationship between all degrees of f
 If a node displacement occurs this relationship gives the interconnecting forces accumulated for all node spanning the finite element.
 
 \subsubsection{Global stiffness of a tetrahedron mesh}
-For the purpose of a global solution all local stiffness matrices $K_{e}$ is assembled into global stiffness matrix $K$. The assembling process is not trivial and need to be composed in way so that a force affecting one elements deflect the others through the body. How to compose the global stiffness matrix from different types of finite elements etc.
+For the purpose of a global solution all local stiffness matrices $K_{e}$ is assembled into global stiffness matrix $K$ which is explained further in \cite{muller_ivm}. The assembling process is not trivial and need to be composed in way so that a force affecting one elements deflect the others through the body. How to compose the global stiffness matrix from different types of finite elements etc.
 
  Since a large part of the dynamics in the global stiffness matrix $K$ is overlapping $K$ tends to be sparse. The dimensionality of $K$ is $3 \cdot n x 3 \cdot n$ where 3 is the degrees of freedom and n is the number of nodes inside the entire object.
 
@@ -233,7 +233,7 @@ The \texttt{TetrahedMesh} class contains functions for creating, changing and re
 \section{Results}
 Our implementation is able to show dynamic deformations of tetrahedral mesh objects. Material settings and force properties can be changed during runtime using a graphical user interface.
 \subsection{Images}
-Some example output from our application using different settings can be seen in figures \ref{fig:defSerie} and \ref{fig:defSerie2}. In figure \ref{fig:defSerie3} a mesh with fracturing enabled is shown. 
+Some example output from our application using different settings can be seen in figures \ref{fig:defSerie} and \ref{fig:defSerie2}. In figure \ref{fig:defSerie3} a mesh with fracturing enabled is shown and in image \ref{fig:defSerie4} we show the defect of using a linear tensor for stress and strain.
 
 \begin{figure}[htpb]
 \centering
@@ -256,7 +256,23 @@ Some example output from our application using different settings can be seen in
 \label{fig:defSerie3}
 \end{figure}
 
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\columnwidth]{figures/defwarp.png}
+\caption{Deforming a bar showing defect of not using warped stiffness, a force is applied on a vertex.}
+\label{fig:defSerie4}
+\end{figure}
+
 \subsection{Performance}
+The test machine used is an average ASUS Notebook with the following specifications:
+\newline
+\newline
+CPU: Intel Core 2 Duo T5800 @ 2.0 GHz\newline
+RAM: 4.00 GB DDR2 SDRAM - 800 MHz\newline
+GPU: ATI Mobility Radeon HD 3470
+\newline
+\newline
+The current scene consist of 140 tetrahedrons and 72 nodes and runs at average 35 fps (frames per seconds).
 
 \section{Discussion}
 We have created an application that handles deformation of objects with different shapes and material properties. Although the application solves the problem we had initially stated there are several extensions and improvements that could be made.
