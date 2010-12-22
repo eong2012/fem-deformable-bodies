@@ -3,15 +3,13 @@
  * See arcball.h for usage details.
  */
 
-
 #include "arcball.h"
-#ifdef __MAC__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
+#include <Windows.h>
+#include <gl/gl.h>
+#include <gl/GLU.h>
+
+
+
 
 GLfloat ab_quat[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 GLfloat ab_last[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};

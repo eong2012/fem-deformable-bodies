@@ -172,7 +172,7 @@ WindowHandler::WindowHandler(void)
 
 	   // Add 'g_Zoom' to 'bar': this is a modifable (RW) variable of type TW_TYPE_FLOAT. Its key shortcuts are [z] and [Z].
     TwAddVarRW(bar, "Force", TW_TYPE_FLOAT, &this->g_Force,
-               " min=0.00 max=4000 ; step=1.0 keyIncr=z keyDecr=Z help='Force applied on Node' ");
+               " min=0.00 max=4000000 ; step=1.0 keyIncr=z keyDecr=Z help='Force applied on Node' ");
 
 	TwAddVarRW(bar, "Force Direction", TW_TYPE_DIR3F, &this->g_ForceDirection,
                " label='Force direction' open help='Change Force Direction' ");
@@ -216,7 +216,7 @@ WindowHandler::WindowHandler(void)
                " label='Inflict Force' key=space help='Toggle Force mode.' ");
 
 	TwAddVarRW(bar, "Fracture limit", TW_TYPE_FLOAT, &this->g_fractureThresh,
-               "group='FractureSettings' min=10000 max=40000;");
+               "group='FractureSettings' min=10000 max=4000000;");
 
 
 }

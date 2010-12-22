@@ -39,6 +39,8 @@ Solver::Solver(int nrOfNodes){
 
 
 
+
+
 }
 
 Solver::~Solver() {
@@ -72,6 +74,9 @@ void Solver::constructKe(TetrahedMesh *mesh){
     unsigned int nrOfTetraheds = mesh->getNrOfTetrahedra();
 
     vector<arma::Mat<double> > vPositions;
+
+         cout << endl << nrOfTetraheds << ": nr of tetra" << endl;
+     cout << endl << this->nrOfNodes << ": nr of nodes" << endl;
 
     for(unsigned int k = 0; k < nrOfTetraheds; k++) {
 
@@ -190,6 +195,7 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 
 
 	//Get all updated positions,
+//#pragma omp parallel for schedule(dynamic, 1)
 	for (int i = 0; i < this->nrOfNodes; i++) {
 
 		X(3*i) = mesh->mVertices->at(i).getPosition()[0];
@@ -207,6 +213,7 @@ void Solver::calcNewPosition(TetrahedMesh *mesh, arma::Mat<double> Fxt)
 	vector<arma::Mat<double> > vPositions;
 	this->K = arma::zeros(this->nrOfNodes*3+1,this->nrOfNodes*3+1);
 	arma::Mat<double> Kf0 = arma::zeros(this->nrOfNodes*3+1,this->nrOfNodes*3+1);
+
 	for(int i = 0; i<nrOfTetraheds;i++){
 
 		vPositions = mesh->getVertexPosition(i);

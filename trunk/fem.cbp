@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="fem" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\fem" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\fem" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fopenmp" />
+			<Add directory="C:\Users\ludde\Downloads\armadillo-0.9.90\armadillo-0.9.90\include" />
+			<Add directory="C:\CLibrary\AntTweakBar\include" />
+		</Compiler>
+		<Linker>
+			<Add option="-fopenmp" />
+			<Add library="glew32s" />
+			<Add library="glut32" />
+			<Add library="glu32" />
+			<Add library="opengl32" />
+			<Add library="lapack_win32_MT" />
+			<Add library="blas_win32_MT" />
+			<Add library="AntTweakBar" />
+			<Add directory="lib_win32" />
+			<Add directory="C:\CLibrary\AntTweakBar\lib" />
+		</Linker>
+		<Unit filename="Shader\Shader.cpp" />
+		<Unit filename="Shader\Shader.h" />
+		<Unit filename="Shader\fragment.glsl" />
+		<Unit filename="Shader\fragmentDeformationShader.glsl" />
+		<Unit filename="Shader\fragmentPhongShader.glsl" />
+		<Unit filename="Shader\vertex.glsl" />
+		<Unit filename="Shader\vertexDeformationShader.glsl" />
+		<Unit filename="Shader\vertexPhongShader.glsl" />
+		<Unit filename="Solver\ConjugateGradient.cpp" />
+		<Unit filename="Solver\ConjugateGradient.h" />
+		<Unit filename="Solver\Solver.cpp" />
+		<Unit filename="Solver\Solver.h" />
+		<Unit filename="WindowHandler.cpp" />
+		<Unit filename="WindowHandler.h" />
+		<Unit filename="arcball.cpp" />
+		<Unit filename="arcball.h" />
+		<Unit filename="forceVector.cpp" />
+		<Unit filename="forceVector.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="mesh\Face.cpp" />
+		<Unit filename="mesh\Face.h" />
+		<Unit filename="mesh\HalfEdge.cpp" />
+		<Unit filename="mesh\HalfEdge.h" />
+		<Unit filename="mesh\HalfFaceMesh" />
+		<Unit filename="mesh\MeshReader.cpp" />
+		<Unit filename="mesh\MeshReader.h" />
+		<Unit filename="mesh\Tetrahed.cpp" />
+		<Unit filename="mesh\Tetrahed.h" />
+		<Unit filename="mesh\TetrahedMesh.cpp" />
+		<Unit filename="mesh\TetrahedMesh.h" />
+		<Unit filename="mesh\Vertex.cpp" />
+		<Unit filename="mesh\Vertex.h" />
+		<Unit filename="mesh\VolumeGenerator.cpp" />
+		<Unit filename="mesh\VolumeGenerator.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
